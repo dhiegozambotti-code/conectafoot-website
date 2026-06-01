@@ -838,6 +838,133 @@
       .badges-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
       .badge-icon { width: 38px; height: 38px; font-size: 18px; }
     }
+
+    /* ── AGENTE VIRTUAL ─────────────────────────────────────── */
+    .agent-card-quick {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      border: none; color: white; cursor: pointer;
+    }
+    .agent-card-quick:hover { border-color: transparent; box-shadow: 0 6px 20px rgba(26,35,126,.35); transform: translateY(-3px); }
+    .agent-card-quick .hub-card-name { color: white; }
+    .agent-card-quick .hub-card-meta { color: rgba(255,255,255,.65); }
+    .agent-pulse {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.15); border-radius: 100px;
+      padding: 3px 9px; font-size: 10px; font-weight: 700; color: white; margin-top: 4px;
+    }
+    .agent-pulse::before { content:''; width:6px; height:6px; background:#4ade80; border-radius:50%; animation: agentPulse 1.4s infinite; }
+    @keyframes agentPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+    /* ── AGENT SELECTION MODAL ──────────────────────────────── */
+    .agent-list { display: flex; flex-direction: column; gap: 10px; }
+    .agent-option {
+      display: flex; align-items: center; gap: 13px;
+      padding: 14px; border-radius: 14px; cursor: pointer;
+      border: 2px solid transparent; transition: all .2s; position: relative; overflow: hidden;
+    }
+    .agent-option:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.1); }
+    .agent-option--motivacional { background: linear-gradient(135deg,#fff8e1,#fffde7); border-color: #ffd54f; }
+    .agent-option--desafiador   { background: linear-gradient(135deg,#fff3e0,#ffe0b2); border-color: #ff8a65; }
+    .agent-option--estudioso    { background: linear-gradient(135deg,#e8eaf6,#e3f2fd); border-color: #7986cb; }
+    .agent-option--provocativo  { background: linear-gradient(135deg,#fce4ec,#ffebee); border-color: #ef9a9a; }
+    .agent-option--cauteloso    { background: linear-gradient(135deg,#e8f5e9,#f1f8e9); border-color: #81c784; }
+
+    .agent-avatar {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+    }
+    .agent-avatar--motivacional { background: linear-gradient(135deg,#f59e0b,#fbbf24); }
+    .agent-avatar--desafiador   { background: linear-gradient(135deg,#ea580c,#f97316); }
+    .agent-avatar--estudioso    { background: linear-gradient(135deg,#1a237e,#3949ab); }
+    .agent-avatar--provocativo  { background: linear-gradient(135deg,#991b1b,#dc2626); }
+    .agent-avatar--cauteloso    { background: linear-gradient(135deg,#166534,#16a34a); }
+
+    .agent-info { flex: 1; }
+    .agent-name { font-size: 14px; font-weight: 800; color: var(--gray-7); }
+    .agent-role { font-size: 11px; font-weight: 600; margin-top: 1px; }
+    .agent-role--motivacional { color: #b45309; }
+    .agent-role--desafiador   { color: #c2410c; }
+    .agent-role--estudioso    { color: var(--navy); }
+    .agent-role--provocativo  { color: #991b1b; }
+    .agent-role--cauteloso    { color: #166534; }
+    .agent-desc { font-size: 11px; color: var(--gray-5); margin-top: 3px; line-height: 1.4; }
+    .agent-select-btn {
+      background: var(--navy); color: white; border: none;
+      font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700;
+      padding: 7px 14px; border-radius: 8px; cursor: pointer; flex-shrink: 0;
+      transition: all .2s;
+    }
+    .agent-select-btn:hover { background: var(--navy-2); transform: scale(1.05); }
+
+    /* ── CHAT MODAL ─────────────────────────────────────────── */
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 0 16px; border-bottom: 1px solid var(--gray-1); margin-bottom: 12px;
+    }
+    .chat-agent-avatar {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .chat-agent-info { flex: 1; }
+    .chat-agent-name { font-size: 14px; font-weight: 800; color: var(--gray-7); }
+    .chat-agent-status { font-size: 11px; color: #16a34a; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .chat-agent-status::before { content:''; width:6px; height:6px; background:#4ade80; border-radius:50%; }
+    .chat-change-btn {
+      background: var(--gray-1); border: none; font-family: 'Poppins', sans-serif;
+      font-size: 11px; font-weight: 700; color: var(--gray-5); padding: 6px 12px;
+      border-radius: 8px; cursor: pointer;
+    }
+    .chat-messages {
+      height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      padding-right: 4px; margin-bottom: 12px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 3px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--gray-2); border-radius: 2px; }
+    .msg { display: flex; gap: 8px; animation: fadeIn .3s ease; }
+    .msg--user { flex-direction: row-reverse; }
+    .msg-bubble {
+      max-width: 78%; padding: 10px 13px; border-radius: 14px;
+      font-size: 13px; line-height: 1.55;
+    }
+    .msg--agent .msg-bubble { background: var(--gray-1); color: var(--gray-7); border-radius: 4px 14px 14px 14px; }
+    .msg--user  .msg-bubble { background: var(--navy); color: white; border-radius: 14px 4px 14px 14px; }
+    .msg-avatar { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+    .msg-typing { display: flex; align-items: center; gap: 4px; padding: 10px 13px; background: var(--gray-1); border-radius: 4px 14px 14px 14px; max-width: 60px; }
+    .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-4); animation: typingBounce 1.2s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+    .chat-input-row {
+      display: flex; gap: 8px; align-items: flex-end;
+      border-top: 1px solid var(--gray-1); padding-top: 12px;
+    }
+    .chat-input {
+      flex: 1; border: 1.5px solid var(--gray-2); border-radius: 12px;
+      padding: 10px 14px; font-family: 'Poppins', sans-serif; font-size: 13px;
+      color: var(--gray-7); resize: none; outline: none; max-height: 90px; min-height: 42px;
+      transition: border-color .2s;
+    }
+    .chat-input:focus { border-color: var(--blue); }
+    .chat-send-btn {
+      width: 42px; height: 42px; border-radius: 12px; border: none;
+      background: var(--navy); color: white; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; flex-shrink: 0;
+    }
+    .chat-send-btn:hover { background: var(--navy-2); transform: scale(1.05); }
+    .chat-send-btn:disabled { background: var(--gray-3); cursor: not-allowed; transform: none; }
+
+    /* journey pills */
+    .journey-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .journey-pill {
+      background: var(--gray-1); border: 1px solid var(--gray-2); color: var(--gray-6);
+      font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 100px;
+      cursor: pointer; transition: all .2s; font-family: 'Poppins', sans-serif;
+    }
+    .journey-pill:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
   </style>
 <style>.nav-back-bar{position:fixed;bottom:0;left:0;right:0;background:#1a237e;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.nav-back-bar a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:700;font-family:Poppins,sans-serif;padding:5px 10px;border-radius:6px;transition:background .2s}.nav-back-bar a:hover{background:rgba(255,255,255,.12);color:#fff}.nav-back-bar .nav-logo{color:#3eb7e6;font-size:12px;font-weight:800}</style></head>
 <body>
@@ -964,10 +1091,11 @@
     <div class="hub-section-title">🛠️ Ações rápidas</div>
     <div class="hub-grid">
 
-      <div class="hub-card animated" onclick="showToast('Abrindo Chat de Carreira…')">
-        <div class="hub-card-emoji">💬</div>
-        <div class="hub-card-name">Chat de Carreira</div>
-        <div class="hub-card-meta hub-card-meta--cta">24 mensagens</div>
+      <div class="hub-card agent-card-quick animated" onclick="openAgentModal()">
+        <div class="hub-card-emoji">🤖</div>
+        <div class="hub-card-name">Agente Virtual FIFA</div>
+        <div class="hub-card-meta">Jornada do atleta</div>
+        <span class="agent-pulse">Online</span>
       </div>
 
       <div class="hub-card animated" onclick="showToast('Analisando seu perfil…')">
@@ -1777,9 +1905,245 @@
   // ── Keyboard close ──────────────────────────────────────
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      ['agentModal','scoutModal','reportModal','contentModal'].forEach(id => closeModal(id));
+      ['agentModal','agentChatModal','scoutModal','reportModal','contentModal'].forEach(id => closeModal(id));
     }
   });
+
+  /* ─── AGENT DATA ─────────────────────────────────────────── */
+  const AGENTS = {
+    motivacional: {
+      name: 'Faísca', role: 'Motivacional', emoji: '🌟',
+      avatarClass: 'agent-avatar--motivacional',
+      intro: 'E aí, Gabriel! 🌟 Que bom ter você aqui. Todo grande jogador começou exatamente onde você está agora. Eu tô aqui pra te lembrar disso toda vez que você duvidar. Me conta — qual é o seu maior sonho no futebol?',
+      pills: ['Qual meu próximo passo?','Preciso de motivação','Como evoluir rápido?','Me ajuda a montar metas'],
+      replies: [
+        'Que resposta incrível! Isso mostra que você tem foco. Vamos transformar isso num plano de 30 dias. Você consegue treinar quantas vezes por semana? 💪',
+        'Sabe o que separa os que chegam dos que ficam pelo caminho? Consistência. Não o talento. Vamos criar uma rotina que funcione pra você! 🔥',
+        'Gabriel, você já tem mais do que muitos que chegaram ao profissional. O que falta é organizar e executar. Vou te ajudar nessa! Qual área quer focar primeiro?',
+        'Incrível! Essa mentalidade já te coloca na frente de 90% dos atletas. Bora definir sua próxima conquista juntos? 🏆',
+      ]
+    },
+    desafiador: {
+      name: 'Vitor', role: 'Desafiador', emoji: '⚡',
+      avatarClass: 'agent-avatar--desafiador',
+      intro: 'Sem rodeios, Gabriel. Você tem potencial — mas potencial não paga conta e não faz gol. Me diz: o que você fez HOJE para chegar mais perto do profissional? Não ontem. Hoje. ⚡',
+      pills: ['Quero ser desafiado','Me dá uma meta difícil','O que estou evitando?','Avalia meu esforço'],
+      replies: [
+        'Tá bom, mas tá bom não é suficiente. Você pode fazer melhor. Me fala: qual é a sua maior fraqueza técnica? Não tem certo ou errado — tem honestidade. ⚡',
+        'Isso é mediano. Mediano não vira profissional. O que você vai mudar AMANHÃ de manhã que vai te diferenciar? Quero uma resposta concreta.',
+        'Agora sim! Isso é o que eu quero ouvir. Mas uma boa resposta não vale nada sem execução. Até quando você vai implementar isso? Preciso de uma data.',
+        'Para. Respira. Agora me diz: você tá dando desculpa ou tá dando razão? Porque o que você acabou de falar soa muito como desculpa pra mim.',
+      ]
+    },
+    estudioso: {
+      name: 'Ana', role: 'Estudioso & Disciplinado', emoji: '📊',
+      avatarClass: 'agent-avatar--estudioso',
+      intro: 'Olá, Gabriel. Analisei seus dados disponíveis no perfil. Sua nota técnica está em 7.8, com pontos de melhoria identificados em jogo aéreo e drible em alta velocidade. Antes de qualquer plano, preciso entender: qual é o seu objetivo de carreira em 12 meses, de forma específica e mensurável? 📊',
+      pills: ['Analisa meu perfil','Cria plano estruturado','Quais métricas importam?','Como me comparar ao mercado?'],
+      replies: [
+        'Interessante. Para estruturar um plano efetivo, preciso de mais dados. Quantas horas semanais você dedica ao treinamento técnico versus físico? E tem algum treinador acompanhando sua evolução? 📈',
+        'Com base nessa informação, identifico 3 variáveis críticas: frequência de treino, qualidade de feedback e consistência de portfólio. Vamos trabalhar cada uma sistematicamente.',
+        'Correto. Agora vamos criar um framework de 90 dias com metas mensuráveis. Semana 1-4: diagnóstico e baseline. Semana 5-8: execução focada. Semana 9-12: avaliação e ajuste.',
+        'Os dados indicam que atletas com perfil similar ao seu que avançaram para o semi-profissional tinham em comum: portfólio atualizado mensalmente, mínimo 3 avaliações por temporada e presença ativa na plataforma.',
+      ]
+    },
+    provocativo: {
+      name: 'Cobra', role: 'Provocativo & Agressivo em resultado', emoji: '🔥',
+      avatarClass: 'agent-avatar--provocativo',
+      intro: 'Resultado ou desculpa. Não tem meio-termo. Você quer ser profissional ou ficar sonhando em rede social? Porque todo dia que passa sem agir, tem outro atleta tomando o lugar que deveria ser seu. Então me prova: o que você fez de concreto essa semana? 🔥',
+      pills: ['Quero resultado agora','Me diz o que precisa melhorar','Chega de desculpa','Qual meu maior problema?'],
+      replies: [
+        'Isso não é suficiente. Ponto. Enquanto você faz isso, tem atleta da sua posição treinando o dobro. O que mais? Me dá algo que realmente importe.',
+        'Mentira. Você sabe que pode fazer mais. Eu sei que você sabe. Qual o maior obstáculo real — não a desculpa que você conta pros outros, o real?',
+        'Agora sim. Isso é o começo. Mas começo não é resultado. Quando você vai entregar? Não "em breve". Quando. Dia e hora.',
+        'Sabe qual é o problema? Você ainda tá no modo conforto. Profissional não tem esse luxo. Amanhã de manhã, 6h, o que você vai fazer diferente? Me responde isso.',
+      ]
+    },
+    cauteloso: {
+      name: 'Jorge', role: 'Cauteloso & Assertivo', emoji: '🎯',
+      avatarClass: 'agent-avatar--cauteloso',
+      intro: 'Olá, Gabriel. Antes de qualquer plano, quero entender bem onde você está. Cada decisão de carreira tem impacto de longo prazo — e eu prefiro fazer certo do que fazer rápido. Me conta: o que está funcionando bem na sua trajetória atual? E o que te preocupa? 🎯',
+      pills: ['Avalia meu momento atual','Qual o menor risco?','Plano de longo prazo','Como agir com segurança?'],
+      replies: [
+        'Entendido. É importante reconhecer o que funciona antes de mudar qualquer coisa. Agora me conta o lado oposto: o que não está funcionando como você esperava? Sem pressa.',
+        'Faz sentido. Antes de recomendar qualquer ação, quero ter certeza que estou entendendo o contexto completo. Há quanto tempo você está nessa situação? E o que você já tentou?',
+        'Minha sugestão é começar com o que apresenta menor risco e maior impacto. No seu caso, isso seria consolidar seu portfólio antes de buscar novos clubes. Concordas?',
+        'Vamos validar esse plano antes de executar. Você tem alguém de confiança que possa dar uma segunda opinião? Decisões de carreira se beneficiam de múltiplas perspectivas.',
+      ]
+    }
+  };
+
+  let currentAgent = null;
+  const agentReplyIndex = {};
+
+  function openAgentModal() { openModal('agentModal'); }
+
+  function selectAgent(agentId) {
+    currentAgent = AGENTS[agentId];
+    if (!agentReplyIndex[agentId]) agentReplyIndex[agentId] = 0;
+    closeModal('agentModal');
+
+    // header
+    const avatar = document.getElementById('chatAvatar');
+    avatar.textContent = currentAgent.emoji;
+    avatar.className = 'chat-agent-avatar ' + currentAgent.avatarClass;
+    document.getElementById('chatAgentName').textContent = currentAgent.name + ' · ' + currentAgent.role;
+
+    // pills
+    document.getElementById('journeyPills').innerHTML =
+      currentAgent.pills.map(p => `<button class="journey-pill" onclick="sendPill('${p.replace(/'/g,"&#39;")}')">${p}</button>`).join('');
+
+    // messages
+    const msgs = document.getElementById('chatMessages');
+    msgs.innerHTML = '';
+    appendMsg('agent', currentAgent.intro);
+
+    openModal('agentChatModal');
+    setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 100);
+  }
+
+  function appendMsg(type, text) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg msg--' + type;
+    if (type === 'agent') {
+      div.innerHTML = `<div class="msg-avatar ${currentAgent.avatarClass}">${currentAgent.emoji}</div><div class="msg-bubble">${text}</div>`;
+    } else {
+      div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+    }
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function showTyping() {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg msg--agent'; div.id = 'typingIndicator';
+    div.innerHTML = `<div class="msg-avatar ${currentAgent.avatarClass}">${currentAgent.emoji}</div><div class="msg-typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() { const e = document.getElementById('typingIndicator'); if(e) e.remove(); }
+
+  function sendPill(text) { document.getElementById('chatInput').value = text; sendAgentMsg(); }
+
+  function sendAgentMsg() {
+    if (!currentAgent) return;
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    appendMsg('user', text);
+    input.value = '';
+    const btn = document.getElementById('chatSendBtn');
+    btn.disabled = true;
+    const key = Object.keys(AGENTS).find(k => AGENTS[k] === currentAgent);
+    const delays = { motivacional:1400, desafiador:1100, estudioso:2000, provocativo:800, cauteloso:1700 };
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const idx = agentReplyIndex[key] || 0;
+      appendMsg('agent', currentAgent.replies[idx % currentAgent.replies.length]);
+      agentReplyIndex[key] = idx + 1;
+      btn.disabled = false;
+    }, delays[key] || 1400);
+  }
 </script>
+<!-- ═══════════════════════════════ MODAL — AGENT SELECTION -->
+<div class="modal-overlay" id="agentModal" onclick="if(event.target===this)closeModal('agentModal')">
+  <div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('agentModal')">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">🤖 Agente Virtual FIFA</div>
+    <p style="font-size:13px;color:var(--gray-5);margin-bottom:16px;line-height:1.6;">
+      Escolha o agente que vai desenhar a sua jornada. Cada um tem uma abordagem única para te levar ao próximo nível.
+    </p>
+
+    <div class="agent-list">
+
+      <div class="agent-option agent-option--motivacional" onclick="selectAgent('motivacional')">
+        <div class="agent-avatar agent-avatar--motivacional">🌟</div>
+        <div class="agent-info">
+          <div class="agent-name">Faísca</div>
+          <div class="agent-role agent-role--motivacional">Motivacional</div>
+          <div class="agent-desc">Celebra cada vitória, transforma obstáculos em combustível. Te faz acreditar quando você duvida.</div>
+        </div>
+        <button class="agent-select-btn">Escolher</button>
+      </div>
+
+      <div class="agent-option agent-option--desafiador" onclick="selectAgent('desafiador')">
+        <div class="agent-avatar agent-avatar--desafiador">⚡</div>
+        <div class="agent-info">
+          <div class="agent-name">Vitor</div>
+          <div class="agent-role agent-role--desafiador">Desafiador</div>
+          <div class="agent-desc">Empurra seus limites sem piedade. Exige o máximo e não aceita menos do que o seu melhor.</div>
+        </div>
+        <button class="agent-select-btn">Escolher</button>
+      </div>
+
+      <div class="agent-option agent-option--estudioso" onclick="selectAgent('estudioso')">
+        <div class="agent-avatar agent-avatar--estudioso">📊</div>
+        <div class="agent-info">
+          <div class="agent-name">Ana</div>
+          <div class="agent-role agent-role--estudioso">Estudioso & Disciplinado</div>
+          <div class="agent-desc">Trabalha com dados, métricas e planos estruturados. Cada passo é calculado e baseado em evidências.</div>
+        </div>
+        <button class="agent-select-btn">Escolher</button>
+      </div>
+
+      <div class="agent-option agent-option--provocativo" onclick="selectAgent('provocativo')">
+        <div class="agent-avatar agent-avatar--provocativo">🔥</div>
+        <div class="agent-info">
+          <div class="agent-name">Cobra</div>
+          <div class="agent-role agent-role--provocativo">Provocativo & Agressivo em resultado</div>
+          <div class="agent-desc">Direto, intenso e sem filtro. Resultado ou desculpa — e ele não aceita desculpa.</div>
+        </div>
+        <button class="agent-select-btn">Escolher</button>
+      </div>
+
+      <div class="agent-option agent-option--cauteloso" onclick="selectAgent('cauteloso')">
+        <div class="agent-avatar agent-avatar--cauteloso">🎯</div>
+        <div class="agent-info">
+          <div class="agent-name">Jorge</div>
+          <div class="agent-role agent-role--cauteloso">Cauteloso & Assertivo</div>
+          <div class="agent-desc">Pensa antes de agir, mas quando decide age com precisão. Estratégia de longo prazo com foco no essencial.</div>
+        </div>
+        <button class="agent-select-btn">Escolher</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL — AGENT CHAT -->
+<div class="modal-overlay" id="agentChatModal" onclick="if(event.target===this)closeModal('agentChatModal')">
+  <div class="modal-sheet" style="position:relative; padding-bottom:20px;">
+    <button class="modal-close" onclick="closeModal('agentChatModal')">✕</button>
+    <div class="modal-handle"></div>
+
+    <!-- Chat header -->
+    <div class="chat-header">
+      <div class="chat-agent-avatar" id="chatAvatar"></div>
+      <div class="chat-agent-info">
+        <div class="chat-agent-name" id="chatAgentName">—</div>
+        <div class="chat-agent-status">Online agora</div>
+      </div>
+      <button class="chat-change-btn" onclick="closeModal('agentChatModal');openAgentModal()">Trocar</button>
+    </div>
+
+    <!-- Journey quick-start pills -->
+    <div class="journey-pills" id="journeyPills"></div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <!-- Input -->
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escreva para o agente…"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAgentMsg()}"></textarea>
+      <button class="chat-send-btn" id="chatSendBtn" onclick="sendAgentMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
 <div class="nav-back-bar"><a href="projeto.html">← Projeto</a><span class="nav-logo">ConectaFoot IA</span><div style="display:flex;gap:4px"><a href="central-ia.html">Hub</a><a href="perfil-atleta.html">Perfil</a><a href="feed.html">Feed</a><a href="match-ia.html">Match</a><a href="bio-conteudo.html">Bio</a></div></div></body>
 </html>

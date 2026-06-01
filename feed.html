@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feed — ConectaFoot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --blue:#3eb7e6;--blue-d:#0b8fc4;
+      --navy:#1a237e;--navy-2:#283593;--navy-3:#3949ab;
+      --green:#2e7d32;--green-l:#e8f5e9;
+      --amber:#f59e0b;--amber-l:#fff8e1;
+      --gold:#ffc107;--gold-l:#fff8e1;
+      --g1:#f2f4f7;--g2:#e8eaf6;--g3:#d0d5dd;--g4:#98a2b3;
+      --g5:#667085;--g6:#475467;--g7:#344054;
+      --w:#fff;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;background:var(--g1);min-height:100vh;color:var(--g7)}
+
+    /* ─── TOP NAV ─── */
+    .top-nav{background:var(--w);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--g2)}
+    .nav-logo{font-size:18px;font-weight:900;color:var(--navy);letter-spacing:-.5px}
+    .nav-logo span{color:var(--blue)}
+    .nav-right{display:flex;gap:8px}
+    .nav-btn{width:36px;height:36px;border-radius:50%;background:var(--g1);border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;position:relative}
+    .nav-btn:hover{background:var(--g2)}
+    .nav-btn-badge{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#ff5252;border-radius:50%;border:1.5px solid var(--w)}
+
+    /* ─── STORIES ─── */
+    .stories-bar{background:var(--w);border-bottom:1px solid var(--g2);padding:12px 0 10px}
+    .stories-scroll{display:flex;gap:12px;overflow-x:auto;padding:0 14px;scrollbar-width:none}
+    .stories-scroll::-webkit-scrollbar{display:none}
+    .story-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
+    .story-ring{width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--blue),var(--navy));transition:transform .2s}
+    .story-ring:hover{transform:scale(1.06)}
+    .story-ring--add{background:var(--g2)}
+    .story-ring--seen{background:var(--g3)}
+    .story-inner{width:100%;height:100%;border-radius:50%;background:var(--w);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--w)}
+    .story-lbl{font-size:10px;font-weight:500;color:var(--g6);max-width:56px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .story-add-btn{width:52px;height:52px;border-radius:50%;background:var(--g2);border:2px dashed var(--g3);display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:background .2s}
+    .story-add-btn:hover{background:var(--g1)}
+
+    /* ─── CREATE POST BAR ─── */
+    .create-bar{background:var(--w);margin:10px 12px 0;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:10px}
+    .create-ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--navy-3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .create-input{flex:1;border:1.5px solid var(--g2);border-radius:100px;padding:9px 16px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--g7);outline:none;transition:border-color .2s;cursor:pointer;background:var(--g1)}
+    .create-input:focus{border-color:var(--blue);background:var(--w)}
+    .create-media-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--navy-3));border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;transition:transform .2s}
+    .create-media-btn:hover{transform:scale(1.1)}
+
+    /* ─── FEED TABS ─── */
+    .feed-tabs{display:flex;background:var(--w);margin:10px 12px 0;border-radius:12px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,.06);gap:4px}
+    .feed-tab{flex:1;padding:8px;background:none;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g4);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .feed-tab.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--w)}
+
+    /* ─── POST CARDS ─── */
+    .post-card{background:var(--w);border-radius:14px;margin:10px 12px 0;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;animation:fadeSlide .4s ease both}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Post header */
+    .post-header{display:flex;align-items:center;gap:10px;padding:14px 14px 0}
+    .post-ava{width:42px;height:42px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;cursor:pointer;transition:opacity .2s}
+    .post-ava:hover{opacity:.85}
+    .post-meta{flex:1}
+    .post-name{font-size:14px;font-weight:700;color:var(--g7);cursor:pointer}
+    .post-name:hover{color:var(--navy)}
+    .post-info{font-size:11px;color:var(--g4)}
+    .post-lvl{display:inline-block;background:var(--g2);color:var(--navy);font-size:9px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:5px;vertical-align:middle}
+    .post-menu{width:30px;height:30px;border-radius:50%;background:none;border:none;font-size:20px;cursor:pointer;color:var(--g4);display:flex;align-items:center;justify-content:center;transition:background .15s}
+    .post-menu:hover{background:var(--g1)}
+
+    /* Post body */
+    .post-body{padding:10px 14px 0}
+    .post-text{font-size:14px;color:var(--g6);line-height:1.6}
+    .post-text--big{font-size:16px;font-weight:600;color:var(--g7);line-height:1.5}
+    .post-hashtag{color:var(--blue);font-weight:600}
+
+    /* Media */
+    .post-image{width:100%;background:linear-gradient(135deg,#1a237e,#3949ab,#3eb7e6);position:relative;overflow:hidden;cursor:pointer;margin-top:10px}
+    .post-image img{width:100%;height:auto;display:block}
+    .post-image-placeholder{height:220px;display:flex;align-items:center;justify-content:center;font-size:60px}
+    .post-video-thumb{height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:linear-gradient(135deg,#0d47a1,#1a237e,#283593);margin-top:10px;position:relative}
+    .post-video-thumb:hover .play-btn{transform:scale(1.1)}
+    .play-btn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(0,0,0,.3);margin-bottom:8px;transition:transform .2s}
+    .post-video-label{color:rgba(255,255,255,.9);font-size:13px;font-weight:600;text-align:center;padding:0 20px}
+    .post-video-sub{color:rgba(255,255,255,.6);font-size:11px;margin-top:4px}
+    .video-duration{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.7);color:var(--w);font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px}
+
+    /* Actions bar */
+    .post-actions{display:flex;align-items:center;padding:10px 12px 4px;gap:0}
+    .post-act-btn{display:flex;align-items:center;gap:5px;background:none;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:var(--g5);cursor:pointer;padding:6px 10px;border-radius:8px;transition:all .2s;flex:1;justify-content:center}
+    .post-act-btn:hover{background:var(--g1)}
+    .post-act-btn.liked{color:#e53935}
+    .post-act-btn.liked .heart-ico{animation:heartPop .35s ease}
+    @keyframes heartPop{0%{transform:scale(1)}40%{transform:scale(1.45)}70%{transform:scale(.9)}100%{transform:scale(1)}}
+    .heart-ico{font-size:18px}
+    .share-ico{font-size:18px}
+    .comment-ico{font-size:18px}
+
+    /* Comments section */
+    .post-comments{padding:0 14px 12px;display:none}
+    .post-comments.open{display:block}
+    .comment-divider{height:1px;background:var(--g1);margin:6px 0 10px}
+    .comment-input-row{display:flex;gap:8px;margin-bottom:12px}
+    .c-ava{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--navy-3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+    .c-input{flex:1;border:1.5px solid var(--g2);border-radius:100px;padding:7px 14px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--g7);outline:none;transition:border-color .2s}
+    .c-input:focus{border-color:var(--blue)}
+    .c-send{background:var(--blue);border:none;width:30px;height:30px;border-radius:50%;color:var(--w);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s}
+    .c-send:hover{transform:scale(1.1)}
+    .comment-item{display:flex;gap:8px;margin-bottom:10px}
+    .ci-ava{width:30px;height:30px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+    .ci-body{flex:1}
+    .ci-name{font-size:12px;font-weight:700;color:var(--g7)}
+    .ci-text{font-size:12px;color:var(--g6);line-height:1.4;margin-top:1px}
+    .ci-meta{font-size:10px;color:var(--g4);margin-top:3px;display:flex;gap:12px}
+
+    /* ── ACHIEVEMENT POST ── */
+    .post-card--achievement{background:linear-gradient(135deg,#fff8e1,#fff3cd);border:1.5px solid #ffe082}
+    .achievement-body{padding:16px 14px;text-align:center}
+    .achievement-icon{font-size:52px;margin-bottom:10px;display:block;animation:bounce .6s ease}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .achievement-title{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:4px}
+    .achievement-sub{font-size:13px;color:var(--g6)}
+    .achievement-chips{display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .a-chip{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700}
+    .a-chip--gold{background:var(--gold);color:#5d4037}
+    .a-chip--navy{background:linear-gradient(135deg,var(--navy),var(--navy-3));color:var(--w)}
+
+    /* ── SCOUT REPORT POST ── */
+    .scout-post-body{padding:14px}
+    .scout-post-scores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+    .score-box{background:var(--g1);border-radius:10px;padding:10px;text-align:center}
+    .score-box-icon{font-size:18px}
+    .score-box-val{font-size:20px;font-weight:900;color:var(--navy);line-height:1.1}
+    .score-box-lbl{font-size:10px;color:var(--g4)}
+
+    /* ── CLUB VIEW POST ── */
+    .post-card--club-view{background:linear-gradient(135deg,#f3f8ff,#e8f0fe);border:1.5px solid var(--g2)}
+    .club-view-body{padding:16px 14px;display:flex;gap:12px;align-items:center}
+    .cv-icon{font-size:40px;flex-shrink:0}
+    .cv-text{flex:1}
+    .cv-title{font-size:14px;font-weight:700;color:var(--navy)}
+    .cv-sub{font-size:12px;color:var(--g5);margin-top:3px}
+    .cv-action{display:flex;gap:8px;margin-top:12px;padding:0 14px 14px}
+
+    /* ── BUTTONS ── */
+    .btn-primary{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--w);border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,35,126,.3)}
+    .btn-ghost{background:transparent;border:1.5px solid var(--g3);color:var(--g7);font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
+    .btn-ghost:hover{border-color:var(--navy);background:var(--g1)}
+
+    /* ─── FAB ─── */
+    .fab{position:fixed;bottom:76px;right:18px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(26,35,126,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;z-index:80}
+    .fab:hover{transform:scale(1.08) translateY(-2px);box-shadow:0 6px 20px rgba(26,35,126,.5)}
+    .fab:active{transform:scale(.95)}
+
+    /* ─── CREATE POST SHEET ─── */
+    .sheet-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center}
+    .sheet-ov.open{display:flex}
+    .sheet{background:var(--w);border-radius:20px 20px 0 0;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:20px 16px 48px;animation:slideUp .3s ease;position:relative}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .sheet-handle{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 18px}
+    .sheet-title{font-size:16px;font-weight:800;color:var(--g7);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .sheet-close{position:absolute;top:18px;right:14px;background:var(--g1);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+    /* Post type picker */
+    .type-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+    .type-row::-webkit-scrollbar{display:none}
+    .type-chip{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:100px;border:1.5px solid var(--g2);background:var(--g1);font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g6);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+    .type-chip.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--w);border-color:transparent}
+    .post-compose-header{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start}
+    .compose-ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--navy-3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .compose-name{font-size:13px;font-weight:700;color:var(--g7)}
+    .compose-visibility{font-size:11px;color:var(--g4)}
+    .compose-textarea{width:100%;border:none;font-family:'Poppins',sans-serif;font-size:14px;color:var(--g7);resize:none;outline:none;min-height:80px;line-height:1.6;placeholder-color:var(--g3)}
+    .compose-textarea::placeholder{color:var(--g4)}
+    .compose-media-row{display:flex;gap:10px;margin:10px 0}
+    .compose-media-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--g1);border:1.5px dashed var(--g3);border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g5);cursor:pointer;transition:all .2s}
+    .compose-media-btn:hover{border-color:var(--blue);color:var(--blue)}
+    .compose-divider{height:1px;background:var(--g1);margin:12px 0}
+    .btn-post{width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer;transition:all .2s}
+    .btn-post:hover{box-shadow:0 4px 14px rgba(26,35,126,.35);transform:translateY(-1px)}
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--w);border-top:1px solid var(--g2);display:flex;z-index:100}
+    .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 5px;cursor:pointer;color:var(--g4);font-size:10px;font-weight:500;gap:2px;text-decoration:none;transition:color .2s}
+    .bn-icon{font-size:21px}
+    .bn-item--active{color:var(--blue)}
+
+    /* ─── LOAD MORE ─── */
+    .load-more{margin:16px 12px 0;background:var(--w);border:1.5px solid var(--g2);border-radius:12px;padding:14px;text-align:center;font-size:13px;font-weight:600;color:var(--blue);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .load-more:hover{background:var(--g1);border-color:var(--blue)}
+    .page-end{text-align:center;padding:24px 12px 100px;font-size:12px;color:var(--g4)}
+
+    /* ─── TOAST ─── */
+    #toast{display:none;position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--g7);color:var(--w);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:500;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+
+    /* Pull to refresh indicator */
+    .ptr-indicator{text-align:center;padding:8px;font-size:12px;color:var(--g4);display:none}
+    .ptr-indicator.show{display:block}
+
+    /* Notification dot */
+    .notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:#ff5252;border-radius:50%;border:1.5px solid var(--w)}
+  </style>
+<style>.nav-back-bar{position:fixed;bottom:0;left:0;right:0;background:#1a237e;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.nav-back-bar a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:700;font-family:Poppins,sans-serif;padding:5px 10px;border-radius:6px;transition:background .2s}.nav-back-bar a:hover{background:rgba(255,255,255,.12);color:#fff}.nav-back-bar .nav-logo{color:#3eb7e6;font-size:12px;font-weight:800}</style></head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-logo">Conecta<span>Foot</span></div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="showToast('Buscar atletas…')">🔍</button>
+    <button class="nav-btn" onclick="openSheet('postSheet')" style="position:relative">
+      📨
+      <span class="notif-dot"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- STORIES -->
+<div class="stories-bar">
+  <div class="stories-scroll">
+    <!-- My story (add) -->
+    <div class="story-item" onclick="openSheet('postSheet')">
+      <div class="story-ring story-ring--add">
+        <div class="story-inner" style="background:var(--g1)">
+          <span style="font-size:26px;color:var(--blue)">+</span>
+        </div>
+      </div>
+      <span class="story-lbl">Sua story</span>
+    </div>
+    <!-- Other stories -->
+    <div class="story-item" onclick="openStory('Lucas M.')">
+      <div class="story-ring"><div class="story-inner">😎</div></div>
+      <span class="story-lbl">Lucas M.</span>
+    </div>
+    <div class="story-item" onclick="openStory('Rafael A.')">
+      <div class="story-ring"><div class="story-inner">🧑</div></div>
+      <span class="story-lbl">Rafael A.</span>
+    </div>
+    <div class="story-item" onclick="openStory('Diego C.')">
+      <div class="story-ring"><div class="story-inner">🧒</div></div>
+      <span class="story-lbl">Diego C.</span>
+    </div>
+    <div class="story-item" onclick="openStory('Marina F.')">
+      <div class="story-ring"><div class="story-inner">👩</div></div>
+      <span class="story-lbl">Marina F.</span>
+    </div>
+    <div class="story-item" onclick="openStory('Grêmio')">
+      <div class="story-ring"><div class="story-inner">🏟️</div></div>
+      <span class="story-lbl">Grêmio POA</span>
+    </div>
+    <div class="story-item" onclick="openStory('Pedro S.')">
+      <div class="story-ring story-ring--seen"><div class="story-inner">🙂</div></div>
+      <span class="story-lbl">Pedro S.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE POST BAR -->
+<div class="create-bar">
+  <div class="create-ava">⚽</div>
+  <input class="create-input" placeholder="Compartilhe algo com a galera…" readonly onclick="openSheet('postSheet')"/>
+  <button class="create-media-btn" onclick="openSheet('postSheet')">📸</button>
+</div>
+
+<!-- FEED TABS -->
+<div class="feed-tabs">
+  <button class="feed-tab active" onclick="switchFeedTab(this)">Para Você</button>
+  <button class="feed-tab" onclick="switchFeedTab(this)">Seguindo</button>
+  <button class="feed-tab" onclick="switchFeedTab(this)">Destaque</button>
+</div>
+
+<!-- ═══════════════════════ POSTS ═══════════════════════ -->
+
+<!-- POST 1: ACHIEVEMENT — Level Up -->
+<div class="post-card post-card--achievement" style="animation-delay:.05s">
+  <div class="post-header">
+    <div class="post-ava" style="background:linear-gradient(135deg,var(--navy-3),var(--blue))" onclick="window.location='perfil-atleta.html'">⚽</div>
+    <div class="post-meta">
+      <div class="post-name" onclick="window.location='perfil-atleta.html'">Gabriel Silva <span class="post-lvl">🔥 Promessa</span></div>
+      <div class="post-info">há 2 horas · ConectaFoot</div>
+    </div>
+    <button class="post-menu" onclick="showToast('Opções do post')">⋯</button>
+  </div>
+  <div class="achievement-body">
+    <span class="achievement-icon">🏆</span>
+    <div class="achievement-title">Nível 3 — Promessa Desbloqueado!</div>
+    <div class="achievement-sub">Gabriel acumulou 800 XP e subiu de nível na plataforma</div>
+    <div class="achievement-chips">
+      <span class="a-chip a-chip--gold">+50 XP bônus</span>
+      <span class="a-chip a-chip--navy">🔥 Promessa</span>
+    </div>
+  </div>
+  <div class="post-actions">
+    <button class="post-act-btn" id="like1" onclick="toggleLike('like1',201)">
+      <span class="heart-ico">🤍</span><span id="likeCount1">201</span>
+    </button>
+    <button class="post-act-btn" onclick="toggleComments('comments1')">
+      <span class="comment-ico">💬</span><span>67</span>
+    </button>
+    <button class="post-act-btn" onclick="sharePost()">
+      <span class="share-ico">📤</span><span>Compartilhar</span>
+    </button>
+  </div>
+  <div class="post-comments" id="comments1">
+    <div class="comment-divider"></div>
+    <div class="comment-input-row">
+      <div class="c-ava">⚽</div>
+      <input class="c-input" placeholder="Comentar…" onkeydown="if(event.key==='Enter')sendComment(this,'comments1')"/>
+      <button class="c-send" onclick="sendComment(this.previousElementSibling,'comments1')">➤</button>
+    </div>
+    <div class="comment-item"><div class="ci-ava">😎</div><div class="ci-body"><span class="ci-name">Lucas M.</span><div class="ci-text">Merece demais! Continua assim 🔥</div><div class="ci-meta"><span>há 1h</span><span>❤️ 14</span></div></div></div>
+    <div class="comment-item"><div class="ci-ava">🏟️</div><div class="ci-body"><span class="ci-name">Scout Grêmio</span><div class="ci-text">Parabéns! Atleta com evolução consistente.</div><div class="ci-meta"><span>há 45m</span><span>❤️ 8</span></div></div></div>
+  </div>
+</div>
+
+<!-- POST 2: VIDEO — Portfolio -->
+<div class="post-card" style="animation-delay:.1s">
+  <div class="post-header">
+    <div class="post-ava" style="background:linear-gradient(135deg,var(--navy-3),var(--blue))" onclick="window.location='perfil-atleta.html'">⚽</div>
+    <div class="post-meta">
+      <div class="post-name" onclick="window.location='perfil-atleta.html'">Gabriel Silva <span class="post-lvl">🔥 Promessa</span></div>
+      <div class="post-info">há 1 dia · Curitiba/PR</div>
+    </div>
+    <button class="post-menu" onclick="openPostMenu()">⋯</button>
+  </div>
+  <div class="post-body">
+    <p class="post-text">
+      Compilado da temporada 2025! Muito trabalho chegou a este resultado. Obrigado a todos que apoiaram 🔥⚽<br>
+      <span class="post-hashtag">#futebol</span> <span class="post-hashtag">#compilado</span> <span class="post-hashtag">#ConectaFoot</span>
+    </p>
+    <div style="margin-top:8px;display:flex;gap:6px;align-items:center">
+      <span style="background:linear-gradient(135deg,var(--navy),var(--navy-3));color:var(--w);font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px">🎯 Laudo Scout: 7.8/10</span>
+    </div>
+  </div>
+  <div class="post-video-thumb" onclick="showToast('Reproduzindo vídeo…')">
+    <div class="play-btn">▶</div>
+    <div class="post-video-label">Compilado Temporada 2025 — Melhores Jogadas</div>
+    <div class="post-video-sub">YouTube · Gabriel Silva</div>
+    <span class="video-duration">4:32</span>
+  </div>
+  <div class="post-actions">
+    <button class="post-act-btn" id="like2" onclick="toggleLike('like2',47)">
+      <span class="heart-ico">🤍</span><span id="likeCount2">47</span>
+    </button>
+    <button class="post-act-btn" onclick="toggleComments('comments2')">
+      <span class="comment-ico">💬</span><span>12</span>
+    </button>
+    <button class="post-act-btn" onclick="sharePost()">
+      <span class="share-ico">📤</span><span>Compartilhar</span>
+    </button>
+  </div>
+  <div class="post-comments" id="comments2">
+    <div class="comment-divider"></div>
+    <div class="comment-input-row">
+      <div class="c-ava">⚽</div>
+      <input class="c-input" placeholder="Comentar…" onkeydown="if(event.key==='Enter')sendComment(this,'comments2')"/>
+      <button class="c-send" onclick="sendComment(this.previousElementSibling,'comments2')">➤</button>
+    </div>
+    <div class="comment-item"><div class="ci-ava">🧑</div><div class="ci-body"><span class="ci-name">Rafael A.</span><div class="ci-text">Que finalização no 2:14! Absurdo 🔥</div><div class="ci-meta"><span>há 20h</span><span>❤️ 9</span></div></div></div>
+    <div class="comment-item"><div class="ci-ava">🏆</div><div class="ci-body"><span class="ci-name">Fábio Costa (Agente)</span><div class="ci-text">Excelente vídeo! Manda DM.</div><div class="ci-meta"><span>há 18h</span><span>❤️ 4</span></div></div></div>
+  </div>
+</div>
+
+<!-- POST 3: CLUBE VIEW notification -->
+<div class="post-card post-card--club-view" style="animation-delay:.15s">
+  <div class="club-view-body">
+    <div class="cv-icon">🏟️</div>
+    <div class="cv-text">
+      <div class="cv-title">Grêmio Porto Alegre visualizou seu perfil!</div>
+      <div class="cv-sub">Clube do Rio Grande do Sul · Série A · há 3 horas</div>
+    </div>
+  </div>
+  <div class="cv-action">
+    <button class="btn-ghost" onclick="showToast('Abrindo perfil do Grêmio…')">Ver clube</button>
+    <button class="btn-primary" onclick="window.location='perfil-atleta.html'">Melhorar perfil →</button>
+  </div>
+</div>
+
+<!-- POST 4: TEXT + STATS (following) -->
+<div class="post-card" style="animation-delay:.2s">
+  <div class="post-header">
+    <div class="post-ava">😎</div>
+    <div class="post-meta">
+      <div class="post-name">Lucas M. <span class="post-lvl">🏆 Lenda</span></div>
+      <div class="post-info">há 4 horas · São Paulo/SP</div>
+    </div>
+    <button class="post-menu" onclick="showToast('Opções')">⋯</button>
+  </div>
+  <div class="post-body">
+    <p class="post-text">
+      Dia de rachar o treino! Foco na semana, descansando no domingo ⚽<br>
+      <span class="post-hashtag">#treino</span> <span class="post-hashtag">#foco</span>
+    </p>
+    <!-- Mini stats card -->
+    <div style="margin-top:12px;background:linear-gradient(135deg,var(--g1),#f0f4ff);border:1.5px solid var(--g2);border-radius:10px;padding:12px;display:flex;gap:16px;justify-content:center">
+      <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">12</div><div style="font-size:10px;color:var(--g4)">Sprints</div></div>
+      <div style="width:1px;background:var(--g2)"></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">2</div><div style="font-size:10px;color:var(--g4)">Gols</div></div>
+      <div style="width:1px;background:var(--g2)"></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:var(--navy)">1h45</div><div style="font-size:10px;color:var(--g4)">Duração</div></div>
+      <div style="width:1px;background:var(--g2)"></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:var(--amber)">+30</div><div style="font-size:10px;color:var(--g4)">XP</div></div>
+    </div>
+  </div>
+  <div class="post-actions">
+    <button class="post-act-btn" id="like4" onclick="toggleLike('like4',34)">
+      <span class="heart-ico">🤍</span><span id="likeCount4">34</span>
+    </button>
+    <button class="post-act-btn" onclick="toggleComments('comments4')">
+      <span class="comment-ico">💬</span><span>8</span>
+    </button>
+    <button class="post-act-btn" onclick="sharePost()">
+      <span class="share-ico">📤</span><span>Compartilhar</span>
+    </button>
+  </div>
+  <div class="post-comments" id="comments4">
+    <div class="comment-divider"></div>
+    <div class="comment-input-row">
+      <div class="c-ava">⚽</div>
+      <input class="c-input" placeholder="Comentar…" onkeydown="if(event.key==='Enter')sendComment(this,'comments4')"/>
+      <button class="c-send" onclick="sendComment(this.previousElementSibling,'comments4')">➤</button>
+    </div>
+    <div class="comment-item"><div class="ci-ava">⚽</div><div class="ci-body"><span class="ci-name">Gabriel Silva</span><div class="ci-text">Vacilão! Bora treinar juntos na semana 💪</div><div class="ci-meta"><span>há 3h</span><span>❤️ 6</span></div></div></div>
+  </div>
+</div>
+
+<!-- POST 5: PHOTO post -->
+<div class="post-card" style="animation-delay:.25s">
+  <div class="post-header">
+    <div class="post-ava">🧑</div>
+    <div class="post-meta">
+      <div class="post-name">Rafael A. <span class="post-lvl">👑 Craque</span></div>
+      <div class="post-info">há 6 horas · Rio de Janeiro/RJ</div>
+    </div>
+    <button class="post-menu" onclick="showToast('Opções')">⋯</button>
+  </div>
+  <div class="post-body">
+    <p class="post-text">Tarde com a rapaziada no campo. Isso que é qualidade de vida ⚽❤️</p>
+  </div>
+  <div class="post-image" onclick="showToast('Ver foto')">
+    <div class="post-image-placeholder">🏟️</div>
+  </div>
+  <div class="post-actions">
+    <button class="post-act-btn" id="like5" onclick="toggleLike('like5',89)">
+      <span class="heart-ico">🤍</span><span id="likeCount5">89</span>
+    </button>
+    <button class="post-act-btn" onclick="toggleComments('comments5')">
+      <span class="comment-ico">💬</span><span>23</span>
+    </button>
+    <button class="post-act-btn" onclick="sharePost()">
+      <span class="share-ico">📤</span><span>Compartilhar</span>
+    </button>
+  </div>
+  <div class="post-comments" id="comments5">
+    <div class="comment-divider"></div>
+    <div class="comment-input-row">
+      <div class="c-ava">⚽</div>
+      <input class="c-input" placeholder="Comentar…" onkeydown="if(event.key==='Enter')sendComment(this,'comments5')"/>
+      <button class="c-send" onclick="sendComment(this.previousElementSibling,'comments5')">➤</button>
+    </div>
+    <div class="comment-item"><div class="ci-ava">🧒</div><div class="ci-body"><span class="ci-name">Diego C.</span><div class="ci-text">Que campo top! Onde é isso?</div><div class="ci-meta"><span>há 5h</span><span>❤️ 3</span></div></div></div>
+    <div class="comment-item"><div class="ci-ava">⚽</div><div class="ci-body"><span class="ci-name">Gabriel S.</span><div class="ci-text">Perfeito demais isso 😍</div><div class="ci-meta"><span>há 4h</span><span>❤️ 7</span></div></div></div>
+  </div>
+</div>
+
+<!-- POST 6: SCOUT REPORT achievement -->
+<div class="post-card" style="animation-delay:.3s;border:1.5px solid #e8f0fe">
+  <div class="post-header">
+    <div class="post-ava" style="background:linear-gradient(135deg,var(--navy),var(--navy-3))" onclick="window.location='perfil-atleta.html'">⚽</div>
+    <div class="post-meta">
+      <div class="post-name" onclick="window.location='perfil-atleta.html'">Gabriel Silva</div>
+      <div class="post-info">Laudo Scout gerado · há 12 dias</div>
+    </div>
+    <span style="background:linear-gradient(135deg,var(--navy),var(--navy-3));color:var(--w);font-size:10px;font-weight:800;padding:4px 10px;border-radius:6px">IA Scout</span>
+  </div>
+  <div class="scout-post-body">
+    <p class="post-text" style="margin-bottom:10px">Meu Laudo Scout foi gerado pela IA da ConectaFoot! Análise completa do meu portfólio 🎬📋</p>
+    <!-- Score grid -->
+    <div class="scout-post-scores">
+      <div class="score-box"><div class="score-box-icon">⚽</div><div class="score-box-val">8.2</div><div class="score-box-lbl">Técnica</div></div>
+      <div class="score-box"><div class="score-box-icon">🧠</div><div class="score-box-val">7.5</div><div class="score-box-lbl">Visão</div></div>
+      <div class="score-box"><div class="score-box-icon">💪</div><div class="score-box-val">7.9</div><div class="score-box-lbl">Físico</div></div>
+      <div class="score-box"><div class="score-box-icon">📍</div><div class="score-box-val">7.6</div><div class="score-box-lbl">Posição</div></div>
+    </div>
+    <!-- Overall -->
+    <div style="background:linear-gradient(135deg,var(--navy),var(--navy-3));border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px">
+      <div style="font-size:36px;font-weight:900;color:var(--w);line-height:1">7.8</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--w)">Nota Geral do Scout</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:2px">"Atleta com perfil técnico acima da média. Recomendo acompanhamento."</div>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <button onclick="window.location='central-ia.html'" class="btn-primary" style="width:100%;padding:10px">Ver relatório completo →</button>
+    </div>
+  </div>
+  <div class="post-actions">
+    <button class="post-act-btn" id="like6" onclick="toggleLike('like6',134)">
+      <span class="heart-ico">🤍</span><span id="likeCount6">134</span>
+    </button>
+    <button class="post-act-btn" onclick="toggleComments('comments6')">
+      <span class="comment-ico">💬</span><span>41</span>
+    </button>
+    <button class="post-act-btn" onclick="sharePost()">
+      <span class="share-ico">📤</span><span>Compartilhar</span>
+    </button>
+  </div>
+  <div class="post-comments" id="comments6">
+    <div class="comment-divider"></div>
+    <div class="comment-input-row">
+      <div class="c-ava">⚽</div>
+      <input class="c-input" placeholder="Comentar…" onkeydown="if(event.key==='Enter')sendComment(this,'comments6')"/>
+      <button class="c-send" onclick="sendComment(this.previousElementSibling,'comments6')">➤</button>
+    </div>
+    <div class="comment-item"><div class="ci-ava">🏆</div><div class="ci-body"><span class="ci-name">Fábio Costa</span><div class="ci-text">Nota excelente! Entra em contato comigo.</div><div class="ci-meta"><span>há 11d</span><span>❤️ 21</span></div></div></div>
+    <div class="comment-item"><div class="ci-ava">😎</div><div class="ci-body"><span class="ci-name">Lucas M.</span><div class="ci-text">Mandou demais 🔥🔥</div><div class="ci-meta"><span>há 11d</span><span>❤️ 12</span></div></div></div>
+  </div>
+</div>
+
+<!-- LOAD MORE -->
+<div class="load-more" onclick="loadMore(this)">
+  <span>⬇</span> Carregar mais posts
+</div>
+
+<div class="page-end" id="pageEnd" style="display:none">
+  Você chegou ao fim do feed 🎉
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openSheet('postSheet')" title="Criar post">✍️</button>
+
+<!-- ═══════════════════════ CREATE POST SHEET ═══════════════════════ -->
+<div class="sheet-ov" id="postSheet" onclick="if(event.target===this)closeSheet('postSheet')">
+  <div class="sheet">
+    <button class="sheet-close" onclick="closeSheet('postSheet')">✕</button>
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">✍️ Criar publicação</div>
+
+    <!-- Post type -->
+    <div class="type-row">
+      <button class="type-chip active" onclick="selectType(this,'text')">✏️ Texto</button>
+      <button class="type-chip" onclick="selectType(this,'video')">🎬 Vídeo</button>
+      <button class="type-chip" onclick="selectType(this,'photo')">📸 Foto</button>
+      <button class="type-chip" onclick="selectType(this,'achievement')">🏅 Conquista</button>
+    </div>
+
+    <!-- Author -->
+    <div class="post-compose-header">
+      <div class="compose-ava">⚽</div>
+      <div>
+        <div class="compose-name">Gabriel Silva</div>
+        <div class="compose-visibility">🌎 Público</div>
+      </div>
+    </div>
+
+    <!-- Content area -->
+    <textarea class="compose-textarea" id="postTextarea" placeholder="O que está acontecendo? Compartilhe com a galera…" rows="4"></textarea>
+
+    <!-- Video type extras -->
+    <div id="videoExtras" style="display:none">
+      <input style="width:100%;border:1.5px solid var(--g3);border-radius:8px;padding:10px 12px;font-family:'Poppins',sans-serif;font-size:13px;margin-top:8px;outline:none;color:var(--g7)" placeholder="Cole o link do YouTube…"/>
+    </div>
+
+    <!-- Media buttons -->
+    <div class="compose-media-row">
+      <button class="compose-media-btn" onclick="showToast('Adicionar foto')">📸 Foto</button>
+      <button class="compose-media-btn" onclick="showToast('Adicionar vídeo')">🎬 Vídeo</button>
+      <button class="compose-media-btn" onclick="showToast('Adicionar localização')">📍 Local</button>
+    </div>
+
+    <div class="compose-divider"></div>
+
+    <!-- Visibility + emotion -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="display:flex;gap:10px">
+        <button onclick="showToast('Audiência')" style="background:var(--g1);border:1.5px solid var(--g2);border-radius:8px;padding:7px 12px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g6);cursor:pointer">🌎 Público</button>
+        <button onclick="showToast('Como você está?')" style="background:var(--g1);border:1.5px solid var(--g2);border-radius:8px;padding:7px 12px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g6);cursor:pointer">😊 Humor</button>
+      </div>
+      <span style="font-size:12px;color:var(--g4)" id="charCount">0/280</span>
+    </div>
+
+    <button class="btn-post" onclick="submitPost()">🚀 Publicar</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bn-item" href="#"><span class="bn-icon">🏠</span>Início</a>
+  <a class="bn-item" href="perfil-atleta.html"><span class="bn-icon">👤</span>Perfil</a>
+  <a class="bn-item" href="central-ia.html"><span class="bn-icon">🤖</span>IA</a>
+  <a class="bn-item bn-item--active" href="#"><span class="bn-icon">📰</span>Feed</a>
+  <a class="bn-item" href="#"><span class="bn-icon">🔔</span>Alertas</a>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+/* ── Feed tabs ── */
+function switchFeedTab(btn) {
+  document.querySelectorAll('.feed-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('Carregando ' + btn.textContent + '…');
+}
+
+/* ── Sheet ── */
+function openSheet(id)  { document.getElementById(id).classList.add('open'); }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.sheet-ov.open').forEach(el=>el.classList.remove('open')); });
+
+/* ── Post type ── */
+function selectType(btn, type) {
+  document.querySelectorAll('.type-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('videoExtras').style.display = type === 'video' ? 'block' : 'none';
+  const ph = {
+    text:        'O que está acontecendo? Compartilhe com a galera…',
+    video:       'Descreva o vídeo que você está compartilhando…',
+    photo:       'O que aconteceu nessa foto?',
+    achievement: 'Compartilhe sua conquista com a galera! 🏆',
+  };
+  document.getElementById('postTextarea').placeholder = ph[type] || ph.text;
+}
+
+/* ── Char count ── */
+document.getElementById('postTextarea').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length + '/280';
+});
+
+/* ── Like ── */
+function toggleLike(id, base) {
+  const btn = document.getElementById(id);
+  const countEl = document.getElementById('likeCount' + id.replace('like',''));
+  const isLiked = btn.classList.toggle('liked');
+  const heart = btn.querySelector('.heart-ico');
+  heart.textContent = isLiked ? '❤️' : '🤍';
+  countEl.textContent = isLiked ? base + 1 : base;
+}
+
+/* ── Comments ── */
+function toggleComments(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) {
+    const input = el.querySelector('.c-input');
+    if (input) setTimeout(() => input.focus(), 100);
+  }
+}
+
+function sendComment(input, commentsId) {
+  const txt = input.value.trim();
+  if (!txt) return;
+  const container = document.getElementById(commentsId);
+  const item = document.createElement('div');
+  item.className = 'comment-item';
+  item.innerHTML = `<div class="ci-ava" style="background:linear-gradient(135deg,var(--navy-3),var(--blue))">⚽</div>
+    <div class="ci-body">
+      <span class="ci-name">Gabriel Silva</span>
+      <div class="ci-text">${txt}</div>
+      <div class="ci-meta"><span>agora</span><span>❤️ 0</span></div>
+    </div>`;
+  container.appendChild(item);
+  input.value = '';
+  item.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+/* ── Submit post ── */
+function submitPost() {
+  const txt = document.getElementById('postTextarea').value.trim();
+  if (!txt) { showToast('Escreva algo antes de publicar!'); return; }
+  closeSheet('postSheet');
+  document.getElementById('postTextarea').value = '';
+
+  // Insert new post at top of feed
+  const newPost = document.createElement('div');
+  newPost.className = 'post-card';
+  newPost.style.cssText = 'margin-top:10px;border:1.5px solid rgba(62,183,230,.3);animation:fadeSlide .4s ease';
+  newPost.innerHTML = `
+    <div class="post-header">
+      <div class="post-ava" style="background:linear-gradient(135deg,var(--navy-3),var(--blue))">⚽</div>
+      <div class="post-meta">
+        <div class="post-name">Gabriel Silva <span class="post-lvl">🔥 Promessa</span></div>
+        <div class="post-info">agora · ConectaFoot</div>
+      </div>
+      <span style="background:var(--green-l);color:var(--green);font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px">Novo</span>
+    </div>
+    <div class="post-body"><p class="post-text">${txt.replace(/</g,'&lt;')}</p></div>
+    <div class="post-actions">
+      <button class="post-act-btn" onclick="showToast('Curtir')"><span class="heart-ico">🤍</span><span>0</span></button>
+      <button class="post-act-btn" onclick="showToast('Comentar')"><span class="comment-ico">💬</span><span>0</span></button>
+      <button class="post-act-btn" onclick="sharePost()"><span class="share-ico">📤</span><span>Compartilhar</span></button>
+    </div>`;
+
+  const feedStart = document.querySelector('.feed-tabs');
+  feedStart.insertAdjacentElement('afterend', newPost);
+  showToast('✅ Post publicado com sucesso! +30 XP');
+  window.scrollTo({top: feedStart.offsetTop + 100, behavior: 'smooth'});
+}
+
+/* ── Load more ── */
+let loadCount = 0;
+function loadMore(btn) {
+  btn.innerHTML = '⏳ Carregando…';
+  btn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    loadCount++;
+    if (loadCount >= 2) {
+      btn.style.display = 'none';
+      document.getElementById('pageEnd').style.display = 'block';
+    } else {
+      // Insert placeholder posts
+      const posts = [
+        { ava:'🧒', name:'Diego C.', lvl:'⭐ Destaque', time:'há 8h', text:'Dois gols no amistoso de hoje! Quando o trabalho duro compensa ⚽🔥', likes:56, comments:18 },
+        { ava:'👩', name:'Marina F.', lvl:'⚡ Revelação', time:'há 10h', text:'Goleira aqui! Treino de reflexos e defesas difíceis. Isso é amor pelo esporte 🧤', likes:43, comments:9 },
+      ];
+      const loadBtn = btn;
+      posts.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.style.cssText = `margin-top:10px;animation-delay:${i*.08}s`;
+        card.innerHTML = `
+          <div class="post-header">
+            <div class="post-ava">${p.ava}</div>
+            <div class="post-meta">
+              <div class="post-name">${p.name} <span class="post-lvl">${p.lvl}</span></div>
+              <div class="post-info">${p.time}</div>
+            </div>
+            <button class="post-menu" onclick="showToast('Opções')">⋯</button>
+          </div>
+          <div class="post-body"><p class="post-text">${p.text}</p></div>
+          <div class="post-actions">
+            <button class="post-act-btn" onclick="toggleLikeInline(this,${p.likes})"><span class="heart-ico">🤍</span><span>${p.likes}</span></button>
+            <button class="post-act-btn" onclick="showToast('Comentar')"><span class="comment-ico">💬</span><span>${p.comments}</span></button>
+            <button class="post-act-btn" onclick="sharePost()"><span class="share-ico">📤</span><span>Compartilhar</span></button>
+          </div>`;
+        loadBtn.insertAdjacentElement('beforebegin', card);
+      });
+      btn.innerHTML = '⬇ Carregar mais posts';
+      btn.style.pointerEvents = 'auto';
+    }
+  }, 1200);
+}
+
+function toggleLikeInline(btn, base) {
+  const isLiked = btn.classList.toggle('liked');
+  btn.querySelector('.heart-ico').textContent = isLiked ? '❤️' : '🤍';
+  btn.querySelectorAll('span')[1].textContent = isLiked ? base + 1 : base;
+}
+
+/* ── Story ── */
+function openStory(name) {
+  showToast('Story de ' + name);
+}
+
+/* ── Share ── */
+function sharePost() {
+  if(navigator.share) navigator.share({title:'ConectaFoot', url:window.location.href});
+  else showToast('Link copiado!');
+}
+
+function openPostMenu() {
+  showToast('Opções do post');
+}
+
+/* ── Toast ── */
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>{ t.style.display='none'; }, 2400);
+}
+
+/* ── Pull to refresh (simulated) ── */
+let startY = 0;
+document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+document.addEventListener('touchend', e => {
+  const dy = e.changedTouches[0].clientY - startY;
+  if (dy > 80 && window.scrollY === 0) showToast('🔄 Feed atualizado!');
+});
+</script>
+<div class="nav-back-bar"><a href="projeto.html">← Projeto</a><span class="nav-logo">ConectaFoot IA</span><div style="display:flex;gap:4px"><a href="central-ia.html">Hub</a><a href="perfil-atleta.html">Perfil</a><a href="feed.html">Feed</a><a href="match-ia.html">Match</a><a href="bio-conteudo.html">Bio</a></div></div></body>
+</html>

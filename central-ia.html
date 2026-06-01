@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central de IA — ConectaFoot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #3eb7e6;
+      --blue-d:  #0b8fc4;
+      --navy:    #1a237e;
+      --navy-2:  #283593;
+      --navy-3:  #3949ab;
+      --green:   #2e7d32;
+      --green-l: #e8f5e9;
+      --amber:   #f59e0b;
+      --amber-l: #fff8e1;
+      --red-l:   #fff3f3;
+      --gray-1:  #f2f4f7;
+      --gray-2:  #e8eaf6;
+      --gray-3:  #d0d5dd;
+      --gray-4:  #98a2b3;
+      --gray-5:  #667085;
+      --gray-6:  #475467;
+      --gray-7:  #344054;
+      --white:   #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--gray-1);
+      color: var(--gray-7);
+      min-height: 100vh;
+    }
+
+    /* ─────────────────────────────────────────────────── TOP NAV */
+    .top-nav {
+      background: var(--navy);
+      padding: 0 20px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-nav-left { display: flex; align-items: center; gap: 10px; }
+    .top-nav-logo {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+    }
+    .top-nav-badge {
+      background: rgba(62,183,230,.15);
+      border: 1px solid rgba(62,183,230,.3);
+      color: var(--blue);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .top-nav-right { display: flex; align-items: center; gap: 10px; }
+    .top-nav-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 2px solid rgba(255,255,255,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .top-nav-notif {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+    .top-nav-notif::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #ff5252;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      border: 1px solid var(--navy);
+    }
+
+    /* ─────────────────────────────────────────────────── PAGE WRAPPER */
+    .page { max-width: 500px; margin: 0 auto; padding-bottom: 100px; }
+
+    /* ─────────────────────────────────────────────────── HEADER HERO */
+    .hub-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      padding: 24px 20px 22px;
+      color: white;
+    }
+    .hub-header-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .hub-header-icon { font-size: 30px; }
+    .hub-header-text { flex: 1; }
+    .hub-title { font-size: 19px; font-weight: 800; line-height: 1.2; }
+    .hub-subtitle { font-size: 13px; opacity: .75; margin-top: 2px; }
+
+    .hub-level-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.22);
+      padding: 6px 13px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* XP bar */
+    .hub-xp-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .hub-xp-label { font-size: 11px; opacity: .65; white-space: nowrap; }
+    .hub-xp-track {
+      flex: 1;
+      height: 7px;
+      background: rgba(255,255,255,.18);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .hub-xp-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 4px;
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Stats */
+    .hub-stats {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,.18);
+      border-radius: 12px;
+      padding: 12px 0;
+    }
+    .hub-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .hub-stat-div { width: 1px; height: 30px; background: rgba(255,255,255,.14); }
+    .hub-stat-val { font-size: 22px; font-weight: 800; color: white; line-height: 1; }
+    .hub-stat-lbl { font-size: 10px; color: rgba(255,255,255,.65); letter-spacing: .2px; }
+
+    /* ─────────────────────────────────────────────────── SECTION */
+    .hub-section {
+      margin: 14px 14px 0;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 18px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    }
+    .hub-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-7);
+      margin-bottom: 14px;
+    }
+
+    /* ─────────────────────────────────────────────────── INSIGHTS */
+    .hub-insight {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      animation: fadeIn .4s ease both;
+    }
+    .hub-insight:last-child { margin-bottom: 0; }
+    .hub-insight--high   { background: var(--red-l); border: 1px solid #ffcdd2; }
+    .hub-insight--medium { background: var(--amber-l); border: 1px solid #ffe082; }
+    .hub-insight--low    { background: #f3f8ff; border: 1px solid var(--gray-2); }
+
+    .hub-insight-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .hub-insight-msg {
+      flex: 1;
+      font-size: 13px;
+      color: var(--gray-7);
+      line-height: 1.55;
+      min-width: 160px;
+    }
+    .hub-insight-btn {
+      background: transparent;
+      border: 1px solid var(--gray-2);
+      color: var(--navy);
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 12px;
+      height: 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .hub-insight-btn:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    /* ─────────────────────────────────────────────────── FEATURE GRID */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .hub-card {
+      background: #f8f9ff;
+      border: 1.5px solid var(--gray-2);
+      border-radius: 13px;
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hub-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 6px 20px rgba(62,183,230,.15);
+      transform: translateY(-3px);
+    }
+    .hub-card:active { transform: translateY(0); }
+    .hub-card-emoji { font-size: 24px; margin-bottom: 4px; }
+    .hub-card-name { font-size: 13px; font-weight: 700; color: var(--gray-7); line-height: 1.3; }
+    .hub-card-meta { font-size: 11px; color: var(--gray-5); }
+    .hub-card-meta--cta { color: var(--blue); font-weight: 600; }
+    .hub-card-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--navy-3));
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 3px;
+      letter-spacing: .3px;
+    }
+
+    /* ─────────────────────────────────────────────────── SCOUT REPORT */
+    .hub-scout-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .hub-scout-video-block { flex: 1; }
+    .hub-scout-video-title {
+      font-size: 13px;
+      color: var(--gray-6);
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hub-scout-date-tag {
+      font-size: 10px;
+      color: var(--gray-4);
+    }
+    .hub-scout-score-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(26,35,126,.25);
+    }
+    .hub-scout-score-num {
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+    }
+    .hub-scout-score-max {
+      font-size: 10px;
+      color: rgba(255,255,255,.6);
+    }
+
+    /* Score bars */
+    .hub-scout-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .hub-scout-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hub-scout-bar-label {
+      font-size: 11px;
+      color: var(--gray-6);
+      width: 74px;
+      flex-shrink: 0;
+    }
+    .hub-scout-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--gray-2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .hub-scout-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+    .hub-scout-bar-fill--high   { background: linear-gradient(90deg, var(--navy), var(--blue)); }
+    .hub-scout-bar-fill--mid    { background: linear-gradient(90deg, var(--navy-2), var(--navy-3)); }
+    .hub-scout-bar-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Chips */
+    .hub-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .hub-chip {
+      padding: 4px 11px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .hub-chip--green { background: var(--green-l); color: var(--green); }
+    .hub-chip--amber { background: var(--amber-l); color: #92400e; }
+
+    .hub-scout-recommendation {
+      background: #f8f9ff;
+      border-left: 3px solid var(--navy);
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 12px;
+      color: var(--gray-6);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    .hub-scout-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-outline {
+      flex: 1;
+      background: transparent;
+      border: 1.5px solid var(--gray-3);
+      color: var(--navy);
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-outline:hover { border-color: var(--navy); background: #f3f4ff; }
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      border: none;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--navy-2), var(--navy-3));
+      box-shadow: 0 4px 12px rgba(26,35,126,.3);
+    }
+    .btn-blue {
+      flex: 1;
+      background: linear-gradient(135deg, var(--blue), var(--blue-d));
+      border: none;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-blue:hover {
+      box-shadow: 0 4px 12px rgba(62,183,230,.35);
+      transform: translateY(-1px);
+    }
+
+    /* ─────────────────────────────────────────────────── GAMIFICATION */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .badge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: transform .2s;
+    }
+    .badge-icon:hover { transform: scale(1.1); }
+    .badge-icon--earned { background: linear-gradient(135deg, #fff8e1, #ffd54f); box-shadow: 0 2px 8px rgba(255,193,7,.3); }
+    .badge-icon--locked { background: var(--gray-2); filter: grayscale(1); opacity: .5; }
+    .badge-label { font-size: 9px; color: var(--gray-5); text-align: center; line-height: 1.2; }
+
+    .level-track {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+      align-items: flex-end;
+    }
+    .level-step {
+      flex: 1;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 6px 2px;
+      transition: all .2s;
+      cursor: pointer;
+      min-height: 40px;
+    }
+    .level-step:nth-child(1) { height: 40px; background: #e3f2fd; }
+    .level-step:nth-child(2) { height: 52px; background: #e1f5fe; }
+    .level-step:nth-child(3) { height: 64px; background: #e0f7fa; }
+    .level-step:nth-child(4) { height: 76px; background: #e8f5e9; }
+    .level-step:nth-child(5) { height: 88px; background: #fff8e1; }
+    .level-step:nth-child(6) { height: 100px; background: #fce4ec; }
+    .level-step--active { box-shadow: 0 0 0 2px var(--blue), 0 4px 12px rgba(62,183,230,.25); }
+    .level-step-icon { font-size: 18px; }
+    .level-step-name { font-size: 8px; font-weight: 700; color: var(--gray-7); text-align: center; margin-top: 3px; }
+    .level-step-xp { font-size: 7px; color: var(--gray-5); }
+
+    .leaderboard-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-1);
+    }
+    .leaderboard-row:last-child { border-bottom: none; }
+    .lb-pos {
+      width: 22px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gray-4);
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .lb-pos--1 { color: #f59e0b; }
+    .lb-pos--2 { color: #98a2b3; }
+    .lb-pos--3 { color: #c27c0e; }
+    .lb-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gray-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .lb-info { flex: 1; }
+    .lb-name { font-size: 13px; font-weight: 600; color: var(--gray-7); }
+    .lb-meta { font-size: 11px; color: var(--gray-5); }
+    .lb-xp {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+    .lb-row-you {
+      background: linear-gradient(90deg, #e8f0fe, #f3f4ff);
+      margin: 0 -16px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border-bottom: none !important;
+    }
+    .lb-you-tag {
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--blue);
+      color: white;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ─────────────────────────────────────────────────── HISTORY */
+    .hub-history-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-1);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .hub-history-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .hub-history-row:hover {
+      background: #f8f9ff;
+      margin: 0 -16px;
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+    .hub-history-icon { font-size: 20px; }
+    .hub-history-info { flex: 1; }
+    .hub-history-title { font-size: 13px; font-weight: 600; color: var(--gray-7); }
+    .hub-history-meta { font-size: 11px; color: var(--gray-5); margin-top: 2px; }
+    .hub-history-score {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .hub-history-arr { font-size: 18px; color: var(--gray-3); margin-left: 4px; }
+
+    /* ─────────────────────────────────────────────────── BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--gray-2);
+      display: flex;
+      z-index: 100;
+    }
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 0 6px;
+      cursor: pointer;
+      transition: color .2s;
+      color: var(--gray-4);
+      font-size: 10px;
+      font-weight: 500;
+      gap: 3px;
+      text-decoration: none;
+    }
+    .bottom-nav-item .nav-icon { font-size: 20px; }
+    .bottom-nav-item--active { color: var(--blue); }
+
+    /* ─────────────────────────────────────────────────── UTILITIES */
+    .divider { height: 1px; background: var(--gray-1); margin: 14px 0; }
+    .text-center { text-align: center; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Animated progress */
+    .animated { animation: fadeIn .5s ease both; }
+    .animated:nth-child(1) { animation-delay: .05s; }
+    .animated:nth-child(2) { animation-delay: .1s; }
+    .animated:nth-child(3) { animation-delay: .15s; }
+    .animated:nth-child(4) { animation-delay: .2s; }
+
+    /* ─────────────────────────────────────────────────── MODAL OVERLAY */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet {
+      background: white;
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 500px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 24px 20px 40px;
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--gray-3);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gray-7);
+      margin-bottom: 16px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: var(--gray-1);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─────────────────────────────────────────────────── BADGE TOOLTIP */
+    .badge-tooltip {
+      display: none;
+      position: fixed;
+      z-index: 300;
+      background: var(--gray-7);
+      color: white;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      max-width: 200px;
+      text-align: center;
+    }
+    .badge-tooltip.show { display: block; }
+
+    /* ─────────────────────────────────────────────────── AGENTS */
+    .agents-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 2px 0 8px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .agents-scroll::-webkit-scrollbar { display: none; }
+    .agent-card {
+      flex: 0 0 115px;
+      border-radius: 16px;
+      padding: 14px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+      position: relative;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    }
+    .agent-card:active { transform: scale(.95); }
+    .agent-card-avatar {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      border: 2.5px solid rgba(255,255,255,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+    .agent-card-name  { font-size: 11px; font-weight: 800; color: white; text-align: center; letter-spacing: .3px; }
+    .agent-card-role  { font-size: 10px; color: rgba(255,255,255,.75); text-align: center; line-height: 1.3; }
+    .agent-card-badge {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 8px; font-weight: 800;
+      background: rgba(255,255,255,.22); color: white;
+      padding: 2px 5px; border-radius: 100px; letter-spacing: .3px;
+    }
+    .agent-card--conecta { background: linear-gradient(135deg, #00897b 0%, #00695c 100%); }
+    .agent-card--scout   { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); }
+    .agent-card--coach   { background: linear-gradient(135deg, #b45309 0%, #92400e 100%); }
+    .agent-card--creator { background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); }
+    .agent-card--matcher { background: linear-gradient(135deg, #0b8fc4 0%, #0277bd 100%); }
+
+    /* ─────────────────────────────────────────────────── AGENT CHAT MODAL */
+    .agent-chat-hdr {
+      display: flex; align-items: center; gap: 12px;
+      margin: 0 -20px 0; padding: 0 20px 14px;
+      border-bottom: 1px solid var(--gray-2);
+    }
+    .agent-chat-ico {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .agent-chat-nm  { font-size: 15px; font-weight: 800; color: var(--gray-7); }
+    .agent-chat-st  { font-size: 11px; color: #2e7d32; font-weight: 600; }
+    .chat-messages  {
+      min-height: 200px; max-height: 270px; overflow-y: auto;
+      padding: 14px 0; display: flex; flex-direction: column; gap: 10px;
+    }
+    .chat-bubble {
+      max-width: 84%; padding: 10px 13px; border-radius: 14px;
+      font-size: 13px; line-height: 1.55;
+    }
+    .chat-bubble--agent { background: var(--gray-1); color: var(--gray-7); border-bottom-left-radius: 4px; align-self: flex-start; }
+    .chat-bubble--user  { background: var(--navy); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+    .chat-bubble--typing { font-style: italic; color: var(--gray-5); }
+    .chat-input-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+    .chat-input {
+      flex: 1; border: 1.5px solid var(--gray-3); border-radius: 24px;
+      padding: 10px 14px; font-family: 'Poppins', sans-serif;
+      font-size: 13px; outline: none; color: var(--gray-7);
+    }
+    .chat-input:focus { border-color: var(--navy); }
+    .chat-send { width: 40px; height: 40px; border-radius: 50%; border: none;
+      background: var(--navy); color: white; font-size: 16px; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .15s; }
+    .chat-send:active { opacity: .8; }
+
+    /* ─────────────────────────────────────────────────── VIDEO LIST */
+    .video-list { display: flex; flex-direction: column; gap: 8px; }
+    .video-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px; background: var(--gray-1); border-radius: 10px;
+      cursor: pointer; transition: background .15s;
+    }
+    .video-item:hover { background: var(--gray-2); }
+    .video-thumb {
+      width: 62px; height: 42px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--navy-2), var(--navy-3));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .video-info { flex: 1; min-width: 0; }
+    .video-ttl { font-size: 12px; font-weight: 600; color: var(--gray-7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .video-met { font-size: 10px; color: var(--gray-5); margin-top: 2px; }
+    .video-tags { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
+    .vtag {
+      font-size: 9px; font-weight: 700;
+      padding: 2px 7px; border-radius: 100px; white-space: nowrap;
+    }
+    .vtag--hl   { background: #e3f2fd; color: #0b8fc4; }
+    .vtag--full { background: #e8f5e9; color: #2e7d32; }
+    .vtag--trn  { background: #fff8e1; color: #b45309; }
+    .vtag--rep  { background: #f3e8ff; color: #7c3aed; }
+    .video-add {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 12px; border: 1.5px dashed var(--gray-3); border-radius: 10px;
+      color: var(--gray-5); font-size: 12px; font-weight: 600;
+      cursor: pointer; background: none; width: 100%;
+      font-family: 'Poppins', sans-serif; transition: border-color .15s, color .15s;
+    }
+    .video-add:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ─────────────────────────────────────────────────── CATEGORY TABS */
+    .cat-tabs {
+      display: flex; gap: 6px; margin-bottom: 14px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      flex-shrink: 0; padding: 5px 13px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; cursor: pointer; border: none;
+      background: var(--gray-2); color: var(--gray-6);
+      font-family: 'Poppins', sans-serif; transition: background .15s, color .15s;
+    }
+    .cat-tab--active { background: var(--navy); color: white; }
+
+    /* ─────────────────────────────────────────────────── RESPONSIVE */
+    @media (max-width: 440px) {
+      .hub-stat-val { font-size: 18px; }
+      .badges-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+      .badge-icon { width: 38px; height: 38px; font-size: 18px; }
+    }
+  </style>
+<style>.nav-back-bar{position:fixed;bottom:0;left:0;right:0;background:#1a237e;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.nav-back-bar a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:700;font-family:Poppins,sans-serif;padding:5px 10px;border-radius:6px;transition:background .2s}.nav-back-bar a:hover{background:rgba(255,255,255,.12);color:#fff}.nav-back-bar .nav-logo{color:#3eb7e6;font-size:12px;font-weight:800}</style></head>
+<body>
+
+<!-- ═══════════════════════════════════════ TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <span class="top-nav-logo">ConectaFoot</span>
+    <span class="top-nav-badge">IA</span>
+  </div>
+  <div class="top-nav-right">
+    <div class="top-nav-notif">🔔</div>
+    <div class="top-nav-avatar">⚽</div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════════ HEADER HERO -->
+  <div class="hub-header">
+    <div class="hub-header-row">
+      <span class="hub-header-icon">🤖</span>
+      <div class="hub-header-text">
+        <div class="hub-title">IA ConectaFoot</div>
+        <div class="hub-subtitle">Olá, Gabriel!</div>
+      </div>
+      <div class="hub-level-pill">🔥 <span>Promessa</span></div>
+    </div>
+
+    <div class="hub-xp-row">
+      <span class="hub-xp-label">1.240 XP</span>
+      <div class="hub-xp-track">
+        <div class="hub-xp-fill" id="xpFill" style="width: 0%"></div>
+      </div>
+      <span class="hub-xp-label">1.800 XP</span>
+    </div>
+
+    <div class="hub-stats">
+      <div class="hub-stat">
+        <span class="hub-stat-val" id="streakVal">0</span>
+        <span class="hub-stat-lbl">🔥 dias</span>
+      </div>
+      <div class="hub-stat-div"></div>
+      <div class="hub-stat">
+        <span class="hub-stat-val" id="viewsVal">0</span>
+        <span class="hub-stat-lbl">👁️ visitas</span>
+      </div>
+      <div class="hub-stat-div"></div>
+      <div class="hub-stat">
+        <span class="hub-stat-val" id="weekXpVal">0</span>
+        <span class="hub-stat-lbl">⚡ XP/sem</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ INSIGHTS -->
+  <div class="hub-section">
+    <div class="hub-section-title">💡 Insights para você</div>
+
+    <div class="hub-insight hub-insight--high animated">
+      <span class="hub-insight-icon">🎬</span>
+      <p class="hub-insight-msg">Você tem portfólio mas ainda não gerou um Laudo Scout. Scouts preferem atletas com relatório técnico.</p>
+      <button class="hub-insight-btn" onclick="openScoutModal()">Gerar Laudo →</button>
+    </div>
+
+    <div class="hub-insight hub-insight--medium animated">
+      <span class="hub-insight-icon">📊</span>
+      <p class="hub-insight-msg">Reanalize seu perfil — ele pode ter evoluído desde a última análise há 3 dias.</p>
+      <button class="hub-insight-btn" onclick="showToast('Abrindo análise de perfil…')">Reanalisar →</button>
+    </div>
+
+    <div class="hub-insight hub-insight--low animated">
+      <span class="hub-insight-icon">🔥</span>
+      <p class="hub-insight-msg">Mantenha a sequência diária para acumular XP e aparecer mais para clubes.</p>
+      <button class="hub-insight-btn" onclick="showToast('Abrindo chat de carreira…')">Abrir Chat →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ AGENTES IA -->
+  <div class="hub-section">
+    <div class="hub-section-title">🤖 Escolha seu Agente</div>
+    <div class="agents-scroll">
+
+      <div class="agent-card agent-card--conecta" onclick="openAgent('conecta')">
+        <div class="agent-card-badge">⭐ CONECTA</div>
+        <div class="agent-card-avatar">🤖</div>
+        <div class="agent-card-name">CONECTA</div>
+        <div class="agent-card-role">Motivação & visão geral</div>
+      </div>
+
+      <div class="agent-card agent-card--scout" onclick="openAgent('scout')">
+        <div class="agent-card-badge">🎯 SCOUT</div>
+        <div class="agent-card-avatar">📹</div>
+        <div class="agent-card-name">SCOUT PRO</div>
+        <div class="agent-card-role">Análise técnica de vídeo</div>
+      </div>
+
+      <div class="agent-card agent-card--coach" onclick="openAgent('coach')">
+        <div class="agent-card-badge">📋 COACH</div>
+        <div class="agent-card-avatar">🏆</div>
+        <div class="agent-card-name">COACH</div>
+        <div class="agent-card-role">Plano de carreira</div>
+      </div>
+
+      <div class="agent-card agent-card--creator" onclick="openAgent('creator')">
+        <div class="agent-card-badge">✨ CREATOR</div>
+        <div class="agent-card-avatar">🎨</div>
+        <div class="agent-card-name">CREATOR</div>
+        <div class="agent-card-role">Bio, posts & cards</div>
+      </div>
+
+      <div class="agent-card agent-card--matcher" onclick="openAgent('matcher')">
+        <div class="agent-card-badge">🔍 MATCH</div>
+        <div class="agent-card-avatar">⚽</div>
+        <div class="agent-card-name">MATCHER</div>
+        <div class="agent-card-role">Match com clubes</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ FERRAMENTAS -->
+  <div class="hub-section">
+    <div class="hub-section-title">🛠️ Ações rápidas</div>
+    <div class="hub-grid">
+
+      <div class="hub-card animated" onclick="showToast('Abrindo Chat de Carreira…')">
+        <div class="hub-card-emoji">💬</div>
+        <div class="hub-card-name">Chat de Carreira</div>
+        <div class="hub-card-meta hub-card-meta--cta">24 mensagens</div>
+      </div>
+
+      <div class="hub-card animated" onclick="showToast('Analisando seu perfil…')">
+        <div class="hub-card-emoji">📊</div>
+        <div class="hub-card-name">Análise de Perfil</div>
+        <div class="hub-card-meta">há 3 dias</div>
+      </div>
+
+      <div class="hub-card animated" onclick="openContentModal()">
+        <div class="hub-card-emoji">✨</div>
+        <div class="hub-card-name">Bio &amp; Conteúdo</div>
+        <div class="hub-card-meta">Bio, posts, portfólio</div>
+        <span class="hub-card-tag">NOVO</span>
+      </div>
+
+      <div class="hub-card animated" onclick="showToast('Buscando Match IA…')">
+        <div class="hub-card-emoji">🔍</div>
+        <div class="hub-card-name">Match IA</div>
+        <div class="hub-card-meta hub-card-meta--cta">Encontrar clubes</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ LAUDO SCOUT -->
+  <div class="hub-section">
+    <div class="hub-section-title">🎬 Laudo Scout IA</div>
+
+    <div class="hub-scout-header">
+      <div class="hub-scout-video-block">
+        <div class="hub-scout-video-title">Compilado Temporada 2025 — Melhores Jogadas</div>
+        <div class="hub-scout-date-tag">Gerado há 12 dias</div>
+      </div>
+      <div class="hub-scout-score-circle">
+        <div class="hub-scout-score-num">7.8</div>
+        <div class="hub-scout-score-max">/10</div>
+      </div>
+    </div>
+
+    <div class="hub-scout-bars">
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">⚽ Técnica</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--high" id="bar-tec" style="width:0%"></div>
+        </div>
+        <span class="hub-scout-bar-num">8.2</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">🧠 Visão</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--mid" id="bar-vis" style="width:0%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.5</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">💪 Físico</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--high" id="bar-fis" style="width:0%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.9</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">📍 Posic.</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--mid" id="bar-pos" style="width:0%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.6</span>
+      </div>
+    </div>
+
+    <div class="hub-chips">
+      <span class="hub-chip hub-chip--green">Finalização precisa</span>
+      <span class="hub-chip hub-chip--green">Boa leitura do jogo</span>
+      <span class="hub-chip hub-chip--green">Velocidade</span>
+      <span class="hub-chip hub-chip--amber">Jogo aéreo</span>
+      <span class="hub-chip hub-chip--amber">Drible em velocidade</span>
+    </div>
+
+    <div class="hub-scout-recommendation">
+      "Atleta com perfil técnico acima da média para a categoria. Destaque para a qualidade de finalização e
+      inteligência tática nas transições ofensivas. Recomendo acompanhamento para seleção na próxima janela."
+    </div>
+
+    <div class="hub-scout-actions">
+      <button class="btn-outline" onclick="openReportModal()">Ver relatório</button>
+      <button class="btn-primary" onclick="openScoutModal()">Novo Laudo</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ HISTÓRICO DE LAUDOS -->
+  <div class="hub-section">
+    <div class="hub-section-title">📅 Histórico de Laudos</div>
+
+    <div class="hub-history-row" onclick="openReportModal()">
+      <span class="hub-history-icon">📋</span>
+      <div class="hub-history-info">
+        <div class="hub-history-title">Compilado Temporada 2025 — Melhores Jogadas</div>
+        <div class="hub-history-meta">há 12 dias</div>
+      </div>
+      <span class="hub-history-score">7.8</span>
+      <span class="hub-history-arr">›</span>
+    </div>
+
+    <div class="hub-history-row" onclick="showToast('Abrindo laudo anterior…')">
+      <span class="hub-history-icon">📋</span>
+      <div class="hub-history-info">
+        <div class="hub-history-title">Treino Técnico — Dribles e Passes</div>
+        <div class="hub-history-meta">há 34 dias</div>
+      </div>
+      <span class="hub-history-score">7.1</span>
+      <span class="hub-history-arr">›</span>
+    </div>
+
+    <div class="hub-history-row" onclick="showToast('Abrindo laudo anterior…')">
+      <span class="hub-history-icon">📋</span>
+      <div class="hub-history-info">
+        <div class="hub-history-title">Jogo Amistoso — Atacante em destaque</div>
+        <div class="hub-history-meta">há 61 dias</div>
+      </div>
+      <span class="hub-history-score">6.8</span>
+      <span class="hub-history-arr">›</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ MEUS VÍDEOS -->
+  <div class="hub-section">
+    <div class="hub-section-title">🎬 Meus Vídeos</div>
+    <div class="video-list">
+
+      <div class="video-item" onclick="openAgent('scout')">
+        <div class="video-thumb">▶️</div>
+        <div class="video-info">
+          <div class="video-ttl">Compilado Temporada 2025 — Melhores Jogadas</div>
+          <div class="video-met">Adicionado há 12 dias</div>
+        </div>
+        <div class="video-tags">
+          <span class="vtag vtag--hl">Highlights</span>
+          <span class="vtag vtag--rep">Laudo 7.8 ✓</span>
+        </div>
+      </div>
+
+      <div class="video-item" onclick="showToast('Abrindo vídeo…')">
+        <div class="video-thumb">▶️</div>
+        <div class="video-info">
+          <div class="video-ttl">Treino Técnico — Dribles e Passes</div>
+          <div class="video-met">Adicionado há 34 dias</div>
+        </div>
+        <div class="video-tags">
+          <span class="vtag vtag--trn">Treino</span>
+          <span class="vtag vtag--rep">Laudo 7.1 ✓</span>
+        </div>
+      </div>
+
+      <div class="video-item" onclick="showToast('Abrindo vídeo…')">
+        <div class="video-thumb">▶️</div>
+        <div class="video-info">
+          <div class="video-ttl">Jogo Amistoso — Atacante em Destaque</div>
+          <div class="video-met">Adicionado há 61 dias · Sem laudo</div>
+        </div>
+        <div class="video-tags">
+          <span class="vtag vtag--full">Jogo Completo</span>
+        </div>
+      </div>
+
+      <button class="video-add" onclick="showToast('Cole o link do YouTube e escolha o tipo de vídeo')">
+        ➕ Adicionar vídeo do YouTube
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ GAMIFICAÇÃO -->
+  <div class="hub-section">
+    <div class="hub-section-title">🏅 Conquistas &amp; Nível</div>
+
+    <!-- Level track -->
+    <div class="level-track" id="levelTrack">
+      <div class="level-step" title="Novato">
+        <span class="level-step-icon">🌱</span>
+        <span class="level-step-name">Novato</span>
+        <span class="level-step-xp">0 XP</span>
+      </div>
+      <div class="level-step" title="Revelação">
+        <span class="level-step-icon">⚡</span>
+        <span class="level-step-name">Revelação</span>
+        <span class="level-step-xp">300</span>
+      </div>
+      <div class="level-step level-step--active" title="Promessa — você está aqui">
+        <span class="level-step-icon">🔥</span>
+        <span class="level-step-name">Promessa</span>
+        <span class="level-step-xp">800</span>
+      </div>
+      <div class="level-step" title="Destaque">
+        <span class="level-step-icon">⭐</span>
+        <span class="level-step-name">Destaque</span>
+        <span class="level-step-xp">1.800</span>
+      </div>
+      <div class="level-step" title="Craque">
+        <span class="level-step-icon">👑</span>
+        <span class="level-step-name">Craque</span>
+        <span class="level-step-xp">4.000</span>
+      </div>
+      <div class="level-step" title="Lenda">
+        <span class="level-step-icon">🏆</span>
+        <span class="level-step-name">Lenda</span>
+        <span class="level-step-xp">8.000</span>
+      </div>
+    </div>
+    <p style="font-size:11px; color:var(--gray-4); margin-bottom:16px; text-align:center;">Você está no nível 3 — faltam 560 XP para Destaque</p>
+
+    <div class="divider"></div>
+    <div class="hub-section-title" style="margin-bottom:12px;">🏅 Badges conquistados</div>
+
+    <div class="badges-grid">
+      <div class="badge-item" onclick="showBadge('Primeiro Login','Bem-vindo à plataforma!')">
+        <div class="badge-icon badge-icon--earned">🎯</div>
+        <span class="badge-label">1º Login</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Perfil 50%','Completou metade do perfil!')">
+        <div class="badge-icon badge-icon--earned">📝</div>
+        <span class="badge-label">Perfil 50%</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Portfólio','Adicionou seu primeiro vídeo!')">
+        <div class="badge-icon badge-icon--earned">🎬</div>
+        <span class="badge-label">Portfólio</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('1ª Avaliação','Recebeu sua primeira avaliação!')">
+        <div class="badge-icon badge-icon--earned">⭐</div>
+        <span class="badge-label">1ª Avaliação</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Popular','Seu perfil foi visto 50x!')">
+        <div class="badge-icon badge-icon--earned">👁️</div>
+        <span class="badge-label">Popular</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('5 Avaliações','Desbloqueie com 5 avaliações')">
+        <div class="badge-icon badge-icon--locked">🏅</div>
+        <span class="badge-label">5 Aval.</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Streak 7','7 dias consecutivos de acesso')">
+        <div class="badge-icon badge-icon--locked">🔥</div>
+        <span class="badge-label">Streak 7</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Top Semanal','Entre no top 10 da semana')">
+        <div class="badge-icon badge-icon--locked">🥇</div>
+        <span class="badge-label">Top Sem.</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Clube Interessado','Um clube visualizou seu perfil')">
+        <div class="badge-icon badge-icon--locked">🏟️</div>
+        <span class="badge-label">Clube Int.</span>
+      </div>
+      <div class="badge-item" onclick="showBadge('Perfil 100%','Complete 100% do seu perfil')">
+        <div class="badge-icon badge-icon--locked">✅</div>
+        <span class="badge-label">Perfil 100%</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="hub-section-title" style="margin-bottom:10px;">🏆 Ranking Semanal</div>
+
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab cat-tab--active" onclick="switchCat(this,'cria')">Cria da Base</button>
+      <button class="cat-tab" onclick="switchCat(this,'boleiro')">Boleiro</button>
+      <button class="cat-tab" onclick="switchCat(this,'juvena')">Juvena</button>
+      <button class="cat-tab" onclick="switchCat(this,'profissa')">Profissa</button>
+    </div>
+    <div style="font-size:11px; color:var(--gray-5); margin-bottom:12px;">Atacantes · Cria da Base · Semana atual</div>
+
+    <div class="leaderboard-row">
+      <span class="lb-pos lb-pos--1">🥇</span>
+      <div class="lb-avatar">😎</div>
+      <div class="lb-info">
+        <div class="lb-name">Lucas M.</div>
+        <div class="lb-meta">Lenda · São Paulo/SP</div>
+      </div>
+      <span class="lb-xp">520 XP</span>
+    </div>
+    <div class="leaderboard-row">
+      <span class="lb-pos lb-pos--2">🥈</span>
+      <div class="lb-avatar">🧑</div>
+      <div class="lb-info">
+        <div class="lb-name">Rafael A.</div>
+        <div class="lb-meta">Craque · Rio/RJ</div>
+      </div>
+      <span class="lb-xp">480 XP</span>
+    </div>
+    <div class="leaderboard-row">
+      <span class="lb-pos lb-pos--3">🥉</span>
+      <div class="lb-avatar">🧒</div>
+      <div class="lb-info">
+        <div class="lb-name">Diego C.</div>
+        <div class="lb-meta">Destaque · BH/MG</div>
+      </div>
+      <span class="lb-xp">440 XP</span>
+    </div>
+    <div class="leaderboard-row lb-row-you">
+      <span class="lb-pos" style="color:var(--blue); font-weight:800;">7º</span>
+      <div class="lb-avatar" style="background:linear-gradient(135deg,var(--blue),var(--navy-3));">⚽</div>
+      <div class="lb-info">
+        <div class="lb-name">Gabriel S. <span class="lb-you-tag">VOCÊ</span></div>
+        <div class="lb-meta">Promessa · Curitiba/PR</div>
+      </div>
+      <span class="lb-xp" style="color:var(--blue);">210 XP</span>
+    </div>
+
+  </div>
+
+</div><!-- /page -->
+
+<!-- ═══════════════════════════════════════ BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bottom-nav-item" href="index.html">
+    <span class="nav-icon">🏠</span>
+    Início
+  </a>
+  <a class="bottom-nav-item" href="perfil-atleta.html">
+    <span class="nav-icon">👤</span>
+    Perfil
+  </a>
+  <a class="bottom-nav-item bottom-nav-item--active" href="central-ia.html">
+    <span class="nav-icon">🤖</span>
+    IA
+  </a>
+  <a class="bottom-nav-item" href="feed.html">
+    <span class="nav-icon">📰</span>
+    Feed
+  </a>
+  <a class="bottom-nav-item" href="match-ia.html">
+    <span class="nav-icon">🔍</span>
+    Match
+  </a>
+</nav>
+
+<!-- ═══════════════════════════════════════ MODAL — AGENT CHAT -->
+<div class="modal-overlay" id="agentModal" onclick="if(event.target===this)closeModal('agentModal')">
+  <div class="modal-sheet" style="position:relative; padding-top:20px;">
+    <button class="modal-close" onclick="closeModal('agentModal')">✕</button>
+    <div class="modal-handle"></div>
+
+    <!-- agent header -->
+    <div class="agent-chat-hdr" id="agentChatHdr">
+      <div class="agent-chat-ico" id="agentChatIco"></div>
+      <div class="agent-chat-info">
+        <div class="agent-chat-nm" id="agentChatName"></div>
+        <div class="agent-chat-st">● Online agora</div>
+      </div>
+    </div>
+
+    <!-- messages -->
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <!-- input -->
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatInput" type="text" placeholder="Digite sua mensagem…"
+        onkeydown="if(event.key==='Enter')sendMsg()" />
+      <button class="chat-send" id="chatSendBtn" onclick="sendMsg()">➤</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL — SCOUT REPORT REQUEST -->
+<div class="modal-overlay" id="scoutModal" onclick="if(event.target===this)closeModal('scoutModal')">
+  <div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('scoutModal')">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">🎬 Gerar Laudo Scout IA</div>
+
+    <p style="font-size:13px; color:var(--gray-6); margin-bottom:16px; line-height:1.6;">
+      Nossa IA analisa seu vídeo de portfólio e gera um relatório técnico completo no estilo de um scout profissional.
+    </p>
+
+    <label style="font-size:12px; font-weight:700; color:var(--gray-7); display:block; margin-bottom:6px;">
+      📹 Vídeo selecionado
+    </label>
+    <div style="background:var(--gray-1); padding:12px; border-radius:8px; font-size:13px; color:var(--gray-6); margin-bottom:16px;">
+      Compilado Temporada 2025 — Melhores Jogadas
+    </div>
+
+    <label style="font-size:12px; font-weight:700; color:var(--gray-7); display:block; margin-bottom:6px;">
+      Contexto do vídeo (opcional)
+    </label>
+    <textarea placeholder="Ex: Jogo amistoso contra time da série B. Atuei como centroavante…"
+      style="width:100%; border:1.5px solid var(--gray-3); border-radius:8px; padding:12px; font-family:'Poppins',sans-serif; font-size:13px; resize:none; height:90px; outline:none; color:var(--gray-7);"
+    ></textarea>
+
+    <label style="font-size:12px; font-weight:700; color:var(--gray-7); display:block; margin:14px 0 8px;">
+      Foco da análise
+    </label>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+      <label class="focus-chip" style="cursor:pointer;">
+        <input type="checkbox" checked hidden class="focus-input" />
+        <span class="hub-chip" style="background:#e8f0fe; color:var(--navy); border:1.5px solid var(--navy-2); cursor:pointer;">⚽ Técnica</span>
+      </label>
+      <label class="focus-chip" style="cursor:pointer;">
+        <input type="checkbox" checked hidden class="focus-input" />
+        <span class="hub-chip" style="background:#e8f0fe; color:var(--navy); border:1.5px solid var(--navy-2); cursor:pointer;">🧠 Visão</span>
+      </label>
+      <label class="focus-chip" style="cursor:pointer;">
+        <input type="checkbox" hidden class="focus-input" />
+        <span class="hub-chip" style="background:var(--gray-1); color:var(--gray-5); border:1.5px solid var(--gray-3); cursor:pointer;">💪 Físico</span>
+      </label>
+      <label class="focus-chip" style="cursor:pointer;">
+        <input type="checkbox" hidden class="focus-input" />
+        <span class="hub-chip" style="background:var(--gray-1); color:var(--gray-5); border:1.5px solid var(--gray-3); cursor:pointer;">📍 Posicionamento</span>
+      </label>
+    </div>
+
+    <button class="btn-primary" style="width:100%; padding:14px;" onclick="simulateGenerate()">
+      🎬 Gerar Laudo Scout
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL — SCOUT REPORT VIEW -->
+<div class="modal-overlay" id="reportModal" onclick="if(event.target===this)closeModal('reportModal')">
+  <div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('reportModal')">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">📋 Laudo Scout Completo</div>
+
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <div style="flex:1;">
+        <div style="font-size:13px; font-weight:600; color:var(--gray-7);">Compilado Temporada 2025</div>
+        <div style="font-size:11px; color:var(--gray-4);">Gerado há 12 dias via Claude Sonnet</div>
+      </div>
+      <div class="hub-scout-score-circle">
+        <div class="hub-scout-score-num">7.8</div>
+        <div class="hub-scout-score-max">/10</div>
+      </div>
+    </div>
+
+    <div class="hub-scout-bars">
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">⚽ Técnica</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--high" style="width:82%"></div>
+        </div>
+        <span class="hub-scout-bar-num">8.2</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">🧠 Visão</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--mid" style="width:75%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.5</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">💪 Físico</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--high" style="width:79%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.9</span>
+      </div>
+      <div class="hub-scout-bar-row">
+        <span class="hub-scout-bar-label">📍 Posic.</span>
+        <div class="hub-scout-bar-track">
+          <div class="hub-scout-bar-fill hub-scout-bar-fill--mid" style="width:76%"></div>
+        </div>
+        <span class="hub-scout-bar-num">7.6</span>
+      </div>
+    </div>
+
+    <p style="font-size:12px; font-weight:700; color:var(--gray-7); margin-bottom:8px;">✅ Pontos Fortes</p>
+    <div class="hub-chips">
+      <span class="hub-chip hub-chip--green">Finalização precisa</span>
+      <span class="hub-chip hub-chip--green">Boa leitura do jogo</span>
+      <span class="hub-chip hub-chip--green">Velocidade acima da média</span>
+    </div>
+
+    <p style="font-size:12px; font-weight:700; color:var(--gray-7); margin-bottom:8px;">⚠️ A Desenvolver</p>
+    <div class="hub-chips">
+      <span class="hub-chip hub-chip--amber">Jogo aéreo</span>
+      <span class="hub-chip hub-chip--amber">Drible em alta velocidade</span>
+    </div>
+
+    <p style="font-size:12px; font-weight:700; color:var(--gray-7); margin-bottom:8px;">📝 Recomendação do Scout</p>
+    <div class="hub-scout-recommendation" style="margin-bottom:16px;">
+      "Atleta com perfil técnico acima da média para a categoria Promessa. Destaque para a qualidade
+      de finalização e inteligência tática nas transições ofensivas. Apresenta boa leitura espacial
+      do jogo e velocidade de execução que se destaca nos momentos decisivos. Recomendo
+      acompanhamento presencial para seleção na próxima janela de contratações. Potencial para
+      categoria Destaque em 6 a 12 meses com trabalho consistente nos fundamentos aéreos."
+    </div>
+
+    <div style="font-size:12px; font-weight:700; color:var(--gray-7); margin-bottom:8px;">📄 Relatório completo</div>
+    <div id="fullReport" style="display:none; font-size:12px; color:var(--gray-6); line-height:1.7; background:var(--gray-1); padding:14px; border-radius:8px; margin-bottom:14px;">
+      <strong>ANÁLISE TÉCNICA</strong><br>
+      O atleta demonstra domínio de bola sólido, com toque curto preciso e boa proteção corporal durante as conduções.
+      Nos momentos de finalização, exibe equilíbrio e potência, registrando três chutes com alto índice de precisão
+      no vídeo analisado.<br><br>
+      <strong>VISÃO DE JOGO</strong><br>
+      Apresenta movimentação sem bola inteligente, desmarcando-se em zonas de profundidade antes mesmo da construção
+      ofensiva. A capacidade de antecipar o movimento do adversário é um ponto de destaque.<br><br>
+      <strong>CONDICIONAMENTO FÍSICO</strong><br>
+      Boa intensidade ao longo do vídeo. Sprints curtos com aceleração rápida. Necessidade de desenvolvimento
+      no jogo aéreo — duelos de cabeça apresentam posicionamento aquém do esperado para o nível.
+    </div>
+    <button onclick="toggleReport()" style="background:none; border:none; color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; width:100%; text-align:center; padding:8px 0; margin-bottom:12px;" id="reportToggleBtn">
+      Ver relatório completo ▼
+    </button>
+
+    <div style="display:flex; gap:8px;">
+      <button class="btn-outline" onclick="showToast('Relatório copiado!')">📋 Copiar</button>
+      <button class="btn-blue" onclick="showToast('Compartilhando…')">📤 Compartilhar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MODAL — BIO & CONTEÚDO -->
+<div class="modal-overlay" id="contentModal" onclick="if(event.target===this)closeModal('contentModal')">
+  <div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" onclick="closeModal('contentModal')">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">✨ Gerar Bio &amp; Conteúdo</div>
+
+    <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+      <button onclick="selectContent(this,'bio')" class="content-type-btn" style="background:var(--navy); color:white; border:none; padding:14px; border-radius:10px; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; cursor:pointer; text-align:left; display:flex; align-items:center; gap:10px;">
+        <span>📝</span>
+        <div>
+          <div>Bio do Perfil</div>
+          <div style="font-size:11px; opacity:.7; font-weight:400;">Apresentação profissional para seu perfil</div>
+        </div>
+      </button>
+      <button onclick="selectContent(this,'post')" class="content-type-btn" style="background:var(--gray-1); color:var(--gray-7); border:1.5px solid var(--gray-2); padding:14px; border-radius:10px; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; cursor:pointer; text-align:left; display:flex; align-items:center; gap:10px;">
+        <span>📣</span>
+        <div>
+          <div>Post para Redes</div>
+          <div style="font-size:11px; color:var(--gray-5); font-weight:400;">Conteúdo para Instagram/TikTok</div>
+        </div>
+      </button>
+      <button onclick="selectContent(this,'portfolio')" class="content-type-btn" style="background:var(--gray-1); color:var(--gray-7); border:1.5px solid var(--gray-2); padding:14px; border-radius:10px; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; cursor:pointer; text-align:left; display:flex; align-items:center; gap:10px;">
+        <span>🎬</span>
+        <div>
+          <div>Descrição do Portfólio</div>
+          <div style="font-size:11px; color:var(--gray-5); font-weight:400;">Texto para acompanhar seu vídeo</div>
+        </div>
+      </button>
+    </div>
+
+    <div id="generatedContent" style="display:none; background:var(--gray-1); padding:14px; border-radius:10px; font-size:13px; color:var(--gray-6); line-height:1.7; margin-bottom:14px; white-space:pre-wrap; min-height:100px;">
+    </div>
+
+    <button class="btn-primary" style="width:100%; padding:14px;" onclick="generateContent()">
+      ✨ Gerar com IA
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ TOAST -->
+<div id="toast" style="display:none; position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
+  background:#344054; color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600;
+  z-index:500; white-space:nowrap; box-shadow:0 4px 12px rgba(0,0,0,.2);">
+</div>
+
+<!-- ═══════════════════════════════════════ BADGE TOOLTIP -->
+<div class="badge-tooltip" id="badgeTooltip"></div>
+
+<!-- ═══════════════════════════════════════ SCRIPTS -->
+<script>
+  // ── Animated counters ──────────────────────────────────
+  function animateCount(el, target, duration) {
+    let start = 0;
+    const step = (ts) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.floor(progress * target);
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // ── Animated bar ───────────────────────────────────────
+  function animateBar(el, targetPct, delay) {
+    setTimeout(() => { el.style.width = targetPct + '%'; }, delay);
+  }
+
+  // ── Init animations ────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    // XP fill
+    setTimeout(() => {
+      document.getElementById('xpFill').style.width = '69%'; // 1240/1800
+    }, 300);
+
+    // Counters
+    setTimeout(() => animateCount(document.getElementById('streakVal'), 7, 900), 400);
+    setTimeout(() => animateCount(document.getElementById('viewsVal'), 142, 1100), 400);
+    setTimeout(() => animateCount(document.getElementById('weekXpVal'), 210, 900), 400);
+
+    // Score bars
+    animateBar(document.getElementById('bar-tec'), 82, 600);
+    animateBar(document.getElementById('bar-vis'), 75, 700);
+    animateBar(document.getElementById('bar-fis'), 79, 800);
+    animateBar(document.getElementById('bar-pos'), 76, 900);
+  });
+
+  // ── Modal helpers ───────────────────────────────────────
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  function openScoutModal()   { openModal('scoutModal'); }
+  function openReportModal()  { openModal('reportModal'); }
+  function openContentModal() { openModal('contentModal'); }
+
+  // ── Toast ───────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2400);
+  }
+
+  // ── Badge tooltip ───────────────────────────────────────
+  function showBadge(name, desc) {
+    showToast(name + ' — ' + desc);
+  }
+
+  // ── Simulate generate (scout) ───────────────────────────
+  function simulateGenerate() {
+    const btn = event.currentTarget;
+    btn.textContent = '⏳ Analisando vídeo com IA…';
+    btn.disabled = true;
+    btn.style.opacity = '.7';
+    setTimeout(() => {
+      closeModal('scoutModal');
+      btn.textContent = '🎬 Gerar Laudo Scout';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      showToast('✅ Laudo gerado com sucesso!');
+    }, 2800);
+  }
+
+  // ── Full report toggle ──────────────────────────────────
+  function toggleReport() {
+    const el = document.getElementById('fullReport');
+    const btn = document.getElementById('reportToggleBtn');
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      btn.textContent = 'Recolher ▲';
+    } else {
+      el.style.display = 'none';
+      btn.textContent = 'Ver relatório completo ▼';
+    }
+  }
+
+  // ── Content modal ────────────────────────────────────────
+  const contentTexts = {
+    bio: `Atacante de 22 anos com passagem pelas categorias de base do Atlético Paranaense. Velocidade e finalização são meus pontos fortes. Busco oportunidade para crescer no futebol profissional. Nível: Promessa 🔥 | 1.240 XP | ConectaFoot`,
+    post: `Mais um treino finalizado 💪⚽\n\nEvoluindo a cada dia, foco no trabalho e mantendo a sequência. Quem também está na luta, comenta aqui! 🔥\n\n#futebol #treino #sonhosquenãoterminunca #ConectaFoot`,
+    portfolio: `Compilado da Temporada 2025 reunindo as melhores jogadas do ano — gols, assistências, dribles e lances decisivos. Analise técnica disponível na plataforma ConectaFoot (nota: 7.8/10 pelo Scout IA).`,
+  };
+  let selectedType = 'bio';
+  function selectContent(btn, type) {
+    selectedType = type;
+    document.querySelectorAll('.content-type-btn').forEach(b => {
+      b.style.background = 'var(--gray-1)';
+      b.style.color = 'var(--gray-7)';
+      b.style.border = '1.5px solid var(--gray-2)';
+    });
+    btn.style.background = 'var(--navy)';
+    btn.style.color = 'white';
+    btn.style.border = 'none';
+    document.getElementById('generatedContent').style.display = 'none';
+  }
+  function generateContent() {
+    const el = document.getElementById('generatedContent');
+    el.textContent = '⏳ Gerando…';
+    el.style.display = 'block';
+    setTimeout(() => {
+      el.textContent = contentTexts[selectedType] || '';
+      showToast('✅ Conteúdo gerado!');
+    }, 1600);
+  }
+
+  // ── Agent configs ───────────────────────────────────────
+  const AGENTS = {
+    conecta: {
+      name: 'CONECTA',
+      emoji: '🤖',
+      color: 'linear-gradient(135deg,#00897b,#00695c)',
+      sendColor: '#00695c',
+      greeting: 'E aí, craque! 🔥 Sou a CONECTA, sua parceira aqui na plataforma. Tô de olho no seu progresso — você tá no nível Promessa com 1.240 XP. Faltam só 560 XP pro Destaque. Bora subir de nível? O que você quer fazer hoje?',
+      replies: [
+        'Exatamente isso! 💪 Manter a consistência é o que separa os craques dos promessas. Continue assim!',
+        'Boa pergunta! 🎯 Vou te conectar com o agente certo pra isso. Quer falar com o COACH ou o SCOUT PRO?',
+        'Você tá evoluindo! 🔥 Cada dia de login vale +5 XP. Sete dias seguidos e você destrava o badge Streak 7!',
+        'Arrasou! ⭐ Esse é o caminho. Clubes olham pra atletas consistentes. Você tem tudo pra chegar longe!',
+      ]
+    },
+    scout: {
+      name: 'SCOUT PRO',
+      emoji: '📹',
+      color: 'linear-gradient(135deg,#1a237e,#283593)',
+      sendColor: '#1a237e',
+      greeting: 'Olá. Sou o SCOUT PRO — scout com 15 anos de mercado no futebol brasileiro. 🎯 Vi seu compilado da Temporada 2025 e tenho algumas observações técnicas. Sua finalização está acima da média para a categoria, mas o jogo aéreo precisa de trabalho. Quer um laudo completo de algum vídeo específico?',
+      replies: [
+        'Tecnicamente falando, 8.2 em finalização é um número sólido para Cria da Base. Isso chama atenção de olheiros. Continue filmando os treinos.',
+        'Para o jogo aéreo, recomendo treinos específicos de posicionamento antes dos cruzamentos. Isso pode elevar sua nota de 7.6 para 8.0+ facilmente.',
+        'Gera um laudo completo com contexto do jogo e oponente — isso dá muito mais profundidade à análise.',
+        'Três laudos consecutivos com evolução de notas é o que um clube precisa ver antes de chamar para peneira.',
+      ]
+    },
+    coach: {
+      name: 'COACH',
+      emoji: '🏆',
+      color: 'linear-gradient(135deg,#b45309,#92400e)',
+      sendColor: '#92400e',
+      greeting: 'Boa! Sou o COACH. Antes de qualquer conselho, preciso te perguntar uma coisa importante: qual é o seu objetivo real com o futebol? Não o que você acha que eu quero ouvir — o que você realmente quer alcançar nos próximos 12 meses? 📋',
+      replies: [
+        'Esse é um objetivo claro. Agora me diz: o que você está fazendo hoje que te aproxima disso? Seja honesto.',
+        'Falta de visibilidade é um problema de estratégia, não de talento. Seu perfil tá 78% completo — os 22% restantes podem estar custando oportunidades.',
+        'Plano de ação: 1) Complete o perfil até 100% (esta semana). 2) Adicione 2 vídeos de jogo completo (próximos 15 dias). 3) Peça avaliação formal para o seu treinador.',
+        'Perfeito. Agora documente esse objetivo. Escreve no seu celular hoje. Atletas que escrevem metas têm 3x mais chance de alcançá-las.',
+      ]
+    },
+    creator: {
+      name: 'CREATOR',
+      emoji: '🎨',
+      color: 'linear-gradient(135deg,#7c3aed,#5b21b6)',
+      sendColor: '#5b21b6',
+      greeting: 'Oi! ✨ Sou o CREATOR — especialista em transformar atletas em marcas. Sua presença digital ainda tá fraca pra o nível do seu talento. Vamos mudar isso? Posso criar bio matadora, captions de impacto ou um card pré-jogo incrível. O que você precisa agora?',
+      replies: [
+        'Aqui vai uma bio pra você: "Atacante de 22 anos, categoria Cria da Base. Velocidade, leitura de jogo e finalização precisa são meu cartão de visita. Nível Promessa 🔥 — em busca do próximo nível." Gostou?',
+        'Para post pós-jogo: "Treino finalizado 💪⚽ Mais um passo na jornada. Cada repetição é um investimento no futuro. Quem tá na luta comenta aqui! #ConectaFoot #FutebolBrasileiro"',
+        'Um card de conquista com seu badge novo viraliza bem. Quer que eu gere o texto pra acompanhar a arte?',
+        'Hashtags quentes pra atletas: #FutebolBrasileiro #CriadaBase #AscensãoNoFutebol #ConectaFoot #ScoutBrasil',
+      ]
+    },
+    matcher: {
+      name: 'MATCHER',
+      emoji: '⚽',
+      color: 'linear-gradient(135deg,#0b8fc4,#0277bd)',
+      sendColor: '#0277bd',
+      greeting: 'Olá! Sou o MATCHER — conheço o mercado do futebol brasileiro de ponta a ponta. 🔍 Analisei seu perfil e identifiquei 3 clubes com alto índice de match esta semana: Grêmio (87%), Fluminense (79%) e Sport Recife (74%). Quer entender por que cada um tem interesse no seu perfil?',
+      replies: [
+        'O Grêmio procura centroavantes com boa finalização para a base — seu 8.2 técnico é exatamente o que eles querem.',
+        'Para aumentar seu match, complete o perfil (a parte de localização ainda está vazia). Clubes filtram por região.',
+        'O Sport Recife tem peneira aberta para Cria da Base em junho. Seu perfil atual seria aprovado na triagem inicial.',
+        'Envie interesse agora para Grêmio e Fluminense. Clubes que recebem interesse dentro de 48h do match têm 3x mais chance de entrar em contato.',
+      ]
+    }
+  };
+
+  let currentAgent = null;
+  let replyIndex = 0;
+
+  function openAgent(agentId) {
+    currentAgent = AGENTS[agentId];
+    replyIndex = 0;
+
+    const hdr  = document.getElementById('agentChatHdr');
+    const ico  = document.getElementById('agentChatIco');
+    const name = document.getElementById('agentChatName');
+    const msgs = document.getElementById('chatMessages');
+    const btn  = document.getElementById('chatSendBtn');
+
+    ico.style.background = currentAgent.color;
+    ico.textContent      = currentAgent.emoji;
+    name.textContent     = currentAgent.name;
+    btn.style.background = currentAgent.sendColor;
+
+    msgs.innerHTML = '';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble chat-bubble--agent';
+    bubble.textContent = currentAgent.greeting;
+    msgs.appendChild(bubble);
+
+    document.getElementById('chatInput').value = '';
+    openModal('agentModal');
+    setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 50);
+  }
+
+  function sendMsg() {
+    const input = document.getElementById('chatInput');
+    const msgs  = document.getElementById('chatMessages');
+    const text  = input.value.trim();
+    if (!text || !currentAgent) return;
+
+    const userBubble = document.createElement('div');
+    userBubble.className = 'chat-bubble chat-bubble--user';
+    userBubble.textContent = text;
+    msgs.appendChild(userBubble);
+    input.value = '';
+    msgs.scrollTop = msgs.scrollHeight;
+
+    const typingBubble = document.createElement('div');
+    typingBubble.className = 'chat-bubble chat-bubble--agent chat-bubble--typing';
+    typingBubble.textContent = '…';
+    msgs.appendChild(typingBubble);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    setTimeout(() => {
+      typingBubble.classList.remove('chat-bubble--typing');
+      typingBubble.textContent = currentAgent.replies[replyIndex % currentAgent.replies.length];
+      replyIndex++;
+      msgs.scrollTop = msgs.scrollHeight;
+    }, 1200);
+  }
+
+  // ── Category tab switch ─────────────────────────────────
+  function switchCat(tab, cat) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('cat-tab--active'));
+    tab.classList.add('cat-tab--active');
+    const labels = { cria: 'Cria da Base', boleiro: 'Boleiro', juvena: 'Juvena', profissa: 'Profissa' };
+    showToast('Ranking: ' + labels[cat] + ' — Atacantes');
+  }
+
+  // ── Keyboard close ──────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      ['agentModal','scoutModal','reportModal','contentModal'].forEach(id => closeModal(id));
+    }
+  });
+</script>
+<div class="nav-back-bar"><a href="projeto.html">← Projeto</a><span class="nav-logo">ConectaFoot IA</span><div style="display:flex;gap:4px"><a href="central-ia.html">Hub</a><a href="perfil-atleta.html">Perfil</a><a href="feed.html">Feed</a><a href="match-ia.html">Match</a><a href="bio-conteudo.html">Bio</a></div></div></body>
+</html>

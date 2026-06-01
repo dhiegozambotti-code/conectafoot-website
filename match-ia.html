@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Match IA — ConectaFoot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --blue:#3eb7e6;--blue-d:#0b8fc4;--blue-l:#e8f6fd;
+      --navy:#1a237e;--navy-2:#283593;--navy-3:#3949ab;
+      --green:#2e7d32;--green-l:#e8f5e9;--green-m:#4caf50;
+      --amber:#f59e0b;--amber-l:#fff8e1;
+      --red:#e53935;--red-l:#fff3f3;
+      --purple:#7c3aed;--purple-l:#f5f3ff;
+      --g1:#f2f4f7;--g2:#e8eaf6;--g3:#d0d5dd;--g4:#98a2b3;
+      --g5:#667085;--g6:#475467;--g7:#344054;
+      --w:#fff;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;background:var(--g1);color:var(--g7);min-height:100vh}
+
+    /* ─── TOP NAV ─── */
+    .top-nav{background:var(--w);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--g2)}
+    .nav-back{width:36px;height:36px;border-radius:50%;background:var(--g1);border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+    .nav-back:hover{background:var(--g2)}
+    .nav-title{font-size:15px;font-weight:700;color:var(--g7);display:flex;align-items:center;gap:6px}
+    .nav-title-badge{background:linear-gradient(135deg,var(--navy),var(--navy-3));color:var(--w);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+    .nav-filter{width:36px;height:36px;border-radius:50%;background:var(--g1);border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;position:relative}
+    .nav-filter:hover{background:var(--g2)}
+    .nav-filter-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--w)}
+
+    /* ─── HERO ─── */
+    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 60%,#1565c0 100%);padding:22px 20px 24px;color:var(--w)}
+    .hero-label{font-size:11px;font-weight:600;opacity:.7;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+    .hero-title{font-size:22px;font-weight:900;line-height:1.2;margin-bottom:4px}
+    .hero-sub{font-size:13px;opacity:.75;margin-bottom:18px}
+
+    .hero-stats{display:flex;gap:10px}
+    .hstat{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 10px;text-align:center;cursor:pointer;transition:background .2s}
+    .hstat:hover{background:rgba(255,255,255,.18)}
+    .hstat-val{font-size:24px;font-weight:900;color:var(--w);display:block;line-height:1}
+    .hstat-lbl{font-size:10px;color:rgba(255,255,255,.65);margin-top:3px;display:block}
+    .hstat--highlight{background:rgba(62,183,230,.2);border-color:rgba(62,183,230,.4)}
+    .hstat--highlight .hstat-val{color:var(--blue)}
+
+    /* Pulse animation for new match */
+    .pulse-dot{display:inline-block;width:8px;height:8px;background:var(--blue);border-radius:50%;margin-right:4px;animation:pulse 1.5s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+
+    /* ─── TABS ─── */
+    .tab-bar{display:flex;background:var(--w);border-bottom:2px solid var(--g1);position:sticky;top:52px;z-index:90}
+    .tab-btn{flex:1;padding:13px 0;background:none;border:none;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--g4);cursor:pointer;position:relative;transition:color .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+    .tab-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2.5px;background:var(--blue);transform:scaleX(0);transition:transform .25s}
+    .tab-btn.active{color:var(--navy)}
+    .tab-btn.active::after{transform:scaleX(1)}
+    .tab-badge{background:var(--red);color:var(--w);font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:100px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+    .tab-panel{display:none;padding-bottom:90px}
+    .tab-panel.active{display:block}
+
+    /* ─── FILTER ROW ─── */
+    .filter-row{padding:12px 12px 0;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+    .filter-row::-webkit-scrollbar{display:none}
+    .filter-chip{display:flex;align-items:center;gap:4px;padding:7px 13px;border-radius:100px;border:1.5px solid var(--g2);background:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g5);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+    .filter-chip:hover{border-color:var(--blue);color:var(--navy)}
+    .filter-chip.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--w);border-color:transparent}
+
+    /* ─── MATCH CARDS ─── */
+    .match-card{background:var(--w);border-radius:14px;margin:10px 12px 0;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;animation:fadeSlide .4s ease both}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* MUTUAL badge banner */
+    .mutual-banner{background:linear-gradient(135deg,var(--green),#388e3c);padding:7px 14px;display:flex;align-items:center;gap:7px}
+    .mutual-banner-ico{font-size:16px}
+    .mutual-banner-txt{font-size:12px;font-weight:700;color:var(--w)}
+    .mutual-banner-new{background:rgba(255,255,255,.25);font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;color:var(--w);margin-left:auto}
+
+    /* Card top section */
+    .mc-top{padding:14px}
+    .mc-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+    .mc-logo{width:56px;height:56px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .mc-meta{flex:1;min-width:0}
+    .mc-name{font-size:16px;font-weight:800;color:var(--g7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mc-location{font-size:12px;color:var(--g5);margin-top:2px}
+    .mc-division{display:inline-block;background:var(--g1);border:1px solid var(--g2);font-size:10px;font-weight:700;color:var(--g6);padding:2px 8px;border-radius:4px;margin-top:4px}
+    .mc-score-block{flex-shrink:0;text-align:center}
+    .mc-pct{font-size:28px;font-weight:900;line-height:1}
+    .mc-pct-lbl{font-size:9px;font-weight:600;margin-top:1px}
+    .pct--green{color:var(--green)}
+    .pct--blue{color:var(--navy)}
+    .pct--amber{color:var(--amber)}
+    .pct--gray{color:var(--g4)}
+
+    /* Match bar */
+    .mc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .mc-bar-lbl{font-size:11px;color:var(--g5);width:80px;flex-shrink:0}
+    .mc-bar-track{flex:1;height:5px;background:var(--g2);border-radius:3px;overflow:hidden}
+    .mc-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+    .mc-bar-fill--green{background:linear-gradient(90deg,var(--green),var(--green-m))}
+    .mc-bar-fill--blue{background:linear-gradient(90deg,var(--navy),var(--blue))}
+    .mc-bar-fill--amber{background:linear-gradient(90deg,#e65100,var(--amber))}
+    .mc-bar-num{font-size:11px;font-weight:700;color:var(--g7);width:28px;text-align:right;flex-shrink:0}
+
+    /* Reason chips */
+    .mc-reasons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+    .reason-chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600}
+    .reason-chip--ok{background:var(--green-l);color:var(--green)}
+    .reason-chip--warn{background:var(--amber-l);color:#92400e}
+    .reason-chip--info{background:var(--blue-l);color:var(--navy)}
+
+    /* Viewed at */
+    .mc-viewed{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--g4);margin-bottom:12px}
+    .viewed-dot{width:6px;height:6px;border-radius:50%;background:var(--green-m);flex-shrink:0;animation:pulse 2s infinite}
+
+    /* Card actions */
+    .mc-actions{display:flex;gap:8px;padding:0 14px 14px}
+    .btn-view-club{flex:1;background:var(--g1);border:1.5px solid var(--g2);color:var(--g7);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:9px;cursor:pointer;transition:all .2s}
+    .btn-view-club:hover{border-color:var(--navy);background:var(--g2)}
+    .btn-send{flex:1;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:9px;cursor:pointer;transition:all .2s}
+    .btn-send:hover{box-shadow:0 4px 12px rgba(26,35,126,.3);transform:translateY(-1px)}
+    .btn-send:disabled{background:var(--g2);color:var(--g4);cursor:default;transform:none;box-shadow:none}
+    .btn-chat{flex:1;background:linear-gradient(135deg,var(--green),#388e3c);border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:9px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .btn-chat:hover{box-shadow:0 4px 12px rgba(46,125,50,.35);transform:translateY(-1px)}
+    .btn-interest-sent{flex:1;background:var(--green-l);border:1.5px solid var(--green-m);color:var(--green);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:9px;cursor:default;display:flex;align-items:center;justify-content:center;gap:5px}
+
+    /* Expand toggle */
+    .mc-expand{width:100%;background:none;border:none;border-top:1px solid var(--g1);padding:9px 14px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:background .15s}
+    .mc-expand:hover{background:var(--blue-l)}
+    .mc-details{display:none;padding:12px 14px 0;border-top:1px solid var(--g1)}
+    .mc-details.open{display:block}
+    .mc-detail-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--g1)}
+    .mc-detail-row:last-child{border-bottom:none}
+    .mc-detail-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+    .mc-detail-label{font-size:12px;color:var(--g5);width:100px;flex-shrink:0}
+    .mc-detail-val{font-size:12px;font-weight:600;color:var(--g7)}
+
+    /* ─── VIEW LOG TAB ─── */
+    .view-section-title{font-size:12px;font-weight:700;color:var(--g4);letter-spacing:.5px;text-transform:uppercase;padding:16px 14px 8px}
+    .view-card{background:var(--w);border-radius:12px;margin:0 12px 8px;padding:13px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05);display:flex;align-items:center;gap:12px;animation:fadeSlide .3s ease both}
+    .view-logo{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+    .view-info{flex:1;min-width:0}
+    .view-name{font-size:13px;font-weight:700;color:var(--g7)}
+    .view-sub{font-size:11px;color:var(--g5);margin-top:2px}
+    .view-time{font-size:11px;color:var(--g4);white-space:nowrap;flex-shrink:0;text-align:right}
+    .view-type-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;display:block;margin-top:3px;text-align:center}
+    .vbadge--scout{background:#e8f5e9;color:var(--green)}
+    .vbadge--club{background:#e8f0fe;color:var(--navy)}
+    .vbadge--agent{background:var(--purple-l);color:var(--purple)}
+
+    /* ─── SENT TAB ─── */
+    .sent-card{background:var(--w);border-radius:12px;margin:8px 12px 0;box-shadow:0 1px 3px rgba(0,0,0,.05);overflow:hidden;animation:fadeSlide .3s ease both}
+    .sent-card-top{display:flex;align-items:center;gap:12px;padding:14px}
+    .sent-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+    .sent-info{flex:1}
+    .sent-name{font-size:14px;font-weight:700;color:var(--g7)}
+    .sent-sub{font-size:11px;color:var(--g5);margin-top:2px}
+    .sent-status{display:flex;align-items:center;gap:5px;margin-top:6px}
+    .status-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px}
+    .status--analysis{background:var(--amber-l);color:#92400e}
+    .status--noresponse{background:var(--g1);color:var(--g4)}
+    .status--interested{background:var(--green-l);color:var(--green)}
+    .status--rejected{background:var(--red-l);color:var(--red)}
+    .sent-msg{padding:0 14px 12px;font-size:12px;color:var(--g5);line-height:1.5;border-top:1px solid var(--g1);padding-top:10px;font-style:italic}
+    .sent-date{font-size:11px;color:var(--g4)}
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state{text-align:center;padding:48px 24px;color:var(--g4)}
+    .empty-icon{font-size:52px;margin-bottom:14px;display:block}
+    .empty-title{font-size:16px;font-weight:700;color:var(--g7);margin-bottom:6px}
+    .empty-sub{font-size:13px;line-height:1.6}
+
+    /* ─── MODALS ─── */
+    .sheet-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:flex-end;justify-content:center}
+    .sheet-ov.open{display:flex}
+    .sheet{background:var(--w);border-radius:20px 20px 0 0;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:22px 18px 48px;animation:slideUp .3s ease;position:relative}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .sheet-handle{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 20px}
+    .sheet-close{position:absolute;top:18px;right:16px;background:var(--g1);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+    .sheet-title{font-size:17px;font-weight:800;color:var(--g7);margin-bottom:16px}
+
+    /* Club profile mini */
+    .club-profile-header{background:linear-gradient(135deg,var(--navy),var(--navy-2));border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;color:var(--w)}
+    .club-profile-logo{font-size:52px;margin-bottom:8px}
+    .club-profile-name{font-size:18px;font-weight:900}
+    .club-profile-sub{font-size:12px;opacity:.7;margin-top:3px}
+    .club-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+    .club-info-cell{background:var(--g1);border-radius:10px;padding:12px}
+    .cell-label{font-size:10px;color:var(--g4);margin-bottom:3px}
+    .cell-value{font-size:13px;font-weight:700;color:var(--g7)}
+    .club-need-section{background:linear-gradient(135deg,#e8f0fe,#f0f4ff);border:1.5px solid var(--g2);border-radius:12px;padding:14px;margin-bottom:16px}
+    .need-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px}
+    .need-chip{display:inline-flex;align-items:center;gap:4px;background:var(--w);border:1.5px solid var(--g2);border-radius:100px;font-size:11px;font-weight:600;color:var(--g7);padding:4px 10px;margin:3px 4px 3px 0}
+
+    /* Send interest */
+    .interest-preview{background:var(--g1);border-radius:12px;padding:14px;margin-bottom:16px}
+    .ip-title{font-size:12px;font-weight:700;color:var(--g7);margin-bottom:8px}
+    .ip-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--g6);padding:4px 0}
+    .ip-ico{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+    .fg{margin-bottom:14px}
+    .fg label{font-size:12px;font-weight:700;color:var(--g7);display:block;margin-bottom:6px}
+    .fg textarea{width:100%;border:1.5px solid var(--g3);border-radius:9px;padding:10px 12px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--g7);outline:none;resize:none;transition:border-color .2s}
+    .fg textarea:focus{border-color:var(--blue)}
+    .btn-send-modal{width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:4px}
+    .btn-send-modal:hover{box-shadow:0 4px 14px rgba(26,35,126,.35);transform:translateY(-1px)}
+
+    /* Send success */
+    .send-success{text-align:center;padding:20px 0 8px}
+    .send-success-icon{font-size:64px;margin-bottom:12px;animation:bounce .5s ease}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    .send-success-title{font-size:18px;font-weight:800;color:var(--g7);margin-bottom:6px}
+    .send-success-sub{font-size:13px;color:var(--g5);line-height:1.6}
+    .send-success-xp{display:inline-block;background:var(--amber-l);color:#92400e;font-size:13px;font-weight:700;padding:6px 14px;border-radius:100px;margin-top:12px}
+
+    /* Confetti */
+    .confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;top:-10px;animation:confettiFall 1.5s ease forwards}
+    @keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--w);border-top:1px solid var(--g2);display:flex;z-index:100}
+    .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 5px;cursor:pointer;color:var(--g4);font-size:10px;font-weight:500;gap:2px;text-decoration:none;transition:color .2s}
+    .bn-icon{font-size:21px}
+    .bn-item--active{color:var(--blue)}
+
+    #toast{display:none;position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--g7);color:var(--w);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:500;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+
+    /* Section titles */
+    .section-header{padding:16px 14px 0;display:flex;align-items:center;justify-content:space-between}
+    .section-title{font-size:13px;font-weight:700;color:var(--g7)}
+    .section-link{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer;background:none;border:none;font-family:'Poppins',sans-serif}
+
+    /* AI insight banner */
+    .ai-banner{margin:12px 12px 0;background:linear-gradient(135deg,#e8f0fe,#f0f4ff);border:1.5px solid var(--g2);border-radius:12px;padding:14px;display:flex;gap:10px;align-items:flex-start}
+    .ai-banner-ico{font-size:22px;flex-shrink:0}
+    .ai-banner-txt{flex:1;font-size:12px;color:var(--navy);line-height:1.55}
+    .ai-banner-txt strong{font-weight:700}
+
+    /* Animate delays */
+    .match-card:nth-child(1){animation-delay:.05s}
+    .match-card:nth-child(2){animation-delay:.1s}
+    .match-card:nth-child(3){animation-delay:.15s}
+    .match-card:nth-child(4){animation-delay:.2s}
+    .match-card:nth-child(5){animation-delay:.25s}
+    .view-card:nth-child(1){animation-delay:.05s}
+    .view-card:nth-child(2){animation-delay:.1s}
+    .view-card:nth-child(3){animation-delay:.15s}
+    .view-card:nth-child(4){animation-delay:.2s}
+    .view-card:nth-child(5){animation-delay:.25s}
+  </style>
+<style>.nav-back-bar{position:fixed;bottom:0;left:0;right:0;background:#1a237e;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.nav-back-bar a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:700;font-family:Poppins,sans-serif;padding:5px 10px;border-radius:6px;transition:background .2s}.nav-back-bar a:hover{background:rgba(255,255,255,.12);color:#fff}.nav-back-bar .nav-logo{color:#3eb7e6;font-size:12px;font-weight:800}</style></head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <button class="nav-back" onclick="history.back()">‹</button>
+  <div class="nav-title">
+    Match IA
+    <span class="nav-title-badge">BETA</span>
+  </div>
+  <button class="nav-filter" onclick="showToast('Filtros avançados')">
+    ⚙️
+    <span class="nav-filter-dot"></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label"><span class="pulse-dot"></span>Atualizado agora</div>
+  <div class="hero-title">3 clubes com match<br>esta semana 🎯</div>
+  <div class="hero-sub">IA analisou 847 clubes e filtrou os mais compatíveis com você</div>
+  <div class="hero-stats">
+    <div class="hstat hstat--highlight" onclick="switchTab(0,document.querySelectorAll('.tab-btn')[0])">
+      <span class="hstat-val" id="cMatches">0</span>
+      <span class="hstat-lbl">🤝 Matches</span>
+    </div>
+    <div class="hstat" onclick="switchTab(1,document.querySelectorAll('.tab-btn')[1])">
+      <span class="hstat-val" id="cViews">0</span>
+      <span class="hstat-lbl">👁️ Visualizaram</span>
+    </div>
+    <div class="hstat" onclick="switchTab(2,document.querySelectorAll('.tab-btn')[2])">
+      <span class="hstat-val" id="cSent">0</span>
+      <span class="hstat-lbl">📤 Enviados</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0,this)">
+    Matches
+    <span class="tab-badge">3</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(1,this)">
+    Visualizações
+    <span class="tab-badge">6</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(2,this)">Enviados</button>
+</div>
+
+<!-- ══════════════════════════ TAB 0: MATCHES ══════════════════════════ -->
+<div class="tab-panel active" id="tab0">
+
+  <!-- Filter -->
+  <div class="filter-row">
+    <button class="filter-chip active" onclick="filterMatch(this,'all')">🔎 Todos</button>
+    <button class="filter-chip" onclick="filterMatch(this,'high')">🔥 Alta compat.</button>
+    <button class="filter-chip" onclick="filterMatch(this,'mutual')">🤝 Com interesse</button>
+    <button class="filter-chip" onclick="filterMatch(this,'sul')">📍 Sul</button>
+    <button class="filter-chip" onclick="filterMatch(this,'sudeste')">📍 Sudeste</button>
+  </div>
+
+  <!-- AI insight -->
+  <div class="ai-banner">
+    <span class="ai-banner-ico">🤖</span>
+    <span class="ai-banner-txt">
+      <strong>Insight IA:</strong> Seu perfil está com 87% de compatibilidade com o Grêmio POA. Envie interesse agora — scouts do clube visualizaram seu portfólio nas últimas 3 horas.
+    </span>
+  </div>
+
+  <!-- ── MATCH 1: GRÊMIO — 87% — MUTUAL ── -->
+  <div class="match-card" id="card-gremio" data-region="sul" data-pct="87" data-mutual="true">
+    <div class="mutual-banner">
+      <span class="mutual-banner-ico">🤝</span>
+      <span class="mutual-banner-txt">Match Mútuo — Grêmio expressou interesse!</span>
+      <span class="mutual-banner-new">NOVO</span>
+    </div>
+    <div class="mc-top">
+      <div class="mc-header">
+        <div class="mc-logo" style="background:linear-gradient(135deg,#0d47a1,#1565c0)">🦅</div>
+        <div class="mc-meta">
+          <div class="mc-name">Grêmio Porto Alegre</div>
+          <div class="mc-location">Porto Alegre — Rio Grande do Sul</div>
+          <span class="mc-division">Campeonato Gaúcho · Série B</span>
+        </div>
+        <div class="mc-score-block">
+          <div class="mc-pct pct--green" id="pct-gremio">0%</div>
+          <div class="mc-pct-lbl" style="color:var(--green)">match</div>
+        </div>
+      </div>
+
+      <!-- Score bars -->
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Compatibilidade</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--green" id="bar-gremio-main" style="width:0%"></div></div>
+        <span class="mc-bar-num">87</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Posição</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--green" id="bar-gremio-pos" style="width:0%"></div></div>
+        <span class="mc-bar-num">100</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Nota Scout</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--blue" id="bar-gremio-scout" style="width:0%"></div></div>
+        <span class="mc-bar-num">78</span>
+      </div>
+
+      <!-- Reasons -->
+      <div class="mc-reasons">
+        <span class="reason-chip reason-chip--ok">✓ Centroavante</span>
+        <span class="reason-chip reason-chip--ok">✓ Sub-23</span>
+        <span class="reason-chip reason-chip--ok">✓ Scout 7.8+</span>
+        <span class="reason-chip reason-chip--ok">✓ Sul do Brasil</span>
+        <span class="reason-chip reason-chip--ok">✓ Disponível</span>
+      </div>
+
+      <!-- Viewed -->
+      <div class="mc-viewed">
+        <span class="viewed-dot"></span>
+        Scout Carlos Mendes visualizou seu perfil e portfólio — há 3 horas
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <button class="btn-view-club" onclick="openClubProfile('gremio')">🏟️ Ver clube</button>
+      <button class="btn-chat" onclick="showToast('💬 Conversa com Grêmio iniciada!')">
+        💬 Iniciar Conversa
+      </button>
+    </div>
+
+    <button class="mc-expand" onclick="toggleDetails('details-gremio', this)">
+      Ver detalhes do match ▾
+    </button>
+    <div class="mc-details" id="details-gremio">
+      <div class="mc-detail-row"><span class="mc-detail-icon">👤</span><span class="mc-detail-label">Posição buscada</span><span class="mc-detail-val">Centroavante / Ponta-Direita</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎂</span><span class="mc-detail-label">Faixa etária</span><span class="mc-detail-val">18 a 24 anos (Sub-23)</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">📏</span><span class="mc-detail-label">Físico mínimo</span><span class="mc-detail-val">1,75m · 68kg</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎯</span><span class="mc-detail-label">Nota Scout mín.</span><span class="mc-detail-val">7.0 — <strong style="color:var(--green)">você tem 7.8 ✓</strong></span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🏆</span><span class="mc-detail-label">Categoria</span><span class="mc-detail-val">Juvena / Base</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">💰</span><span class="mc-detail-label">Contrato</span><span class="mc-detail-val">Profissional · a combinar</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🏠</span><span class="mc-detail-label">Moradia</span><span class="mc-detail-val">Oferece alojamento</span></div>
+      <div style="padding:10px 0"></div>
+    </div>
+  </div>
+
+  <!-- ── MATCH 2: FLUMINENSE — 79% ── -->
+  <div class="match-card" id="card-flu" data-region="sudeste" data-pct="79">
+    <div class="mc-top">
+      <div class="mc-header">
+        <div class="mc-logo" style="background:linear-gradient(135deg,#004d40,#00695c)">🌊</div>
+        <div class="mc-meta">
+          <div class="mc-name">Fluminense FC</div>
+          <div class="mc-location">Rio de Janeiro — RJ</div>
+          <span class="mc-division">Carioca · Pré-Série B</span>
+        </div>
+        <div class="mc-score-block">
+          <div class="mc-pct pct--blue" id="pct-flu">0%</div>
+          <div class="mc-pct-lbl" style="color:var(--navy)">match</div>
+        </div>
+      </div>
+
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Compatibilidade</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--blue" id="bar-flu-main" style="width:0%"></div></div>
+        <span class="mc-bar-num">79</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Posição</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--blue" id="bar-flu-pos" style="width:0%"></div></div>
+        <span class="mc-bar-num">100</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Região</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--amber" id="bar-flu-reg" style="width:0%"></div></div>
+        <span class="mc-bar-num">60</span>
+      </div>
+
+      <div class="mc-reasons">
+        <span class="reason-chip reason-chip--ok">✓ Centroavante</span>
+        <span class="reason-chip reason-chip--ok">✓ Sub-23</span>
+        <span class="reason-chip reason-chip--ok">✓ Scout 7.8+</span>
+        <span class="reason-chip reason-chip--warn">⚠ Sudeste (relocação)</span>
+      </div>
+
+      <div class="mc-viewed" style="animation:none">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--blue);display:inline-block;flex-shrink:0"></span>
+        Scout Rodrigo Faria visualizou seu perfil — ontem, 14:32
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <button class="btn-view-club" onclick="openClubProfile('fluminense')">🏟️ Ver clube</button>
+      <button class="btn-send" id="btn-flu" onclick="openInterestModal('flu','Fluminense FC','🌊')">📤 Enviar Interesse</button>
+    </div>
+
+    <button class="mc-expand" onclick="toggleDetails('details-flu', this)">
+      Ver detalhes do match ▾
+    </button>
+    <div class="mc-details" id="details-flu">
+      <div class="mc-detail-row"><span class="mc-detail-icon">👤</span><span class="mc-detail-label">Posição buscada</span><span class="mc-detail-val">Centroavante</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎂</span><span class="mc-detail-label">Faixa etária</span><span class="mc-detail-val">19 a 25 anos</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎯</span><span class="mc-detail-label">Nota Scout mín.</span><span class="mc-detail-val">7.5 — <strong style="color:var(--green)">você tem 7.8 ✓</strong></span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🏠</span><span class="mc-detail-label">Moradia</span><span class="mc-detail-val">Auxílio aluguel</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">✈️</span><span class="mc-detail-label">Relocação</span><span class="mc-detail-val">Necessária — Rio de Janeiro</span></div>
+      <div style="padding:10px 0"></div>
+    </div>
+  </div>
+
+  <!-- ── MATCH 3: SPORT RECIFE — 74% ── -->
+  <div class="match-card" id="card-sport" data-region="nordeste" data-pct="74">
+    <div class="mc-top">
+      <div class="mc-header">
+        <div class="mc-logo" style="background:linear-gradient(135deg,#b71c1c,#c62828)">🦁</div>
+        <div class="mc-meta">
+          <div class="mc-name">Sport Club do Recife</div>
+          <div class="mc-location">Recife — Pernambuco</div>
+          <span class="mc-division">Pernambucano · Série C</span>
+        </div>
+        <div class="mc-score-block">
+          <div class="mc-pct pct--amber" id="pct-sport">0%</div>
+          <div class="mc-pct-lbl" style="color:var(--amber)">match</div>
+        </div>
+      </div>
+
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Compatibilidade</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--amber" id="bar-sport-main" style="width:0%"></div></div>
+        <span class="mc-bar-num">74</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Posição</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--blue" id="bar-sport-pos" style="width:0%"></div></div>
+        <span class="mc-bar-num">90</span>
+      </div>
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Região</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--amber" id="bar-sport-reg" style="width:0%"></div></div>
+        <span class="mc-bar-num">45</span>
+      </div>
+
+      <div class="mc-reasons">
+        <span class="reason-chip reason-chip--ok">✓ Ponta-Direita</span>
+        <span class="reason-chip reason-chip--ok">✓ Categoria Juvena</span>
+        <span class="reason-chip reason-chip--warn">⚠ Distância alta</span>
+        <span class="reason-chip reason-chip--info">ℹ Aceita test. presencial</span>
+      </div>
+
+      <div class="mc-viewed" style="animation:none">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--g3);display:inline-block;flex-shrink:0"></span>
+        Sport visualizou seu perfil — há 3 dias
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <button class="btn-view-club" onclick="openClubProfile('sport')">🏟️ Ver clube</button>
+      <button class="btn-send" id="btn-sport" onclick="openInterestModal('sport','Sport Club do Recife','🦁')">📤 Enviar Interesse</button>
+    </div>
+
+    <button class="mc-expand" onclick="toggleDetails('details-sport', this)">
+      Ver detalhes do match ▾
+    </button>
+    <div class="mc-details" id="details-sport">
+      <div class="mc-detail-row"><span class="mc-detail-icon">👤</span><span class="mc-detail-label">Posição buscada</span><span class="mc-detail-val">Ponta-Direita / Ponta-Esquerda</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎂</span><span class="mc-detail-label">Faixa etária</span><span class="mc-detail-val">17 a 23 anos</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🎯</span><span class="mc-detail-label">Nota Scout mín.</span><span class="mc-detail-val">6.5 — <strong style="color:var(--green)">você tem 7.8 ✓</strong></span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">🧪</span><span class="mc-detail-label">Processo seletivo</span><span class="mc-detail-val">Teste presencial em Recife</span></div>
+      <div class="mc-detail-row"><span class="mc-detail-icon">✈️</span><span class="mc-detail-label">Passagem</span><span class="mc-detail-val">Clube custeia ida + volta</span></div>
+      <div style="padding:10px 0"></div>
+    </div>
+  </div>
+
+  <!-- ── MATCH 4: ATLÉTICO MG — 71% (low opacity / locked) ── -->
+  <div class="match-card" id="card-atletico" data-region="sudeste" data-pct="71" style="opacity:.7">
+    <div class="mc-top">
+      <div class="mc-header">
+        <div class="mc-logo" style="background:linear-gradient(135deg,#212121,#424242)">⚫</div>
+        <div class="mc-meta">
+          <div class="mc-name">Atlético Mineiro</div>
+          <div class="mc-location">Belo Horizonte — Minas Gerais</div>
+          <span class="mc-division">Mineiro · Série A</span>
+        </div>
+        <div class="mc-score-block">
+          <div class="mc-pct pct--amber" id="pct-atletico">0%</div>
+          <div class="mc-pct-lbl" style="color:var(--amber)">match</div>
+        </div>
+      </div>
+
+      <div class="mc-bar-row">
+        <span class="mc-bar-lbl">Compatibilidade</span>
+        <div class="mc-bar-track"><div class="mc-bar-fill mc-bar-fill--amber" id="bar-atletico-main" style="width:0%"></div></div>
+        <span class="mc-bar-num">71</span>
+      </div>
+
+      <div class="mc-reasons">
+        <span class="reason-chip reason-chip--ok">✓ Atacante</span>
+        <span class="reason-chip reason-chip--warn">⚠ Exige experiência pro</span>
+        <span class="reason-chip reason-chip--warn">⚠ Scout mínimo 8.0</span>
+      </div>
+
+      <!-- Locked banner -->
+      <div style="background:var(--amber-l);border:1px solid #ffe082;border-radius:8px;padding:10px 12px;font-size:12px;color:#92400e;display:flex;gap:8px;align-items:flex-start">
+        <span>🔒</span>
+        <span>Para se candidatar a clubes da <strong>Série A</strong>, melhore seu perfil para 85%+ e alcance nota Scout ≥ 8.0. Faltam <strong>0.2 pontos</strong>!</span>
+      </div>
+    </div>
+
+    <div class="mc-actions">
+      <button class="btn-view-club" onclick="openClubProfile('atletico')">🏟️ Ver clube</button>
+      <button class="btn-send" disabled>🔒 Nível insuficiente</button>
+    </div>
+  </div>
+
+</div><!-- /tab0 -->
+
+<!-- ══════════════════════════ TAB 1: VISUALIZAÇÕES ══════════════════════════ -->
+<div class="tab-panel" id="tab1">
+
+  <div class="ai-banner" style="margin-top:12px">
+    <span class="ai-banner-ico">📊</span>
+    <span class="ai-banner-txt">
+      <strong>142 visualizações totais.</strong> Esta semana, 6 scouts e clubes abriram seu perfil. O Grêmio foi o único a também assistir seu portfólio completo.
+    </span>
+  </div>
+
+  <!-- Today -->
+  <div class="view-section-title">Hoje</div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#0d47a1,#1565c0)">🦅</div>
+    <div class="view-info">
+      <div class="view-name">Scout Carlos Mendes</div>
+      <div class="view-sub">Grêmio Porto Alegre · viu perfil + portfólio</div>
+    </div>
+    <div class="view-time">
+      há 3h
+      <span class="view-type-badge vbadge--scout">Scout</span>
+    </div>
+  </div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">🏆</div>
+    <div class="view-info">
+      <div class="view-name">Fábio Costa</div>
+      <div class="view-sub">Agente FIFA · viu perfil completo</div>
+    </div>
+    <div class="view-time">
+      há 5h
+      <span class="view-type-badge vbadge--agent">Agente</span>
+    </div>
+  </div>
+
+  <!-- This week -->
+  <div class="view-section-title">Esta semana</div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#004d40,#00695c)">🌊</div>
+    <div class="view-info">
+      <div class="view-name">Fluminense FC</div>
+      <div class="view-sub">Scout Rodrigo Faria · viu perfil + avaliações</div>
+    </div>
+    <div class="view-time">
+      ontem 14:32
+      <span class="view-type-badge vbadge--club">Clube</span>
+    </div>
+  </div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#b71c1c,#c62828)">🦁</div>
+    <div class="view-info">
+      <div class="view-name">Sport Club do Recife</div>
+      <div class="view-sub">Diretoria · viu perfil</div>
+    </div>
+    <div class="view-time">
+      há 3 dias
+      <span class="view-type-badge vbadge--club">Clube</span>
+    </div>
+  </div>
+
+  <!-- Last month -->
+  <div class="view-section-title">Este mês</div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#212121,#424242)">⚫</div>
+    <div class="view-info">
+      <div class="view-name">Atlético Mineiro</div>
+      <div class="view-sub">Scout · viu perfil (sem portfólio)</div>
+    </div>
+    <div class="view-time">
+      há 6 dias
+      <span class="view-type-badge vbadge--club">Clube</span>
+    </div>
+  </div>
+
+  <div class="view-card">
+    <div class="view-logo" style="background:linear-gradient(135deg,#e65100,#f57c00)">🔴</div>
+    <div class="view-info">
+      <div class="view-name">Fortaleza EC</div>
+      <div class="view-sub">Agente parceiro · viu perfil</div>
+    </div>
+    <div class="view-time">
+      há 2 sem.
+      <span class="view-type-badge vbadge--agent">Agente</span>
+    </div>
+  </div>
+
+  <div style="margin:12px 12px 0;background:var(--w);border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+    <div style="font-size:12px;font-weight:700;color:var(--g7);margin-bottom:12px">📈 Visitas por semana</div>
+    <!-- Simple bar chart -->
+    <div style="display:flex;gap:8px;align-items:flex-end;height:60px">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:100%;background:var(--g2);border-radius:4px 4px 0 0;height:18px"></div>
+        <span style="font-size:9px;color:var(--g4)">S1</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:100%;background:var(--g2);border-radius:4px 4px 0 0;height:28px"></div>
+        <span style="font-size:9px;color:var(--g4)">S2</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:100%;background:var(--g2);border-radius:4px 4px 0 0;height:22px"></div>
+        <span style="font-size:9px;color:var(--g4)">S3</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:100%;background:linear-gradient(to top,var(--navy),var(--blue));border-radius:4px 4px 0 0;height:48px"></div>
+        <span style="font-size:9px;color:var(--navy);font-weight:700">S4</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:6px;font-size:11px;color:var(--g5)">Semana atual tem <strong style="color:var(--navy)">3× mais visitas</strong> que a anterior</div>
+  </div>
+
+</div><!-- /tab1 -->
+
+<!-- ══════════════════════════ TAB 2: ENVIADOS ══════════════════════════ -->
+<div class="tab-panel" id="tab2">
+
+  <div style="padding:12px 12px 0;font-size:13px;font-weight:700;color:var(--g7)">Interesses enviados</div>
+
+  <!-- Sent 1: Athletico-PR — Em análise -->
+  <div class="sent-card" style="animation-delay:.05s">
+    <div class="sent-card-top">
+      <div class="sent-logo" style="background:linear-gradient(135deg,#880e4f,#ad1457)">🔴</div>
+      <div class="sent-info">
+        <div class="sent-name">Athletico Paranaense</div>
+        <div class="sent-sub">Curitiba, Paraná · Série A</div>
+        <div class="sent-status">
+          <span class="status-pill status--analysis">⏳ Em análise</span>
+          <span class="sent-date">Enviado há 5 dias</span>
+        </div>
+      </div>
+    </div>
+    <div class="sent-msg">"Sou atacante de 22 anos, formado na base do Atlético Paranaense. Tenho nota 7.8 no Laudo Scout IA. Acredito que posso contribuir…"</div>
+  </div>
+
+  <!-- Sent 2: Santos — Sem resposta -->
+  <div class="sent-card" style="animation-delay:.1s">
+    <div class="sent-card-top">
+      <div class="sent-logo" style="background:linear-gradient(135deg,#1a1a1a,#333)">⚫</div>
+      <div class="sent-info">
+        <div class="sent-name">Santos FC</div>
+        <div class="sent-sub">Santos, São Paulo · Série B</div>
+        <div class="sent-status">
+          <span class="status-pill status--noresponse">📭 Sem resposta</span>
+          <span class="sent-date">Enviado há 2 semanas</span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:10px 14px 12px">
+      <button onclick="showToast('Reenviar interesse para Santos FC?')"
+        style="background:none;border:1.5px solid var(--g2);border-radius:8px;padding:8px 14px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--g5);cursor:pointer;transition:all .2s;width:100%">
+        🔄 Reenviar com portfólio atualizado
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty state hint -->
+  <div style="margin:16px 12px 0;background:var(--w);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+    <div style="font-size:12px;font-weight:700;color:var(--g7);margin-bottom:8px">💡 Dica do coach IA</div>
+    <p style="font-size:12px;color:var(--g5);line-height:1.65">
+      Atletas que enviam interesse <strong style="color:var(--navy)">dentro de 24h</strong> após um clube visualizar o perfil têm <strong style="color:var(--navy)">3× mais chance</strong> de resposta. O Grêmio visualizou seu perfil há 3h — você ainda não enviou interesse!
+    </p>
+    <button onclick="switchTab(0,document.querySelectorAll('.tab-btn')[0]);setTimeout(()=>document.getElementById('card-gremio').scrollIntoView({behavior:'smooth'}),200)"
+      style="width:100%;margin-top:12px;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:9px;cursor:pointer">
+      👆 Ver match com Grêmio
+    </button>
+  </div>
+
+</div><!-- /tab2 -->
+
+<!-- ══════════════════════════ CLUB PROFILE MODAL ══════════════════════════ -->
+<div class="sheet-ov" id="clubModal" onclick="if(event.target===this)closeSheet('clubModal')">
+  <div class="sheet">
+    <button class="sheet-close" onclick="closeSheet('clubModal')">✕</button>
+    <div class="sheet-handle"></div>
+    <div id="clubModalContent"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ ENVIAR INTERESSE MODAL ══════════════════════════ -->
+<div class="sheet-ov" id="interestModal" onclick="if(event.target===this)closeSheet('interestModal')">
+  <div class="sheet">
+    <button class="sheet-close" onclick="closeSheet('interestModal')">✕</button>
+    <div class="sheet-handle"></div>
+    <div id="interestModalContent"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bn-item" href="feed.html"><span class="bn-icon">🏠</span>Início</a>
+  <a class="bn-item" href="perfil-atleta.html"><span class="bn-icon">👤</span>Perfil</a>
+  <a class="bn-item bn-item--active" href="#"><span class="bn-icon">🤖</span>IA</a>
+  <a class="bn-item" href="feed.html"><span class="bn-icon">📰</span>Feed</a>
+  <a class="bn-item" href="#" style="position:relative">
+    <span class="bn-icon">🔔</span>Alertas
+    <span style="position:absolute;top:6px;right:14px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--w)"></span>
+  </a>
+</nav>
+
+<div id="toast"></div>
+
+<!-- CLUBS DATA -->
+<script>
+const CLUBS = {
+  gremio: {
+    emoji:'🦅', name:'Grêmio Porto Alegre', grad:'#0d47a1,#1565c0',
+    location:'Porto Alegre — Rio Grande do Sul',
+    division:'Campeonato Gaúcho · Série B',
+    founded:1903, stadium:'Arena do Grêmio (60.000 lugares)',
+    style:'Futebol coletivo, pressão alta, valoriza base',
+    needs:'2 atacantes para a temporada 2025',
+    positions:['Centroavante','Ponta-Direita','Ponta-Esquerda'],
+    pct:87,
+  },
+  fluminense: {
+    emoji:'🌊', name:'Fluminense FC', grad:'#004d40,#00695c',
+    location:'Rio de Janeiro — RJ',
+    division:'Campeonato Carioca · Pré-Série B',
+    founded:1902, stadium:'Maracanã (78.838 lugares)',
+    style:'Posse de bola, futebol ofensivo',
+    needs:'1 atacante Sub-23 para o time principal',
+    positions:['Centroavante'],
+    pct:79,
+  },
+  sport: {
+    emoji:'🦁', name:'Sport Club do Recife', grad:'#b71c1c,#c62828',
+    location:'Recife — Pernambuco',
+    division:'Pernambucano · Série C',
+    founded:1905, stadium:'Ilha do Retiro (23.500 lugares)',
+    style:'Futebol de pressão, velocidade nas pontas',
+    needs:'Ponta-direita com velocidade para disputa da Série C',
+    positions:['Ponta-Direita','Ponta-Esquerda'],
+    pct:74,
+  },
+  atletico: {
+    emoji:'⚫', name:'Atlético Mineiro', grad:'#212121,#424242',
+    location:'Belo Horizonte — Minas Gerais',
+    division:'Campeonato Mineiro · Série A',
+    founded:1908, stadium:'Arena MRV (46.000 lugares)',
+    style:'Futebol intenso, alta pressão, transições rápidas',
+    needs:'Atacante experiente com passagem profissional',
+    positions:['Centroavante','Camisa 10'],
+    pct:71,
+  },
+};
+
+/* ── Tab switching ── */
+function switchTab(idx, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab' + idx).classList.add('active');
+}
+
+/* ── Sheet ── */
+function openSheet(id)  { document.getElementById(id).classList.add('open'); }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.sheet-ov.open').forEach(el=>el.classList.remove('open')); });
+
+/* ── Filter ── */
+function filterMatch(btn, type) {
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.match-card');
+  cards.forEach(card => {
+    if (type === 'all') {
+      card.style.display = '';
+    } else if (type === 'high') {
+      card.style.display = parseInt(card.dataset.pct) >= 79 ? '' : 'none';
+    } else if (type === 'mutual') {
+      card.style.display = card.dataset.mutual ? '' : 'none';
+    } else if (type === 'sul') {
+      card.style.display = card.dataset.region === 'sul' ? '' : 'none';
+    } else if (type === 'sudeste') {
+      card.style.display = card.dataset.region === 'sudeste' ? '' : 'none';
+    }
+  });
+}
+
+/* ── Club profile modal ── */
+function openClubProfile(key) {
+  const c = CLUBS[key];
+  if (!c) return;
+  document.getElementById('clubModalContent').innerHTML = `
+    <div class="club-profile-header" style="background:linear-gradient(135deg,${c.grad})">
+      <div class="club-profile-logo">${c.emoji}</div>
+      <div class="club-profile-name">${c.name}</div>
+      <div class="club-profile-sub">${c.location} · Desde ${c.founded}</div>
+    </div>
+
+    <div class="club-info-grid">
+      <div class="club-info-cell"><div class="cell-label">Divisão</div><div class="cell-value">${c.division}</div></div>
+      <div class="club-info-cell"><div class="cell-label">Estádio</div><div class="cell-value" style="font-size:12px">${c.stadium}</div></div>
+      <div class="club-info-cell"><div class="cell-label">Estilo de jogo</div><div class="cell-value" style="font-size:11px;font-weight:500;color:var(--g5)">${c.style}</div></div>
+      <div class="club-info-cell"><div class="cell-label">Compatibilidade</div><div class="cell-value" style="font-size:18px;color:${c.pct>=80?'var(--green)':c.pct>=70?'var(--navy)':'var(--amber)'}">${c.pct}%</div></div>
+    </div>
+
+    <div class="club-need-section">
+      <div class="need-title">🎯 O que o clube procura agora:</div>
+      <div style="font-size:13px;color:var(--g6);margin-bottom:8px">${c.needs}</div>
+      <div>${c.positions.map(p=>`<span class="need-chip">⚽ ${p}</span>`).join('')}</div>
+    </div>
+
+    <button onclick="closeSheet('clubModal');openInterestModal('${key}','${c.name}','${c.emoji}')"
+      style="width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer">
+      📤 Enviar Interesse para este clube
+    </button>
+  `;
+  openSheet('clubModal');
+}
+
+/* ── Interest modal ── */
+function openInterestModal(key, clubName, clubEmoji) {
+  document.getElementById('interestModalContent').innerHTML = `
+    <div class="sheet-title">📤 Enviar Interesse</div>
+
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+      <div style="width:48px;height:48px;border-radius:12px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${clubEmoji}</div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--g7)">${clubName}</div>
+        <div style="font-size:12px;color:var(--g4)">Seu interesse será enviado ao scout responsável</div>
+      </div>
+    </div>
+
+    <div class="interest-preview">
+      <div class="ip-title">📋 O que o clube vai receber:</div>
+      <div class="ip-item"><span class="ip-ico">⚽</span> Perfil completo (nome, posição, físico)</div>
+      <div class="ip-item"><span class="ip-ico">🎬</span> Vídeo de portfólio (Compilado 2025)</div>
+      <div class="ip-item"><span class="ip-ico">📊</span> Laudo Scout IA (nota 7.8/10)</div>
+      <div class="ip-item"><span class="ip-ico">🏅</span> Avaliações recebidas (média 7.8)</div>
+      <div class="ip-item"><span class="ip-ico">📈</span> Nível da plataforma: Promessa</div>
+    </div>
+
+    <div class="fg">
+      <label>Mensagem personalizada (opcional)</label>
+      <textarea rows="4" placeholder="Ex: Sou centroavante de 22 anos, formado na base do Atlético-PR. Assisti a proposta do clube e acredito que meu perfil se encaixa perfeitamente…" id="interestMsg"></textarea>
+    </div>
+
+    <button class="btn-send-modal" onclick="sendInterest('${key}','${clubName}')">
+      🚀 Enviar Interesse Agora
+    </button>
+  `;
+  openSheet('interestModal');
+}
+
+/* ── Send interest ── */
+function sendInterest(key, clubName) {
+  // Animate button
+  const btn = document.querySelector('.btn-send-modal');
+  btn.textContent = '⏳ Enviando…';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    document.getElementById('interestModalContent').innerHTML = `
+      <div class="send-success">
+        <div class="send-success-icon">🎉</div>
+        <div class="send-success-title">Interesse enviado!</div>
+        <div class="send-success-sub">
+          O scout do <strong>${clubName}</strong> recebeu seu perfil e será notificado agora.<br><br>
+          Acompanhe o status na aba <strong>Enviados</strong>.
+        </div>
+        <div class="send-success-xp">⚡ +50 XP ganho!</div>
+      </div>
+      <div style="height:20px"></div>
+      <button onclick="closeSheet('interestModal');updateSentBtn('${key}')"
+        style="width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer">
+        ✓ Entendido
+      </button>
+    `;
+    launchConfetti();
+  }, 1500);
+}
+
+function updateSentBtn(key) {
+  const btn = document.getElementById('btn-' + key);
+  if (btn) {
+    btn.outerHTML = `<div class="btn-interest-sent">✅ Interesse enviado</div>`;
+  }
+  showToast('✅ Interesse enviado! +50 XP');
+}
+
+/* ── Confetti ── */
+function launchConfetti() {
+  const colors = ['#3eb7e6','#1a237e','#ffc107','#4caf50','#e91e63','#ff5722'];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1.2+Math.random()*.8}s;
+      animation-delay:${Math.random()*.4}s;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+}
+
+/* ── Toggle details ── */
+function toggleDetails(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? 'Ocultar detalhes ▴' : 'Ver detalhes do match ▾';
+}
+
+/* ── Animate bars & counters on load ── */
+function animBar(id, pct, delay) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.style.width = pct + '%';
+  }, delay);
+}
+
+function animCount(id, target, delay) {
+  setTimeout(() => {
+    let start = null;
+    const el = document.getElementById(id);
+    if (!el) return;
+    const step = ts => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 800, 1);
+      el.textContent = Math.round(p * target) + (id.startsWith('pct') ? '%' : '');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+/* ── Toast ── */
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toastT);
+  toastT = setTimeout(() => { t.style.display = 'none'; }, 2600);
+}
+
+/* ── Init ── */
+window.addEventListener('DOMContentLoaded', () => {
+  // Hero counters
+  animCount('cMatches', 3, 200);
+  animCount('cViews',   6, 300);
+  animCount('cSent',    2, 400);
+
+  // Grêmio 87%
+  animCount('pct-gremio', 87, 500);
+  animBar('bar-gremio-main', 87, 600);
+  animBar('bar-gremio-pos',  100, 700);
+  animBar('bar-gremio-scout', 78, 800);
+
+  // Fluminense 79%
+  animCount('pct-flu', 79, 550);
+  animBar('bar-flu-main', 79, 650);
+  animBar('bar-flu-pos',  100, 750);
+  animBar('bar-flu-reg',   60, 850);
+
+  // Sport 74%
+  animCount('pct-sport', 74, 600);
+  animBar('bar-sport-main', 74, 700);
+  animBar('bar-sport-pos',  90, 800);
+  animBar('bar-sport-reg',  45, 900);
+
+  // Atlético 71%
+  animCount('pct-atletico', 71, 650);
+  animBar('bar-atletico-main', 71, 750);
+});
+</script>
+<div class="nav-back-bar"><a href="projeto.html">← Projeto</a><span class="nav-logo">ConectaFoot IA</span><div style="display:flex;gap:4px"><a href="central-ia.html">Hub</a><a href="perfil-atleta.html">Perfil</a><a href="feed.html">Feed</a><a href="match-ia.html">Match</a><a href="bio-conteudo.html">Bio</a></div></div></body>
+</html>

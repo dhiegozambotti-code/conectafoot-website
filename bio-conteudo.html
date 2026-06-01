@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bio & Conteúdo — ConectaFoot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Oswald:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --blue:#3eb7e6;--blue-d:#0b8fc4;--blue-l:#e8f6fd;
+      --navy:#1a237e;--navy-2:#283593;--navy-3:#3949ab;
+      --green:#2e7d32;--green-l:#e8f5e9;--green-m:#4caf50;
+      --amber:#f59e0b;--amber-l:#fff8e1;
+      --gold:#ffc107;--purple:#7c3aed;--purple-l:#f5f3ff;
+      --g1:#f2f4f7;--g2:#e8eaf6;--g3:#d0d5dd;--g4:#98a2b3;
+      --g5:#667085;--g6:#475467;--g7:#344054;--w:#fff;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;background:var(--g1);color:var(--g7);min-height:100vh}
+
+    /* ─── TOP NAV ─── */
+    .top-nav{background:var(--w);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--g2)}
+    .nav-back{width:36px;height:36px;border-radius:50%;background:var(--g1);border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .nav-back:hover{background:var(--g2)}
+    .nav-title{font-size:15px;font-weight:700;color:var(--g7)}
+    .nav-history{width:36px;height:36px;border-radius:50%;background:var(--g1);border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+    /* ─── HERO ─── */
+    .hero{background:linear-gradient(135deg,#7c3aed 0%,var(--navy) 55%,var(--navy-2) 100%);padding:20px 18px 22px;color:var(--w)}
+    .hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.65;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+    .hero-eyebrow::before{content:'';width:16px;height:2px;background:var(--blue);border-radius:1px}
+    .hero-title{font-size:21px;font-weight:900;line-height:1.25;margin-bottom:6px}
+    .hero-sub{font-size:13px;opacity:.72;margin-bottom:18px;line-height:1.5}
+    .hero-stats{display:flex;gap:0;background:rgba(0,0,0,.2);border-radius:12px;overflow:hidden}
+    .hstat{flex:1;padding:11px 0;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+    .hstat:last-child{border-right:none}
+    .hstat-val{font-size:20px;font-weight:900;color:var(--w);display:block;line-height:1}
+    .hstat-lbl{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px}
+
+    /* ─── QUICK ACTIONS ─── */
+    .qa-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 12px 0}
+    .qa-card{background:var(--w);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:all .2s;border:1.5px solid transparent}
+    .qa-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);border-color:var(--blue)}
+    .qa-card:active{transform:translateY(0)}
+    .qa-emoji{font-size:24px;margin-bottom:5px;display:block}
+    .qa-label{font-size:11px;font-weight:700;color:var(--g7);line-height:1.3}
+    .qa-sub{font-size:10px;color:var(--g4);margin-top:2px}
+    .qa-card--featured{background:linear-gradient(135deg,var(--navy),var(--navy-2));border-color:transparent}
+    .qa-card--featured .qa-label{color:var(--w)}
+    .qa-card--featured .qa-sub{color:rgba(255,255,255,.6)}
+
+    /* ─── CATEGORY TABS ─── */
+    .cat-scroll{display:flex;gap:8px;overflow-x:auto;padding:12px 12px 0;scrollbar-width:none}
+    .cat-scroll::-webkit-scrollbar{display:none}
+    .cat-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:100px;border:1.5px solid var(--g2);background:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--g5);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
+    .cat-btn.active{background:linear-gradient(135deg,var(--purple),var(--navy));color:var(--w);border-color:transparent}
+    .cat-btn:hover:not(.active){border-color:var(--blue);color:var(--navy)}
+
+    /* ─── SECTION HEADER ─── */
+    .sec-hdr{padding:14px 14px 8px;display:flex;align-items:center;justify-content:space-between}
+    .sec-title{font-size:14px;font-weight:700;color:var(--g7)}
+    .sec-link{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer;background:none;border:none;font-family:'Poppins',sans-serif}
+
+    /* ─── TEMPLATE GRID ─── */
+    .tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
+    .tpl-card{background:var(--w);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;transition:all .2s;border:2px solid transparent}
+    .tpl-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.12);border-color:var(--blue)}
+
+    /* Mini art preview — actual CSS arts scaled down */
+    .tpl-preview{height:140px;position:relative;overflow:hidden}
+    .art-scale-wrap{position:absolute;top:0;left:0;width:286%;height:286%;transform:scale(.35);transform-origin:top left;pointer-events:none}
+
+    /* ─── CSS ARTS (400×400) ─── */
+
+    /* Pré-Jogo 1 — "Dia de Jogo" */
+    .art--pregame1{width:400px;height:400px;background:radial-gradient(ellipse at 50% -10%,#1565c0 0%,#0a0e2e 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-family:'Poppins',sans-serif;overflow:hidden}
+    .art--pregame1::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--blue)}
+    .art--pregame1::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--blue)}
+    .a1-tag{font-size:11px;font-weight:800;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:8px}
+    .a1-name{font-size:38px;font-weight:900;color:var(--w);text-align:center;line-height:1;margin-bottom:4px;font-family:'Oswald',sans-serif}
+    .a1-pos{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:16px}
+    .a1-sep{width:60px;height:2px;background:rgba(255,255,255,.2);margin-bottom:16px}
+    .a1-vs{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .a1-team{font-size:14px;font-weight:700;color:var(--w);text-align:center;max-width:100px}
+    .a1-vs-pill{background:var(--blue);color:var(--w);font-size:11px;font-weight:900;padding:4px 10px;border-radius:4px}
+    .a1-info{font-size:11px;color:rgba(255,255,255,.5);text-align:center}
+    .art-watermark{position:absolute;bottom:10px;right:12px;font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:1px}
+
+    /* Pré-Jogo 2 — "Foco Total" */
+    .art--pregame2{width:400px;height:400px;background:linear-gradient(160deg,#0a0a12 0%,#1a0a2e 55%,#0d1b5e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-family:'Poppins',sans-serif;overflow:hidden}
+    .art--pregame2::before{content:'';position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(62,183,230,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)}
+    .a2-word1{font-size:72px;font-weight:900;color:var(--w);line-height:.9;font-family:'Oswald',sans-serif}
+    .a2-word2{font-size:72px;font-weight:900;color:var(--blue);line-height:.9;font-family:'Oswald',sans-serif;margin-bottom:18px}
+    .a2-name{font-size:20px;font-weight:700;color:var(--w);margin-bottom:6px}
+    .a2-msg{font-size:12px;color:rgba(255,255,255,.55);text-align:center;max-width:260px}
+
+    /* Pós-Jogo 1 — "Stats do Jogo" */
+    .art--postgame1{width:400px;height:400px;background:linear-gradient(135deg,#050d1a 0%,#0d1b4a 100%);display:flex;flex-direction:column;padding:28px 28px 20px;position:relative;font-family:'Poppins',sans-serif;overflow:hidden}
+    .art--postgame1::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--green-m)}
+    .pg1-title{font-size:11px;font-weight:800;letter-spacing:3px;color:var(--green-m);text-transform:uppercase;margin-bottom:4px}
+    .pg1-date{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:20px}
+    .pg1-stat-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .pg1-stat-ico{font-size:20px;width:28px;text-align:center}
+    .pg1-stat-lbl{font-size:12px;color:rgba(255,255,255,.55);flex:1}
+    .pg1-stat-val{font-size:38px;font-weight:900;color:var(--w);line-height:1;font-family:'Oswald',sans-serif}
+    .pg1-div{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+    .pg1-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .pg1-bar-lbl{font-size:10px;color:rgba(255,255,255,.4);width:60px;flex-shrink:0}
+    .pg1-bar-track{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:2px}
+    .pg1-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue-d),var(--blue))}
+    .pg1-bar-num{font-size:10px;font-weight:700;color:var(--w);width:24px;text-align:right}
+    .pg1-rating{position:absolute;top:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .pg1-rating-val{font-size:18px;font-weight:900;color:var(--w);line-height:1}
+    .pg1-rating-lbl{font-size:8px;color:rgba(255,255,255,.7)}
+
+    /* Pós-Jogo 2 — "Gol Marcado" */
+    .art--postgame2{width:400px;height:400px;background:radial-gradient(ellipse at 50% 30%,rgba(255,193,7,.18) 0%,transparent 60%),linear-gradient(160deg,#0a0e2e 0%,#1a237e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;position:relative;overflow:hidden}
+    .art--postgame2::before{content:'';position:absolute;width:200px;height:200px;border:2px solid rgba(255,193,7,.2);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .art--postgame2::after{content:'';position:absolute;width:280px;height:280px;border:1px solid rgba(255,193,7,.1);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+    .pg2-emoji{font-size:52px;margin-bottom:6px}
+    .pg2-count{font-size:80px;font-weight:900;color:var(--gold);line-height:1;font-family:'Oswald',sans-serif}
+    .pg2-label{font-size:28px;font-weight:900;color:var(--w);letter-spacing:4px;margin-bottom:14px;font-family:'Oswald',sans-serif}
+    .pg2-name{font-size:18px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:4px}
+    .pg2-match{font-size:12px;color:rgba(255,255,255,.45)}
+
+    /* Achievement 1 — "Laudo Scout" */
+    .art--scout{width:400px;height:400px;background:linear-gradient(150deg,#0d1438 0%,var(--navy) 100%);display:flex;flex-direction:column;align-items:center;padding:28px 28px 20px;font-family:'Poppins',sans-serif;position:relative;overflow:hidden}
+    .art--scout::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--purple))}
+    .sc-tag{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:16px}
+    .sc-score-wrap{display:flex;align-items:flex-end;gap:4px;margin-bottom:6px}
+    .sc-score{font-size:80px;font-weight:900;color:var(--w);line-height:1;font-family:'Oswald',sans-serif}
+    .sc-max{font-size:22px;color:rgba(255,255,255,.3);padding-bottom:12px}
+    .sc-label{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:18px}
+    .sc-bars{width:100%}
+    .sc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+    .sc-bar-lbl{font-size:11px;color:rgba(255,255,255,.6);width:72px;flex-shrink:0}
+    .sc-bar-track{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:3px}
+    .sc-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue-d),var(--blue))}
+    .sc-bar-num{font-size:11px;font-weight:700;color:var(--w);width:26px;text-align:right}
+    .sc-name{margin-top:auto;font-size:12px;color:rgba(255,255,255,.4)}
+
+    /* Achievement 2 — "Nível Up" */
+    .art--levelup{width:400px;height:400px;background:radial-gradient(ellipse at 50% 30%,rgba(255,193,7,.25) 0%,transparent 60%),linear-gradient(150deg,#1b5e20 0%,#2e7d32 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;position:relative;overflow:hidden}
+    .art--levelup::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold)}
+    .lvl-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+    .lvl-icon{font-size:60px;margin-bottom:6px}
+    .lvl-name{font-size:52px;font-weight:900;color:var(--w);font-family:'Oswald',sans-serif;line-height:1;margin-bottom:6px}
+    .lvl-num{font-size:16px;font-weight:700;color:rgba(255,255,255,.65);margin-bottom:12px}
+    .lvl-xp{background:rgba(255,193,7,.2);border:1px solid rgba(255,193,7,.4);color:var(--gold);font-size:13px;font-weight:700;padding:6px 16px;border-radius:100px}
+
+    /* Story — Pre-game vertical */
+    .art--story{width:400px;height:712px;background:linear-gradient(180deg,#0a0e2e 0%,var(--navy) 50%,#3eb7e6 100%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:40px 30px;font-family:'Poppins',sans-serif;position:relative;overflow:hidden}
+    .art--story::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(62,183,230,.15) 0%,transparent 60%)}
+    .story-top{text-align:center}
+    .story-eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:6px}
+    .story-bigtext{font-size:48px;font-weight:900;color:var(--w);line-height:1;font-family:'Oswald',sans-serif;margin-bottom:4px}
+    .story-bigtext2{font-size:48px;font-weight:900;color:var(--blue);line-height:1;font-family:'Oswald',sans-serif;margin-bottom:24px}
+    .story-time{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:var(--w);font-size:32px;font-weight:900;padding:12px 28px;border-radius:12px;font-family:'Oswald',sans-serif}
+    .story-mid{text-align:center}
+    .story-avatar{width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:50px;margin:0 auto 16px}
+    .story-name{font-size:22px;font-weight:800;color:var(--w)}
+    .story-pos{font-size:13px;color:rgba(255,255,255,.6)}
+    .story-bottom{text-align:center}
+    .story-cta{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:8px}
+    .story-hashtag{font-size:12px;color:var(--blue);font-weight:600}
+
+    /* Template card info */
+    .tpl-info{padding:10px 12px 12px;display:flex;align-items:center;justify-content:space-between}
+    .tpl-name{font-size:12px;font-weight:700;color:var(--g7)}
+    .tpl-cat-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px}
+    .badge--pre{background:#e8f0fe;color:var(--navy)}
+    .badge--post{background:var(--green-l);color:var(--green)}
+    .badge--ach{background:var(--amber-l);color:#92400e}
+    .badge--story{background:var(--purple-l);color:var(--purple)}
+    .tpl-use-btn{width:100%;margin:0 12px 12px;display:block;width:calc(100% - 24px);background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:9px;border-radius:8px;cursor:pointer;transition:all .2s}
+    .tpl-use-btn:hover{box-shadow:0 4px 12px rgba(26,35,126,.3);transform:translateY(-1px)}
+
+    /* ─── RECENT CONTENT ─── */
+    .recent-list{display:flex;flex-direction:column;gap:8px;padding:0 12px}
+    .recent-card{background:var(--w);border-radius:12px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;gap:10px;align-items:center}
+    .recent-thumb{width:52px;height:52px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px}
+    .recent-info{flex:1;min-width:0}
+    .recent-title{font-size:13px;font-weight:700;color:var(--g7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .recent-sub{font-size:11px;color:var(--g4);margin-top:2px}
+    .recent-actions{display:flex;gap:6px}
+    .recent-btn{width:32px;height:32px;border-radius:8px;background:var(--g1);border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+    .recent-btn:hover{background:var(--g2)}
+
+    /* ─── CAPTION QUICK TOOL ─── */
+    .caption-card{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid rgba(124,58,237,.15);border-radius:14px;margin:12px 12px 0;padding:16px}
+    .caption-card-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+    .caption-card-sub{font-size:11px;color:var(--g5);margin-bottom:12px}
+    .caption-input-row{display:flex;gap:8px}
+    .caption-input{flex:1;border:1.5px solid rgba(124,58,237,.2);border-radius:8px;padding:9px 12px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--g7);outline:none;transition:border-color .2s;background:var(--w)}
+    .caption-input:focus{border-color:var(--purple)}
+    .caption-gen-btn{background:linear-gradient(135deg,var(--purple),#6d28d9);border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:9px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:all .2s}
+    .caption-gen-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,.3)}
+    .caption-results{display:none;margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .caption-option{background:var(--w);border:1.5px solid rgba(124,58,237,.12);border-radius:10px;padding:12px;cursor:pointer;transition:border-color .2s;position:relative}
+    .caption-option:hover{border-color:var(--purple)}
+    .caption-option-num{font-size:9px;font-weight:800;color:var(--purple);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+    .caption-option-text{font-size:13px;color:var(--g6);line-height:1.55}
+    .caption-copy-btn{position:absolute;top:10px;right:10px;background:none;border:none;font-size:16px;cursor:pointer;opacity:.5;transition:opacity .2s}
+    .caption-copy-btn:hover{opacity:1}
+
+    /* ─── BIO GENERATOR ─── */
+    .bio-card{background:var(--w);border-radius:14px;margin:12px 12px 0;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .bio-card-title{font-size:13px;font-weight:700;color:var(--g7);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+    .bio-type-row{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+    .bio-type-row::-webkit-scrollbar{display:none}
+    .bio-type-btn{padding:7px 13px;border-radius:100px;border:1.5px solid var(--g2);background:var(--g1);font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--g5);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
+    .bio-type-btn.active{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--w);border-color:transparent}
+    .bio-result{background:var(--g1);border-radius:10px;padding:14px;font-size:13px;color:var(--g6);line-height:1.7;min-height:80px;display:none;white-space:pre-wrap}
+    .bio-result.show{display:block}
+    .bio-actions{display:flex;gap:8px;margin-top:12px}
+    .btn-copy{flex:1;background:var(--g1);border:1.5px solid var(--g2);color:var(--g7);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:8px;cursor:pointer;transition:all .2s}
+    .btn-copy:hover{border-color:var(--navy)}
+    .btn-apply{flex:1;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;padding:10px;border-radius:8px;cursor:pointer;transition:all .2s}
+    .btn-apply:hover{box-shadow:0 4px 12px rgba(26,35,126,.3)}
+
+    /* ─── HASHTAG TOOL ─── */
+    .hashtag-card{background:var(--w);border-radius:14px;margin:12px 12px 0;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .hashtag-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+    .htag{background:var(--blue-l);color:var(--navy);font-size:11px;font-weight:600;padding:5px 11px;border-radius:100px;cursor:pointer;transition:all .2s}
+    .htag:hover{background:var(--navy);color:var(--w)}
+    .htag--selected{background:var(--navy);color:var(--w)}
+    .htag--hot{background:linear-gradient(135deg,var(--blue-l),#f5f3ff);border:1px solid rgba(124,58,237,.15)}
+
+    /* ─── PLANNER ─── */
+    .planner-card{background:var(--w);border-radius:14px;margin:12px 12px 0;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .week-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:12px}
+    .day-cell{text-align:center;padding:6px 2px;border-radius:8px;cursor:pointer;transition:background .15s}
+    .day-cell:hover{background:var(--g1)}
+    .day-lbl{font-size:9px;font-weight:600;color:var(--g4);margin-bottom:3px}
+    .day-num{font-size:14px;font-weight:700;color:var(--g7)}
+    .day-cell.today{background:linear-gradient(135deg,var(--navy),var(--navy-2))}
+    .day-cell.today .day-lbl,.day-cell.today .day-num{color:var(--w)}
+    .day-cell.has-content::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--blue);margin:2px auto 0}
+    .day-cell.has-content-post::after{background:var(--green-m)}
+    .plan-items{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+    .plan-item{display:flex;gap:10px;align-items:center;background:var(--g1);border-radius:10px;padding:10px 12px}
+    .plan-item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .plan-item-info{flex:1}
+    .plan-item-title{font-size:12px;font-weight:700;color:var(--g7)}
+    .plan-item-time{font-size:11px;color:var(--g4)}
+    .plan-add-btn{width:100%;margin-top:12px;padding:11px;background:var(--g1);border:1.5px dashed var(--g3);border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--g5);cursor:pointer;transition:all .2s}
+    .plan-add-btn:hover{border-color:var(--blue);color:var(--blue)}
+
+    /* ─── EDITOR MODAL ─── */
+    .sheet-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:flex-end;justify-content:center}
+    .sheet-ov.open{display:flex}
+    .sheet{background:var(--w);border-radius:20px 20px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding:20px 16px 48px;animation:slideUp .3s ease;position:relative}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .sheet-handle{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 18px}
+    .sheet-close{position:absolute;top:18px;right:14px;background:var(--g1);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+    .sheet-title{font-size:16px;font-weight:800;color:var(--g7);margin-bottom:14px}
+
+    /* Art preview in editor */
+    .editor-preview-wrap{width:100%;aspect-ratio:1;border-radius:12px;overflow:hidden;margin-bottom:14px;position:relative}
+    .editor-preview-wrap--story{aspect-ratio:9/16;max-height:400px}
+    .editor-preview-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .editor-art-scale{transform-origin:top center}
+
+    /* Color themes */
+    .theme-row{display:flex;gap:8px;margin-bottom:14px}
+    .theme-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;flex-shrink:0}
+    .theme-dot.active{border-color:var(--g7);transform:scale(1.15)}
+    .theme--navy{background:linear-gradient(135deg,var(--navy),var(--blue))}
+    .theme--gold{background:linear-gradient(135deg,#f57f17,#ffc107)}
+    .theme--green{background:linear-gradient(135deg,#1b5e20,var(--green-m))}
+    .theme--purple{background:linear-gradient(135deg,var(--purple),#a855f7)}
+    .theme--red{background:linear-gradient(135deg,#b71c1c,#ef5350)}
+
+    /* Form */
+    .fg{margin-bottom:12px}
+    .fg label{font-size:11px;font-weight:700;color:var(--g7);display:block;margin-bottom:5px}
+    .fg input,.fg select,.fg textarea{width:100%;border:1.5px solid var(--g3);border-radius:8px;padding:9px 12px;font-family:'Poppins',sans-serif;font-size:13px;color:var(--g7);outline:none;transition:border-color .2s;background:var(--w)}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue)}
+    .fg-row{display:flex;gap:8px}
+    .fg-row .fg{flex:1}
+    .btn-export{width:100%;background:linear-gradient(135deg,var(--purple),var(--navy));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;padding:14px;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:6px}
+    .btn-export:hover{box-shadow:0 4px 14px rgba(124,58,237,.35);transform:translateY(-1px)}
+    .export-row{display:flex;gap:8px;margin-top:10px}
+    .export-mini{flex:1;background:var(--g1);border:1.5px solid var(--g2);color:var(--g7);font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:10px;border-radius:8px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .export-mini:hover{border-color:var(--blue)}
+
+    /* ─── BOTTOM NAV ─── */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--w);border-top:1px solid var(--g2);display:flex;z-index:100}
+    .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 5px;cursor:pointer;color:var(--g4);font-size:10px;font-weight:500;gap:2px;text-decoration:none;transition:color .2s}
+    .bn-icon{font-size:21px}
+    .bn-item--active{color:var(--blue)}
+
+    #toast{display:none;position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--g7);color:var(--w);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:500;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+    .page-pad{padding-bottom:90px}
+
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes typing{from{opacity:0}to{opacity:1}}
+    .typewriter-char{animation:typing .04s linear both}
+  </style>
+<style>.nav-back-bar{position:fixed;bottom:0;left:0;right:0;background:#1a237e;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.nav-back-bar a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:700;font-family:Poppins,sans-serif;padding:5px 10px;border-radius:6px;transition:background .2s}.nav-back-bar a:hover{background:rgba(255,255,255,.12);color:#fff}.nav-back-bar .nav-logo{color:#3eb7e6;font-size:12px;font-weight:800}</style></head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <button class="nav-back" onclick="history.back()">‹</button>
+  <span class="nav-title">✨ Bio & Conteúdo</span>
+  <button class="nav-history" onclick="showToast('Histórico de criações')">📂</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Powered by IA</div>
+  <div class="hero-title">Crie conteúdo que<br>vende seu talento ✨</div>
+  <div class="hero-sub">Artes de pré/pós jogo, bio profissional e legendas geradas por IA para dominar as redes.</div>
+  <div class="hero-stats">
+    <div class="hstat">
+      <span class="hstat-val" id="cArtes">0</span>
+      <span class="hstat-lbl">🎨 Artes criadas</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-val" id="cAlcance">0</span>
+      <span class="hstat-lbl">👁️ Alcance médio</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-val" id="cEngaj">0</span>
+      <span class="hstat-lbl">❤️ Engajamento</span>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="qa-grid">
+  <div class="qa-card qa-card--featured" onclick="openEditor('pregame1')">
+    <span class="qa-emoji">📸</span>
+    <div class="qa-label">Arte Pré-Jogo</div>
+    <div class="qa-sub">Hype do dia</div>
+  </div>
+  <div class="qa-card qa-card--featured" onclick="openEditor('postgame1')">
+    <span class="qa-emoji">🏆</span>
+    <div class="qa-label">Arte Pós-Jogo</div>
+    <div class="qa-sub">Stats & gols</div>
+  </div>
+  <div class="qa-card" onclick="generateBio('instagram');document.getElementById('bioSection').scrollIntoView({behavior:'smooth'})">
+    <span class="qa-emoji">✍️</span>
+    <div class="qa-label">Gerar Bio</div>
+    <div class="qa-sub">3 formatos</div>
+  </div>
+  <div class="qa-card" onclick="openEditor('story')">
+    <span class="qa-emoji">📱</span>
+    <div class="qa-label">Story Template</div>
+    <div class="qa-sub">9:16 formato</div>
+  </div>
+  <div class="qa-card" onclick="openEditor('scout')">
+    <span class="qa-emoji">🎯</span>
+    <div class="qa-label">Card de Laudo</div>
+    <div class="qa-sub">Compartilhável</div>
+  </div>
+  <div class="qa-card" onclick="openEditor('levelup')">
+    <span class="qa-emoji">⚡</span>
+    <div class="qa-label">Conquista</div>
+    <div class="qa-sub">Nível & badges</div>
+  </div>
+</div>
+
+<!-- CATEGORY FILTER -->
+<div class="cat-scroll">
+  <button class="cat-btn active" onclick="filterCat(this,'all')">🔎 Todos</button>
+  <button class="cat-btn" onclick="filterCat(this,'pre')">📸 Pré-Jogo</button>
+  <button class="cat-btn" onclick="filterCat(this,'post')">🏆 Pós-Jogo</button>
+  <button class="cat-btn" onclick="filterCat(this,'ach')">🏅 Conquistas</button>
+  <button class="cat-btn" onclick="filterCat(this,'story')">📱 Stories</button>
+</div>
+
+<!-- TEMPLATE GALLERY -->
+<div class="sec-hdr"><span class="sec-title">Templates</span><button class="sec-link">Ver todos</button></div>
+<div class="tpl-grid" id="tplGrid">
+
+  <!-- PRÉ-JOGO 1 -->
+  <div class="tpl-card" data-cat="pre">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--pregame1">
+          <div class="a1-tag">⚽ Dia de Jogo</div>
+          <div class="a1-name">GABRIEL<br>SILVA</div>
+          <div class="a1-pos">Centroavante</div>
+          <div class="a1-sep"></div>
+          <div class="a1-vs"><div class="a1-team">Atlético-PR</div><div class="a1-vs-pill">VS</div><div class="a1-team">Coritiba</div></div>
+          <div class="a1-info">Hoje · 15:00h · Arena da Baixada</div>
+          <div class="art-watermark">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Dia de Jogo</span><span class="tpl-cat-badge badge--pre">Pré-Jogo</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('pregame1')">Usar este template →</button>
+  </div>
+
+  <!-- PRÉ-JOGO 2 -->
+  <div class="tpl-card" data-cat="pre">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--pregame2">
+          <div class="a2-word1">FOCO</div>
+          <div class="a2-word2">TOTAL</div>
+          <div class="a2-name">Gabriel Silva</div>
+          <div class="a2-msg">🎯 Missão clara.<br>Resultado garantido.</div>
+          <div class="art-watermark" style="color:rgba(255,255,255,.2)">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Foco Total</span><span class="tpl-cat-badge badge--pre">Pré-Jogo</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('pregame2')">Usar este template →</button>
+  </div>
+
+  <!-- PÓS-JOGO 1 -->
+  <div class="tpl-card" data-cat="post">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--postgame1">
+          <div class="pg1-rating"><div class="pg1-rating-val">8.5</div><div class="pg1-rating-lbl">Rating</div></div>
+          <div class="pg1-title">Stats do Jogo</div>
+          <div class="pg1-date">Hoje · Atlético-PR 2×1 Coritiba</div>
+          <div class="pg1-stat-row"><div class="pg1-stat-ico">⚽</div><div class="pg1-stat-lbl">Gols</div><div class="pg1-stat-val">2</div></div>
+          <div class="pg1-stat-row"><div class="pg1-stat-ico">🅰️</div><div class="pg1-stat-lbl">Assistências</div><div class="pg1-stat-val">1</div></div>
+          <div class="pg1-div"></div>
+          <div class="pg1-bar-row"><div class="pg1-bar-lbl">Técnica</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:82%"></div></div><div class="pg1-bar-num">8.2</div></div>
+          <div class="pg1-bar-row"><div class="pg1-bar-lbl">Físico</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:79%"></div></div><div class="pg1-bar-num">7.9</div></div>
+          <div class="pg1-bar-row"><div class="pg1-bar-lbl">Visão</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:75%"></div></div><div class="pg1-bar-num">7.5</div></div>
+          <div class="art-watermark">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Stats do Jogo</span><span class="tpl-cat-badge badge--post">Pós-Jogo</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('postgame1')">Usar este template →</button>
+  </div>
+
+  <!-- PÓS-JOGO 2 -->
+  <div class="tpl-card" data-cat="post">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--postgame2">
+          <div class="pg2-emoji">⚽</div>
+          <div class="pg2-count">2</div>
+          <div class="pg2-label">GOL!</div>
+          <div class="pg2-name">Gabriel Silva</div>
+          <div class="pg2-match">Atlético-PR · Hoje</div>
+          <div class="art-watermark">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Gol Marcado</span><span class="tpl-cat-badge badge--post">Pós-Jogo</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('postgame2')">Usar este template →</button>
+  </div>
+
+  <!-- CONQUISTA — Laudo Scout -->
+  <div class="tpl-card" data-cat="ach">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--scout">
+          <div class="sc-tag">Laudo Scout IA</div>
+          <div class="sc-score-wrap"><div class="sc-score">7.8</div><div class="sc-max">/10</div></div>
+          <div class="sc-label">Nota Geral · Análise de Portfólio</div>
+          <div class="sc-bars">
+            <div class="sc-bar-row"><div class="sc-bar-lbl">⚽ Técnica</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:82%"></div></div><div class="sc-bar-num">8.2</div></div>
+            <div class="sc-bar-row"><div class="sc-bar-lbl">💪 Físico</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:79%"></div></div><div class="sc-bar-num">7.9</div></div>
+            <div class="sc-bar-row"><div class="sc-bar-lbl">🧠 Visão</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:75%"></div></div><div class="sc-bar-num">7.5</div></div>
+            <div class="sc-bar-row"><div class="sc-bar-lbl">📍 Posição</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:76%"></div></div><div class="sc-bar-num">7.6</div></div>
+          </div>
+          <div class="sc-name">Gabriel Silva · Centroavante</div>
+          <div class="art-watermark">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Laudo Scout</span><span class="tpl-cat-badge badge--ach">Conquista</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('scout')">Usar este template →</button>
+  </div>
+
+  <!-- CONQUISTA — Level Up -->
+  <div class="tpl-card" data-cat="ach">
+    <div class="tpl-preview">
+      <div class="art-scale-wrap">
+        <div class="art--levelup">
+          <div class="lvl-eyebrow">Nível Novo!</div>
+          <div class="lvl-icon">🔥</div>
+          <div class="lvl-name">PROMESSA</div>
+          <div class="lvl-num">Nível 3 · ConectaFoot</div>
+          <div class="lvl-xp">⚡ 1.240 XP acumulados</div>
+          <div class="art-watermark" style="color:rgba(255,255,255,.2)">ConectaFoot</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Nível Novo</span><span class="tpl-cat-badge badge--ach">Conquista</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('levelup')">Usar este template →</button>
+  </div>
+
+  <!-- STORY -->
+  <div class="tpl-card" data-cat="story" style="grid-column:1/-1">
+    <div class="tpl-preview" style="height:200px">
+      <div class="art-scale-wrap" style="width:73%;height:73%;transform:scale(.43);transform-origin:top left">
+        <div class="art--story">
+          <div class="story-top">
+            <div class="story-eyebrow">O jogo é hoje</div>
+            <div class="story-bigtext">DIA</div>
+            <div class="story-bigtext2">DE JOGO</div>
+            <div class="story-time">15:00h</div>
+          </div>
+          <div class="story-mid">
+            <div class="story-avatar">⚽</div>
+            <div class="story-name">Gabriel Silva</div>
+            <div class="story-pos">Centroavante · Atlético-PR</div>
+          </div>
+          <div class="story-bottom">
+            <div class="story-cta">🙏 Torça por mim!</div>
+            <div class="story-hashtag">#FutebolBrasileiro #ConectaFoot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tpl-info"><span class="tpl-name">Story — Pré-Jogo</span><span class="tpl-cat-badge badge--story">Story 9:16</span></div>
+    <button class="tpl-use-btn" onclick="openEditor('story')">Usar este template →</button>
+  </div>
+
+</div>
+
+<!-- RECENT CONTENT -->
+<div class="sec-hdr"><span class="sec-title">Criados recentemente</span></div>
+<div class="recent-list">
+  <div class="recent-card">
+    <div class="recent-thumb" style="background:linear-gradient(135deg,var(--navy),var(--blue))">📸</div>
+    <div class="recent-info">
+      <div class="recent-title">Arte Pré-Jogo — Atlético × Coritiba</div>
+      <div class="recent-sub">há 2 horas · 312 visualizações</div>
+    </div>
+    <div class="recent-actions">
+      <button class="recent-btn" onclick="showToast('Compartilhando…')">📤</button>
+      <button class="recent-btn" onclick="openEditor('pregame1')">✏️</button>
+    </div>
+  </div>
+  <div class="recent-card">
+    <div class="recent-thumb" style="background:linear-gradient(135deg,var(--navy-2),var(--green-m))">📊</div>
+    <div class="recent-info">
+      <div class="recent-title">Stats do Jogo — 2 gols, rating 8.5</div>
+      <div class="recent-sub">ontem · 876 visualizações</div>
+    </div>
+    <div class="recent-actions">
+      <button class="recent-btn" onclick="showToast('Compartilhando…')">📤</button>
+      <button class="recent-btn" onclick="openEditor('postgame1')">✏️</button>
+    </div>
+  </div>
+  <div class="recent-card">
+    <div class="recent-thumb" style="background:linear-gradient(135deg,var(--green),var(--green-m))">🏆</div>
+    <div class="recent-info">
+      <div class="recent-title">Nível Promessa desbloqueado!</div>
+      <div class="recent-sub">há 5 dias · 1.204 visualizações</div>
+    </div>
+    <div class="recent-actions">
+      <button class="recent-btn" onclick="showToast('Compartilhando…')">📤</button>
+      <button class="recent-btn" onclick="openEditor('levelup')">✏️</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAPTION QUICK TOOL -->
+<div class="caption-card">
+  <div class="caption-card-title">💬 Gerador de Legendas IA</div>
+  <div class="caption-card-sub">Descreva o que aconteceu — a IA escreve 3 variações perfeitas para o Instagram</div>
+  <div class="caption-input-row">
+    <input class="caption-input" id="captionPrompt" placeholder="Ex: Fiz 2 gols e 1 assist hoje…"/>
+    <button class="caption-gen-btn" onclick="generateCaptions()">✨ Gerar</button>
+  </div>
+  <div class="caption-results" id="captionResults"></div>
+</div>
+
+<!-- BIO GENERATOR -->
+<div class="bio-card" id="bioSection">
+  <div class="bio-card-title">✍️ <span>Gerador de Bio IA</span></div>
+  <div class="bio-type-row">
+    <button class="bio-type-btn active" onclick="selectBioType(this,'instagram')">📱 Instagram</button>
+    <button class="bio-type-btn" onclick="selectBioType(this,'profissional')">💼 Profissional</button>
+    <button class="bio-type-btn" onclick="selectBioType(this,'clube')">🏟️ Para Clube</button>
+    <button class="bio-type-btn" onclick="selectBioType(this,'en')">🌍 English</button>
+  </div>
+  <button onclick="generateBio(currentBioType)" style="width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-2));border:none;color:var(--w);font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;padding:12px;border-radius:9px;cursor:pointer;transition:all .2s;margin-bottom:12px" onmouseover="this.style.boxShadow='0 4px 12px rgba(26,35,126,.3)'" onmouseout="this.style.boxShadow='none'">✨ Gerar bio agora</button>
+  <div class="bio-result" id="bioResult"></div>
+  <div class="bio-actions" id="bioActions" style="display:none">
+    <button class="btn-copy" onclick="copyBio()">📋 Copiar</button>
+    <button class="btn-apply" onclick="showToast('✅ Bio aplicada no perfil!')">✓ Aplicar no perfil</button>
+  </div>
+</div>
+
+<!-- HASHTAG GENERATOR -->
+<div class="hashtag-card">
+  <div style="font-size:13px;font-weight:700;color:var(--g7);display:flex;align-items:center;gap:6px"># Hashtags recomendadas</div>
+  <div style="font-size:11px;color:var(--g4);margin-top:2px;margin-bottom:6px">Baseadas no seu perfil: Centroavante · Sub-23 · Curitiba</div>
+  <div class="hashtag-cloud" id="hashtagCloud"></div>
+  <button onclick="copyHashtags()" style="width:100%;margin-top:12px;padding:10px;background:var(--g1);border:1.5px solid var(--g2);border-radius:9px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--g7);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--g2)'">📋 Copiar selecionadas</button>
+</div>
+
+<!-- CONTENT PLANNER -->
+<div class="planner-card">
+  <div style="font-size:13px;font-weight:700;color:var(--g7);display:flex;align-items:center;justify-content:space-between">
+    📅 Planejador de Conteúdo
+    <button onclick="showToast('Calendário completo')" style="background:none;border:none;font-size:12px;color:var(--blue);font-weight:600;cursor:pointer">Maio 2026 ›</button>
+  </div>
+  <div class="week-row">
+    <div class="day-cell"><div class="day-lbl">QUI</div><div class="day-num">14</div></div>
+    <div class="day-cell today"><div class="day-lbl">SEX</div><div class="day-num">15</div></div>
+    <div class="day-cell has-content"><div class="day-lbl">SÁB</div><div class="day-num">16</div></div>
+    <div class="day-cell has-content-post"><div class="day-lbl">DOM</div><div class="day-num">17</div></div>
+    <div class="day-cell"><div class="day-lbl">SEG</div><div class="day-num">18</div></div>
+    <div class="day-cell has-content"><div class="day-lbl">TER</div><div class="day-num">19</div></div>
+    <div class="day-cell"><div class="day-lbl">QUA</div><div class="day-num">20</div></div>
+  </div>
+  <div class="plan-items">
+    <div class="plan-item"><div class="plan-item-dot" style="background:var(--navy)"></div><div class="plan-item-info"><div class="plan-item-title">Arte Pré-Jogo — Atlético × Flamengo</div><div class="plan-item-time">Sáb 16/05 · antes das 10h</div></div><button onclick="showToast('Editando post')" style="background:none;border:none;font-size:16px;cursor:pointer">✏️</button></div>
+    <div class="plan-item"><div class="plan-item-dot" style="background:var(--green-m)"></div><div class="plan-item-info"><div class="plan-item-title">Stats + Legenda — Pós-Jogo</div><div class="plan-item-time">Dom 17/05 · após o apito</div></div><button onclick="showToast('Editando post')" style="background:none;border:none;font-size:16px;cursor:pointer">✏️</button></div>
+    <div class="plan-item"><div class="plan-item-dot" style="background:var(--blue)"></div><div class="plan-item-info"><div class="plan-item-title">Story: treino de finalização</div><div class="plan-item-time">Ter 19/05 · manhã</div></div><button onclick="showToast('Editando post')" style="background:none;border:none;font-size:16px;cursor:pointer">✏️</button></div>
+  </div>
+  <button class="plan-add-btn" onclick="showToast('Criar novo conteúdo planejado')">+ Planejar novo conteúdo</button>
+</div>
+
+<div class="page-pad"></div>
+
+<!-- ═══════════════════ EDITOR MODAL ═══════════════════ -->
+<div class="sheet-ov" id="editorModal" onclick="if(event.target===this)closeSheet('editorModal')">
+  <div class="sheet">
+    <button class="sheet-close" onclick="closeSheet('editorModal')">✕</button>
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="editorTitle">Editar Arte</div>
+
+    <!-- Preview -->
+    <div class="editor-preview-wrap" id="previewWrap">
+      <div class="editor-preview-inner" id="previewInner">
+        <!-- Art rendered here -->
+      </div>
+    </div>
+
+    <!-- Color themes -->
+    <div style="font-size:11px;font-weight:700;color:var(--g7);margin-bottom:8px">Tema de cores</div>
+    <div class="theme-row">
+      <div class="theme-dot theme--navy active" onclick="setTheme(this,'navy')" title="Azul Navy"></div>
+      <div class="theme-dot theme--gold" onclick="setTheme(this,'gold')" title="Ouro"></div>
+      <div class="theme-dot theme--green" onclick="setTheme(this,'green')" title="Verde"></div>
+      <div class="theme-dot theme--purple" onclick="setTheme(this,'purple')" title="Roxo"></div>
+      <div class="theme-dot theme--red" onclick="setTheme(this,'red')" title="Vermelho"></div>
+    </div>
+
+    <!-- Dynamic form fields -->
+    <div id="editorForm"></div>
+
+    <!-- Export -->
+    <button class="btn-export" onclick="exportArt()">📲 Gerar Arte & Compartilhar</button>
+    <div class="export-row">
+      <button class="export-mini" onclick="showToast('📥 Arte salva na galeria!')">💾 Salvar</button>
+      <button class="export-mini" onclick="showToast('📤 Publicando no feed…')">📤 Feed</button>
+      <button class="export-mini" onclick="showToast('📱 Exportar para Instagram')">📱 Insta</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bn-item" href="feed.html"><span class="bn-icon">🏠</span>Início</a>
+  <a class="bn-item" href="perfil-atleta.html"><span class="bn-icon">👤</span>Perfil</a>
+  <a class="bn-item bn-item--active" href="#"><span class="bn-icon">✨</span>Conteúdo</a>
+  <a class="bn-item" href="match-ia.html"><span class="bn-icon">🎯</span>Match IA</a>
+  <a class="bn-item" href="central-ia.html"><span class="bn-icon">🤖</span>IA</a>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+/* ─── Data ─── */
+const BIOS = {
+  instagram:`⚽ Centroavante | Atlético Paranaense
+🔥 Promessa · Nível 3 @ConectaFoot
+📍 Curitiba, PR · Cria da Base
+🎬 Laudo Scout: 7.8/10
+📊 Formado na base, vivendo o sonho
+🔗 Perfil completo na bio`,
+
+  profissional:`Gabriel Silva — Centroavante
+Idade: 22 anos | Altura: 1,78m | Peso: 72kg
+Clube atual: Atlético Paranaense (base)
+Posição principal: Centroavante | Secundária: Ponta-Direita
+Pé dominante: Direito | Categoria: Sub-23
+
+Formado nas categorias de base do Atlético Paranaense. Avaliado com nota 7.8/10 pelo sistema de Laudo Scout IA da plataforma ConectaFoot. Destaque em finalização, leitura de jogo e transições ofensivas.
+
+Disponível para testes e negociações imediatas.
+Contato: via plataforma ConectaFoot`,
+
+  clube:`FICHA TÉCNICA — GABRIEL SILVA
+
+▸ Posição: Centroavante / Ponta-Direita
+▸ Data de nascimento: Mai/2002 (22 anos)
+▸ Medidas: 1,78m · 72kg
+▸ Pé dominante: Direito
+▸ Clube: Atlético Paranaense (Base)
+▸ Categoria: Sub-23 / Juvena
+
+AVALIAÇÃO IA (Laudo Scout ConectaFoot):
+• Nota geral: 7.8/10
+• Técnica: 8.2 | Físico: 7.9 | Visão: 7.5 | Posição: 7.6
+
+Portfólio disponível para análise. Disponível para testes presenciais imediatamente.`,
+
+  en:`⚽ Center Forward | Atlético Paranaense
+🔥 ConectaFoot Level 3 — Promising Talent
+📍 Curitiba, Brazil | Sub-23
+🎯 AI Scout Report: 7.8/10
+📲 Full profile & highlight reel available
+🌎 Open to national & international opportunities`,
+};
+
+const CAPTIONS = {
+  default:[
+    [
+      "Mais uma entregue. 2 gols, 1 assist e o time na frente. 🔥⚽\nIsso que acontece quando o trabalho diário vira realidade.\n\n#FutebolBrasileiro #Centroavante #ConectaFoot #GameDay",
+    ],
+    [
+      "Dia sim. ⚽⚽ Dois gols e uma assistência — agradecido demais pelo jogo e pela confiança da comissão. 🙏\nA jornada é longa, mas cada passo aqui vale.\n\n#Futebol #SonhosQueNãoTerminam #AtletaConectaFoot",
+    ],
+    [
+      "📊 Stats de hoje:\n⚽ 2 Gols\n🅰️ 1 Assistência\n📈 Rating: 8.5\n\nO trabalho fala por mim. 💪\n\n#FutebolDeMente #ConectaFoot #Sub23",
+    ],
+  ],
+};
+
+const HASHTAGS = [
+  {tag:'#FutebolBrasileiro', hot:true},
+  {tag:'#Centroavante'},
+  {tag:'#Sub23'},
+  {tag:'#ConectaFoot', hot:true},
+  {tag:'#CriasDaBase'},
+  {tag:'#FutebolParanaense'},
+  {tag:'#AcoradãoNaBase'},
+  {tag:'#SonhosQueNãoTerminam'},
+  {tag:'#GameDay', hot:true},
+  {tag:'#FutebolDeMente'},
+  {tag:'#JogoHoje'},
+  {tag:'#AtletaProfissional'},
+  {tag:'#Curitiba'},
+  {tag:'#Juvena'},
+  {tag:'#GolDe' + 'Hoje', hot:true},
+];
+
+const TEMPLATES = {
+  pregame1:{
+    title:'Arte Pré-Jogo — Dia de Jogo',
+    story:false,
+    fields:[
+      {id:'p_name', label:'Seu nome', value:'Gabriel Silva'},
+      {id:'p_pos', label:'Posição', value:'Centroavante'},
+      {id:'p_time1', label:'Seu time', value:'Atlético-PR'},
+      {id:'p_time2', label:'Adversário', value:'Coritiba'},
+      {id:'p_hora', label:'Horário', value:'15:00h'},
+      {id:'p_local', label:'Local', value:'Arena da Baixada'},
+    ],
+    render(data){
+      return `<div class="art--pregame1" style="width:100%;height:100%">
+        <div class="a1-tag">⚽ Dia de Jogo</div>
+        <div class="a1-name">${data.p_name||'Gabriel Silva'}</div>
+        <div class="a1-pos">${data.p_pos||'Centroavante'}</div>
+        <div class="a1-sep"></div>
+        <div class="a1-vs">
+          <div class="a1-team">${data.p_time1||'Meu Time'}</div>
+          <div class="a1-vs-pill">VS</div>
+          <div class="a1-team">${data.p_time2||'Adversário'}</div>
+        </div>
+        <div class="a1-info">Hoje · ${data.p_hora||'15:00h'} · ${data.p_local||'Estádio'}</div>
+        <div class="art-watermark">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  pregame2:{
+    title:'Arte Pré-Jogo — Foco Total',
+    story:false,
+    fields:[
+      {id:'f_name', label:'Seu nome', value:'Gabriel Silva'},
+      {id:'f_msg', label:'Mensagem motivacional', value:'Missão clara. Resultado garantido.'},
+    ],
+    render(data){
+      return `<div class="art--pregame2" style="width:100%;height:100%">
+        <div class="a2-word1">FOCO</div>
+        <div class="a2-word2">TOTAL</div>
+        <div class="a2-name">${data.f_name||'Gabriel Silva'}</div>
+        <div class="a2-msg">🎯 ${data.f_msg||'Missão clara. Resultado garantido.'}</div>
+        <div class="art-watermark" style="color:rgba(255,255,255,.2)">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  postgame1:{
+    title:'Arte Pós-Jogo — Stats',
+    story:false,
+    fields:[
+      {id:'s_time1', label:'Seu time', value:'Atlético-PR'},
+      {id:'s_placar1', label:'Placar (seu time)', value:'2'},
+      {id:'s_time2', label:'Adversário', value:'Coritiba'},
+      {id:'s_placar2', label:'Placar (adversário)', value:'1'},
+      {id:'s_gols', label:'Gols marcados', value:'2'},
+      {id:'s_assist', label:'Assistências', value:'1'},
+      {id:'s_rating', label:'Rating', value:'8.5'},
+    ],
+    render(data){
+      return `<div class="art--postgame1" style="width:100%;height:100%">
+        <div class="pg1-rating"><div class="pg1-rating-val">${data.s_rating||'8.5'}</div><div class="pg1-rating-lbl">Rating</div></div>
+        <div class="pg1-title">Stats do Jogo</div>
+        <div class="pg1-date">${data.s_time1||'Meu Time'} ${data.s_placar1||'0'}×${data.s_placar2||'0'} ${data.s_time2||'Adversário'}</div>
+        <div class="pg1-stat-row"><div class="pg1-stat-ico">⚽</div><div class="pg1-stat-lbl">Gols</div><div class="pg1-stat-val">${data.s_gols||'0'}</div></div>
+        <div class="pg1-stat-row"><div class="pg1-stat-ico">🅰️</div><div class="pg1-stat-lbl">Assistências</div><div class="pg1-stat-val">${data.s_assist||'0'}</div></div>
+        <div class="pg1-div"></div>
+        <div class="pg1-bar-row"><div class="pg1-bar-lbl">Técnica</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:82%"></div></div><div class="pg1-bar-num">8.2</div></div>
+        <div class="pg1-bar-row"><div class="pg1-bar-lbl">Físico</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:79%"></div></div><div class="pg1-bar-num">7.9</div></div>
+        <div class="pg1-bar-row"><div class="pg1-bar-lbl">Visão</div><div class="pg1-bar-track"><div class="pg1-bar-fill" style="width:75%"></div></div><div class="pg1-bar-num">7.5</div></div>
+        <div class="art-watermark">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  postgame2:{
+    title:'Arte Pós-Jogo — Gol Marcado',
+    story:false,
+    fields:[
+      {id:'g_count', label:'Quantidade de gols', value:'2'},
+      {id:'g_name', label:'Seu nome', value:'Gabriel Silva'},
+      {id:'g_clube', label:'Clube', value:'Atlético-PR'},
+    ],
+    render(data){
+      return `<div class="art--postgame2" style="width:100%;height:100%">
+        <div class="pg2-emoji">⚽</div>
+        <div class="pg2-count">${data.g_count||'1'}</div>
+        <div class="pg2-label">${(data.g_count||'1')==='1'?'GOL!':'GOLS!'}</div>
+        <div class="pg2-name">${data.g_name||'Gabriel Silva'}</div>
+        <div class="pg2-match">${data.g_clube||'Meu Time'} · Hoje</div>
+        <div class="art-watermark">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  scout:{
+    title:'Card Laudo Scout IA',
+    story:false,
+    fields:[
+      {id:'sc_name', label:'Seu nome + posição', value:'Gabriel Silva · Centroavante'},
+      {id:'sc_nota', label:'Nota geral (ex: 7.8)', value:'7.8'},
+    ],
+    render(data){
+      return `<div class="art--scout" style="width:100%;height:100%">
+        <div class="sc-tag">Laudo Scout IA</div>
+        <div class="sc-score-wrap"><div class="sc-score">${data.sc_nota||'7.8'}</div><div class="sc-max">/10</div></div>
+        <div class="sc-label">Nota Geral · Análise de Portfólio</div>
+        <div class="sc-bars">
+          <div class="sc-bar-row"><div class="sc-bar-lbl">⚽ Técnica</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:82%"></div></div><div class="sc-bar-num">8.2</div></div>
+          <div class="sc-bar-row"><div class="sc-bar-lbl">💪 Físico</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:79%"></div></div><div class="sc-bar-num">7.9</div></div>
+          <div class="sc-bar-row"><div class="sc-bar-lbl">🧠 Visão</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:75%"></div></div><div class="sc-bar-num">7.5</div></div>
+          <div class="sc-bar-row"><div class="sc-bar-lbl">📍 Posição</div><div class="sc-bar-track"><div class="sc-bar-fill" style="width:76%"></div></div><div class="sc-bar-num">7.6</div></div>
+        </div>
+        <div class="sc-name">${data.sc_name||'Gabriel Silva · Centroavante'}</div>
+        <div class="art-watermark">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  levelup:{
+    title:'Conquista — Nível Novo',
+    story:false,
+    fields:[
+      {id:'lv_nivel', label:'Nome do nível', value:'Promessa'},
+      {id:'lv_num', label:'Número do nível', value:'3'},
+      {id:'lv_icon', label:'Emoji do nível', value:'🔥'},
+      {id:'lv_xp', label:'XP acumulados', value:'1.240'},
+    ],
+    render(data){
+      return `<div class="art--levelup" style="width:100%;height:100%">
+        <div class="lvl-eyebrow">Nível Novo!</div>
+        <div class="lvl-icon">${data.lv_icon||'🔥'}</div>
+        <div class="lvl-name">${(data.lv_nivel||'PROMESSA').toUpperCase()}</div>
+        <div class="lvl-num">Nível ${data.lv_num||'3'} · ConectaFoot</div>
+        <div class="lvl-xp">⚡ ${data.lv_xp||'0'} XP acumulados</div>
+        <div class="art-watermark" style="color:rgba(255,255,255,.2)">ConectaFoot</div>
+      </div>`;
+    }
+  },
+  story:{
+    title:'Story — Pré-Jogo (9:16)',
+    story:true,
+    fields:[
+      {id:'st_name', label:'Seu nome', value:'Gabriel Silva'},
+      {id:'st_pos', label:'Posição · Clube', value:'Centroavante · Atlético-PR'},
+      {id:'st_hora', label:'Horário do jogo', value:'15:00h'},
+      {id:'st_cta', label:'Chamada de engajamento', value:'Torça por mim! 🙏'},
+    ],
+    render(data){
+      return `<div class="art--story" style="width:100%;height:100%">
+        <div class="story-top">
+          <div class="story-eyebrow">O jogo é hoje</div>
+          <div class="story-bigtext">DIA</div>
+          <div class="story-bigtext2">DE JOGO</div>
+          <div class="story-time">${data.st_hora||'15:00h'}</div>
+        </div>
+        <div class="story-mid">
+          <div class="story-avatar">⚽</div>
+          <div class="story-name">${data.st_name||'Gabriel Silva'}</div>
+          <div class="story-pos">${data.st_pos||'Centroavante'}</div>
+        </div>
+        <div class="story-bottom">
+          <div class="story-cta">${data.st_cta||'Torça por mim! 🙏'}</div>
+          <div class="story-hashtag">#FutebolBrasileiro #ConectaFoot</div>
+        </div>
+      </div>`;
+    }
+  },
+};
+
+let currentTemplate = 'pregame1';
+let currentBioType  = 'instagram';
+let editorData = {};
+
+/* ── Open editor ── */
+function openEditor(tplKey) {
+  currentTemplate = tplKey;
+  const tpl = TEMPLATES[tplKey];
+  if (!tpl) return;
+
+  document.getElementById('editorTitle').textContent = tpl.title;
+
+  // Preview size
+  const wrap = document.getElementById('previewWrap');
+  wrap.className = 'editor-preview-wrap' + (tpl.story ? ' editor-preview-wrap--story' : '');
+
+  // Build form
+  editorData = {};
+  tpl.fields.forEach(f => { editorData[f.id] = f.value; });
+  document.getElementById('editorForm').innerHTML = tpl.fields.map(f => `
+    <div class="fg">
+      <label>${f.label}</label>
+      <input type="text" value="${f.value}" oninput="editorData['${f.id}']=this.value;renderPreview()" />
+    </div>`).join('');
+
+  // Render preview
+  renderPreview();
+  openSheet('editorModal');
+}
+
+function renderPreview() {
+  const tpl = TEMPLATES[currentTemplate];
+  if (!tpl) return;
+  const inner = document.getElementById('previewInner');
+  inner.innerHTML = tpl.render(editorData);
+  // Make art fill the preview
+  const art = inner.firstElementChild;
+  if (art) { art.style.width='100%'; art.style.height='100%'; }
+}
+
+/* ── Export ── */
+function exportArt() {
+  closeSheet('editorModal');
+  setTimeout(()=>{
+    showToast('🎉 Arte criada! Compartilhando…');
+  },300);
+}
+
+/* ── Theme ── */
+function setTheme(dot, theme) {
+  document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
+  dot.classList.add('active');
+  showToast('Tema ' + theme + ' aplicado');
+  // In a real app, re-render with new color scheme
+}
+
+/* ── Category filter ── */
+function filterCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tpl-card').forEach(card => {
+    card.style.display = (cat==='all' || card.dataset.cat===cat) ? '' : 'none';
+  });
+}
+
+/* ── Caption generator ── */
+function generateCaptions() {
+  const prompt = document.getElementById('captionPrompt').value.trim();
+  if (!prompt) { showToast('Descreva o que aconteceu!'); return; }
+
+  const btn = document.querySelector('.caption-gen-btn');
+  btn.textContent = '⏳';
+  btn.disabled = true;
+
+  const resultsEl = document.getElementById('captionResults');
+  resultsEl.style.display = 'flex';
+  resultsEl.innerHTML = '<div style="font-size:12px;color:var(--g4);padding:8px">Gerando legendas…</div>';
+
+  setTimeout(()=>{
+    const opts = [
+      { num:'Opção 1 — Emocional', text: prompt + '\n\nIsso que acontece quando o trabalho diário vira realidade. 🙏🔥\n\n#FutebolBrasileiro #ConectaFoot #' + new Date().getFullYear() },
+      { num:'Opção 2 — Direto e impactante', text: '📊 ' + prompt.split(' ').slice(0,4).join(' ').replace(/,/g,'') + '.\nStats completos no story. 👆\n\n#Stats #Centroavante #ConectaFoot' },
+      { num:'Opção 3 — Engajamento', text: prompt + '\n\nO que acharam do jogo? Comenta aí! 💬⚽\n\n#FutebolBrasileiro #GameDay #ConectaFoot' },
+    ];
+
+    resultsEl.innerHTML = opts.map((o,i) => `
+      <div class="caption-option" id="cap${i}" onclick="selectCaption(${i})">
+        <div class="caption-option-num">${o.num}</div>
+        <div class="caption-option-text" style="white-space:pre-line">${o.text}</div>
+        <button class="caption-copy-btn" onclick="event.stopPropagation();copyCaption(${i})">📋</button>
+      </div>`).join('');
+
+    btn.textContent = '✨ Gerar';
+    btn.disabled = false;
+  }, 1400);
+}
+
+function selectCaption(idx) {
+  document.querySelectorAll('.caption-option').forEach(c=>c.style.borderColor='rgba(124,58,237,.12)');
+  document.getElementById('cap'+idx).style.borderColor='var(--purple)';
+  showToast('Legenda selecionada!');
+}
+
+function copyCaption(idx) {
+  const text = document.querySelectorAll('.caption-option-text')[idx]?.textContent || '';
+  navigator.clipboard?.writeText(text).catch(()=>{});
+  showToast('📋 Legenda copiada!');
+}
+
+/* ── Bio generator ── */
+function selectBioType(btn, type) {
+  currentBioType = type;
+  document.querySelectorAll('.bio-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function generateBio(type) {
+  currentBioType = type || currentBioType;
+  const result = document.getElementById('bioResult');
+  const actions = document.getElementById('bioActions');
+
+  result.style.display = 'block';
+  result.classList.add('show');
+  result.textContent = 'Gerando…';
+  actions.style.display = 'none';
+
+  setTimeout(()=>{
+    const bioText = BIOS[currentBioType] || BIOS.instagram;
+    result.textContent = bioText;
+    actions.style.display = 'flex';
+  }, 1200);
+}
+
+function copyBio() {
+  const text = document.getElementById('bioResult').textContent;
+  navigator.clipboard?.writeText(text).catch(()=>{});
+  showToast('📋 Bio copiada!');
+}
+
+/* ── Hashtags ── */
+function buildHashtags() {
+  const cloud = document.getElementById('hashtagCloud');
+  cloud.innerHTML = HASHTAGS.map((h,i) =>
+    `<span class="htag${h.hot?' htag--hot':''}" onclick="toggleTag(this,${i})">${h.tag}</span>`
+  ).join('');
+}
+
+function toggleTag(el) {
+  el.classList.toggle('htag--selected');
+}
+
+function copyHashtags() {
+  const selected = Array.from(document.querySelectorAll('.htag--selected')).map(e=>e.textContent);
+  if (!selected.length) { showToast('Selecione ao menos uma hashtag!'); return; }
+  navigator.clipboard?.writeText(selected.join(' ')).catch(()=>{});
+  showToast(`📋 ${selected.length} hashtags copiadas!`);
+}
+
+/* ── Sheet ── */
+function openSheet(id)  { document.getElementById(id).classList.add('open'); }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.sheet-ov.open').forEach(el=>el.classList.remove('open')); });
+
+/* ── Toast ── */
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>{ t.style.display='none'; },2500);
+}
+
+/* ── Counter animation ── */
+function animCount(id,target,dur,suffix=''){
+  let start=null;
+  const el=document.getElementById(id);
+  if(!el)return;
+  const step=ts=>{
+    if(!start)start=ts;
+    const p=Math.min((ts-start)/dur,1);
+    el.textContent=Math.round(p*target)+suffix;
+    if(p<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ── Init ── */
+window.addEventListener('DOMContentLoaded',()=>{
+  animCount('cArtes',47,800);
+  animCount('cAlcance',2300,900,'');
+  animCount('cEngaj',89,700,'%');
+  buildHashtags();
+});
+</script>
+<div class="nav-back-bar"><a href="projeto.html">← Projeto</a><span class="nav-logo">ConectaFoot IA</span><div style="display:flex;gap:4px"><a href="central-ia.html">Hub</a><a href="perfil-atleta.html">Perfil</a><a href="feed.html">Feed</a><a href="match-ia.html">Match</a><a href="bio-conteudo.html">Bio</a></div></div></body>
+</html>

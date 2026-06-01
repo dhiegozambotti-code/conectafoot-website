@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ConectaFoot IA — Projeto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    :root{
+      --navy:#1a237e;--navy2:#283593;--navy3:#3949ab;
+      --blue:#3eb7e6;--blue-d:#0b8fc4;--blue-l:#e8f6fd;
+      --green:#2e7d32;--green-l:#e8f5e9;
+      --amber:#f59e0b;--amber-l:#fff8e1;
+      --red:#e53935;--red-l:#fff3f3;
+      --purple:#7c3aed;
+      --g1:#f2f4f7;--g2:#e8eaf6;--g3:#d0d5dd;--g4:#98a2b3;--g5:#667085;--g6:#475467;--g7:#344054;
+      --w:#fff;
+    }
+    body{font-family:'Poppins',sans-serif;background:var(--g1);color:var(--g7)}
+
+    /* ── NAV ── */
+    .topnav{background:var(--navy);position:sticky;top:0;z-index:200;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+    .topnav-brand{display:flex;align-items:center;gap:10px}
+    .topnav-logo{font-size:16px;font-weight:800;color:var(--blue);letter-spacing:-.5px}
+    .topnav-tag{background:rgba(62,183,230,.18);border:1px solid rgba(62,183,230,.35);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px}
+    .topnav-links{display:flex;gap:4px}
+    .topnav-link{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .topnav-link:hover,.topnav-link.active{color:#fff;background:rgba(255,255,255,.1)}
+    @media(max-width:680px){.topnav-links{display:none}}
+
+    /* ── HERO ── */
+    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,#1565c0 100%);padding:64px 24px 56px;text-align:center;color:#fff}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(62,183,230,.15);border:1px solid rgba(62,183,230,.3);color:var(--blue);font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:20px}
+    .hero-title{font-size:clamp(28px,5vw,52px);font-weight:900;line-height:1.15;margin-bottom:14px}
+    .hero-title span{color:var(--blue)}
+    .hero-sub{font-size:clamp(14px,2vw,17px);opacity:.75;max-width:640px;margin:0 auto 32px;line-height:1.7}
+    .hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:40px}
+    .hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:100px}
+    .hero-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+    .btn-hero{padding:13px 28px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .2s}
+    .btn-hero--primary{background:var(--blue);color:#fff}
+    .btn-hero--primary:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 8px 24px rgba(62,183,230,.4)}
+    .btn-hero--outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+    .btn-hero--outline:hover{background:rgba(255,255,255,.1);border-color:#fff}
+
+    /* ── STATS BAR ── */
+    .stats-bar{background:var(--w);border-bottom:1px solid var(--g2);padding:20px 24px}
+    .stats-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:0}
+    .stat-item{flex:1;min-width:140px;text-align:center;padding:0 20px;border-right:1px solid var(--g2)}
+    .stat-item:last-child{border-right:none}
+    .stat-val{font-size:26px;font-weight:900;color:var(--navy);line-height:1}
+    .stat-lbl{font-size:11px;color:var(--g4);margin-top:3px}
+
+    /* ── SECTIONS ── */
+    .section{padding:56px 24px}
+    .section--white{background:var(--w)}
+    .section--gray{background:var(--g1)}
+    .section--navy{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff}
+    .sec-inner{max-width:1100px;margin:0 auto}
+    .sec-header{text-align:center;margin-bottom:40px}
+    .sec-eyebrow{display:inline-block;background:var(--blue-l);color:var(--blue-d);font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px}
+    .sec-eyebrow--light{background:rgba(62,183,230,.2);color:var(--blue)}
+    .sec-title{font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:8px}
+    .sec-title--light{color:#fff}
+    .sec-sub{font-size:14px;color:var(--g5);max-width:560px;margin:0 auto;line-height:1.7}
+    .sec-sub--light{color:rgba(255,255,255,.7)}
+
+    /* ── SCREENS GRID ── */
+    .screens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px}
+    .screen-card{background:var(--w);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .25s;cursor:pointer;text-decoration:none;display:flex;flex-direction:column}
+    .screen-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(26,35,126,.15)}
+    .phone-frame{background:var(--navy);padding:8px 8px 0;position:relative;aspect-ratio:9/16;overflow:hidden}
+    .phone-notch{width:60px;height:14px;background:rgba(0,0,0,.5);border-radius:0 0 10px 10px;margin:0 auto 6px;position:relative;z-index:2}
+    .phone-iframe{width:100%;height:calc(100% - 20px);border:none;border-radius:8px;pointer-events:none;transform:scale(1);transform-origin:top left}
+    .screen-info{padding:12px 14px 14px}
+    .screen-name{font-size:13px;font-weight:700;color:var(--g7);margin-bottom:2px}
+    .screen-desc{font-size:11px;color:var(--g4)}
+    .screen-tag{display:inline-block;margin-top:6px;background:var(--blue-l);color:var(--blue-d);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+    .screen-tag--done{background:var(--green-l);color:var(--green)}
+    .screen-tag--progress{background:var(--amber-l);color:#92400e}
+
+    /* ── ROADMAP ── */
+    .phases{display:flex;flex-direction:column;gap:16px}
+    .phase-card{background:var(--w);border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
+    .phase-header{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;user-select:none}
+    .phase-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+    .phase-title{flex:1;font-size:14px;font-weight:700;color:var(--g7)}
+    .phase-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
+    .phase-status--done{background:var(--green-l);color:var(--green)}
+    .phase-status--progress{background:var(--amber-l);color:#92400e}
+    .phase-status--pending{background:var(--g2);color:var(--g5)}
+    .phase-pct{font-size:13px;font-weight:800;color:var(--navy);margin-left:6px}
+    .phase-toggle{font-size:18px;color:var(--g3);transition:transform .25s}
+    .phase-toggle.open{transform:rotate(90deg)}
+    .phase-body{display:none;padding:0 20px 18px;border-top:1px solid var(--g1)}
+    .phase-body.open{display:block}
+    .phase-progress{height:4px;background:var(--g2);border-radius:2px;margin:14px 0 16px;overflow:hidden}
+    .phase-progress-fill{height:100%;border-radius:2px;transition:width .8s}
+    .deliverables{display:flex;flex-direction:column;gap:8px}
+    .deliv{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--g6);line-height:1.5}
+    .deliv-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+
+    /* ── AI MODULES ── */
+    .modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+    .module-card{background:var(--w);border-radius:16px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);border-top:4px solid var(--navy)}
+    .module-card:nth-child(2){border-color:var(--blue)}
+    .module-card:nth-child(3){border-color:var(--purple)}
+    .module-card:nth-child(4){border-color:#2e7d32}
+    .module-card:nth-child(5){border-color:var(--amber)}
+    .module-icon{font-size:32px;margin-bottom:12px}
+    .module-title{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:6px}
+    .module-desc{font-size:13px;color:var(--g5);line-height:1.6;margin-bottom:16px}
+    .module-features{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .module-feature{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--g6)}
+    .module-feature::before{content:'›';color:var(--blue);font-weight:800;font-size:14px}
+    .module-ai-chips{display:flex;flex-wrap:wrap;gap:5px}
+    .ai-chip{background:var(--g2);color:var(--navy);font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px}
+
+    /* ── COSTS TABLE ── */
+    .costs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:32px}
+    .cost-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:22px}
+    .cost-card-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.65);margin-bottom:16px;text-transform:uppercase;letter-spacing:.5px}
+    .cost-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+    .cost-row:last-child{border-bottom:none}
+    .cost-label{font-size:13px;color:rgba(255,255,255,.75)}
+    .cost-val{font-size:13px;font-weight:700;color:#fff}
+    .cost-val--highlight{color:var(--blue)}
+    .cost-val--green{color:#81c784}
+    .cost-val--red{color:#ef9a9a}
+    .proj-table{width:100%;border-collapse:collapse;font-size:13px}
+    .proj-table th{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;text-align:left}
+    .proj-table td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+    .proj-table tr:last-child td{border-bottom:none}
+    .proj-table tr:hover td{background:rgba(255,255,255,.04)}
+    .proj-table .highlight-row td{background:rgba(62,183,230,.1);font-weight:700;color:#fff}
+
+    /* ── PLANS ── */
+    .plans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+    .plan-card{background:var(--w);border-radius:16px;padding:28px 24px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:2px solid transparent;position:relative;overflow:hidden}
+    .plan-card--featured{border-color:var(--navy);box-shadow:0 8px 32px rgba(26,35,126,.18)}
+    .plan-badge{position:absolute;top:16px;right:16px;background:var(--navy);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:100px;letter-spacing:.5px;text-transform:uppercase}
+    .plan-name{font-size:11px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+    .plan-price{font-size:32px;font-weight:900;color:var(--navy);line-height:1;margin-bottom:4px}
+    .plan-price span{font-size:14px;font-weight:500;color:var(--g4)}
+    .plan-desc{font-size:12px;color:var(--g5);margin-bottom:20px;line-height:1.5}
+    .plan-features{display:flex;flex-direction:column;gap:8px}
+    .plan-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--g6)}
+    .plan-feat-icon{font-size:13px;flex-shrink:0}
+
+    /* ── TECH STACK ── */
+    .stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+    .stack-card{background:var(--w);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+    .stack-icon{font-size:24px;flex-shrink:0}
+    .stack-name{font-size:13px;font-weight:700;color:var(--g7)}
+    .stack-role{font-size:11px;color:var(--g4)}
+
+    /* ── FOOTER ── */
+    .footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:28px 24px;font-size:12px}
+    .footer strong{color:rgba(255,255,255,.9)}
+
+    /* ── UTILS ── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    @media(max-width:680px){.two-col{grid-template-columns:1fr}.screens-grid{grid-template-columns:repeat(2,1fr)}.stat-item{min-width:100px}}
+    .divider{height:1px;background:var(--g2);margin:20px 0}
+    .tag{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
+    .tag--blue{background:var(--blue-l);color:var(--blue-d)}
+    .tag--green{background:var(--green-l);color:var(--green)}
+    .tag--amber{background:var(--amber-l);color:#92400e}
+    .tag--navy{background:var(--g2);color:var(--navy)}
+  </style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ══════════════════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="topnav-brand">
+    <span class="topnav-logo">ConectaFoot</span>
+    <span class="topnav-tag">PROJETO IA</span>
+  </div>
+  <div class="topnav-links">
+    <a class="topnav-link" href="#telas">Telas</a>
+    <a class="topnav-link" href="#roadmap">Roadmap</a>
+    <a class="topnav-link" href="#modulos">Módulos IA</a>
+    <a class="topnav-link" href="#financeiro">Financeiro</a>
+    <a class="topnav-link" href="#planos">Planos</a>
+    <a class="topnav-link" href="#stack">Stack</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-eyebrow">⚽ ConectaFoot — Visão do Produto</div>
+  <h1 class="hero-title">A plataforma de futebol<br/>com <span>Inteligência Artificial</span></h1>
+  <p class="hero-sub">Conectando atletas a clubes e scouts com 5 módulos de IA generativa, gamificação e análise profissional de vídeo.</p>
+  <div class="hero-badges">
+    <span class="hero-badge">🤖 5 Módulos de IA</span>
+    <span class="hero-badge">🏆 6 Níveis de Gamificação</span>
+    <span class="hero-badge">🎬 Laudo Scout com Vídeo</span>
+    <span class="hero-badge">📱 iOS + Android + Web</span>
+    <span class="hero-badge">🔥 Angular + Firebase</span>
+  </div>
+  <div class="hero-actions">
+    <a href="#telas" class="btn-hero btn-hero--primary">Ver Telas →</a>
+    <a href="#roadmap" class="btn-hero btn-hero--outline">Ver Roadmap</a>
+  </div>
+</section>
+
+<!-- ══ STATS BAR ═════════════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-val">40+</div>
+      <div class="stat-lbl">Módulos Angular</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">5</div>
+      <div class="stat-lbl">Cloud Functions IA</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">6</div>
+      <div class="stat-lbl">Níveis de Carreira</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">12+</div>
+      <div class="stat-lbl">Badges & Conquistas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">R$49</div>
+      <div class="stat-lbl">Plano Elite/mês</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">14</div>
+      <div class="stat-lbl">Pagantes p/ break-even</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TELAS ═════════════════════════════════════════════════════════ -->
+<section class="section section--white" id="telas">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow">Protótipos</div>
+      <h2 class="sec-title">Telas do Produto</h2>
+      <p class="sec-sub">Clique em qualquer tela para abrir a versão interativa completa</p>
+    </div>
+    <div class="screens-grid">
+
+      <a class="screen-card" href="central-ia.html" target="_blank">
+        <div class="phone-frame" style="background:#1a237e">
+          <div class="phone-notch"></div>
+          <iframe class="phone-iframe" src="central-ia.html" title="Central IA" loading="lazy"></iframe>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">🤖 Central IA</div>
+          <div class="screen-desc">Hub de ferramentas, insights, laudos e gamificação</div>
+          <span class="screen-tag screen-tag--done">✓ Prototipado</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="perfil-atleta.html" target="_blank">
+        <div class="phone-frame" style="background:#1a237e">
+          <div class="phone-notch"></div>
+          <iframe class="phone-iframe" src="perfil-atleta.html" title="Perfil Atleta" loading="lazy"></iframe>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">👤 Perfil do Atleta</div>
+          <div class="screen-desc">Perfil completo com stats, nível e portfólio</div>
+          <span class="screen-tag screen-tag--done">✓ Prototipado</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="feed.html" target="_blank">
+        <div class="phone-frame" style="background:#1a237e">
+          <div class="phone-notch"></div>
+          <iframe class="phone-iframe" src="feed.html" title="Feed" loading="lazy"></iframe>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">📰 Feed</div>
+          <div class="screen-desc">Feed personalizado com posts de atletas e clubes</div>
+          <span class="screen-tag screen-tag--done">✓ Prototipado</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="match-ia.html" target="_blank">
+        <div class="phone-frame" style="background:#1a237e">
+          <div class="phone-notch"></div>
+          <iframe class="phone-iframe" src="match-ia.html" title="Match IA" loading="lazy"></iframe>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">🔍 Match IA</div>
+          <div class="screen-desc">Recomendações inteligentes de clubes e scouts</div>
+          <span class="screen-tag screen-tag--done">✓ Prototipado</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="bio-conteudo.html" target="_blank">
+        <div class="phone-frame" style="background:linear-gradient(135deg,#7c3aed,#1a237e)">
+          <div class="phone-notch"></div>
+          <iframe class="phone-iframe" src="bio-conteudo.html" title="Bio e Conteúdo" loading="lazy"></iframe>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">✨ Bio & Conteúdo</div>
+          <div class="screen-desc">Cards, bios e posts gerados por IA</div>
+          <span class="screen-tag screen-tag--done">✓ Prototipado</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="#" style="opacity:.6;cursor:default">
+        <div class="phone-frame" style="background:#283593;display:flex;align-items:center;justify-content:center">
+          <div style="text-align:center;color:rgba(255,255,255,.4)">
+            <div style="font-size:32px;margin-bottom:8px">🤖</div>
+            <div style="font-size:11px;font-weight:700">Agentes Virtuais</div>
+          </div>
+        </div>
+        <div class="screen-info">
+          <div class="screen-name">🤖 5 Agentes Virtuais</div>
+          <div class="screen-desc">Coach Vitor, Scout Ana, Mídia Léo, Mentor Jorge</div>
+          <span class="screen-tag screen-tag--progress">Em desenvolvimento</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ ROADMAP ═══════════════════════════════════════════════════════ -->
+<section class="section section--gray" id="roadmap">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow">Entregas</div>
+      <h2 class="sec-title">Roadmap por Fase</h2>
+      <p class="sec-sub">Clique em cada fase para ver as entregas detalhadas</p>
+    </div>
+    <div class="phases">
+
+      <!-- Fase 1 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:#2e7d32">1</div>
+          <div class="phase-title">Fundação da Plataforma — Perfis & Autenticação</div>
+          <span class="phase-status phase-status--done">Concluído</span>
+          <span class="phase-pct">100%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:100%;background:#2e7d32"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Autenticação (email, Google, Apple, Sky)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Perfil completo: Atleta, Avaliador, Clube, Agente, Fornecedor</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Upload de foto, imagens e endereço</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Navegação e layout base mobile-first</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 2 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:#2e7d32">2</div>
+          <div class="phase-title">Rede Social & Conteúdo</div>
+          <span class="phase-status phase-status--done">Concluído</span>
+          <span class="phase-pct">100%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:100%;background:#2e7d32"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Feed de publicações (imagem e vídeo YouTube)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Comentários, seguir/deixar de seguir</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Chat em tempo real + integração WhatsApp (Wablas)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Notificações push (FCM) + busca Algolia</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 3 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:#2e7d32">3</div>
+          <div class="phase-title">Avaliação & Desempenho</div>
+          <span class="phase-status phase-status--done">Concluído</span>
+          <span class="phase-pct">100%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:100%;background:#2e7d32"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Sistema de avaliação de habilidades (grades)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Solicitação e gestão de avaliações</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Gráficos de desempenho e resumo gerado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 4 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:var(--amber)">4</div>
+          <div class="phase-title">Inteligência Artificial — 5 Módulos</div>
+          <span class="phase-status phase-status--progress">Em andamento</span>
+          <span class="phase-pct">70%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:70%;background:var(--amber)"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Chat com IA — assistente pessoal do atleta</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Análise automatizada de perfil (cache 24h)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Geração de bio, legenda e post para redes</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Recomendação de match atleta ↔ clube/scout</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Laudo scout com análise de vídeo YouTube</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>5 Agentes virtuais (Coach, Scout, Mídia, Mentor, Conecta)</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Dashboard de performance com evolução histórica</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Ranking de atletas com score de IA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 5 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:var(--amber)">5</div>
+          <div class="phase-title">Monetização & Pagamentos</div>
+          <span class="phase-status phase-status--progress">Em andamento</span>
+          <span class="phase-pct">65%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:65%;background:var(--amber)"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Integração Mercado Pago + webhooks</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Assinatura SKY e Apple (StoreKit2)</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Tiers Free / Pro R$9,90 / Elite R$49,90</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Histórico financeiro para o usuário</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 6 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:var(--navy3)">6</div>
+          <div class="phase-title">App Mobile — iOS & Android</div>
+          <span class="phase-status phase-status--progress">Em andamento</span>
+          <span class="phase-pct">55%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:55%;background:var(--navy3)"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">✅</span>Capacitor configurado (iOS + Android)</div>
+            <div class="deliv"><span class="deliv-icon">✅</span>Plugin customizado StoreKit2</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Publicação App Store & Play Store</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Deep links e push notification nativa</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fase 7 -->
+      <div class="phase-card">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <div class="phase-num" style="background:var(--g4)">7</div>
+          <div class="phase-title">Escala & Qualidade</div>
+          <span class="phase-status phase-status--pending">Pendente</span>
+          <span class="phase-pct">10%</span>
+          <span class="phase-toggle">›</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-progress"><div class="phase-progress-fill" style="width:10%;background:var(--g4)"></div></div>
+          <div class="deliverables">
+            <div class="deliv"><span class="deliv-icon">⏳</span>Painel administrativo</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Analytics de uso da plataforma</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Monitoramento de erros (Sentry)</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>LGPD / Política de privacidade</div>
+            <div class="deliv"><span class="deliv-icon">⏳</span>Testes end-to-end</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ MÓDULOS IA ═════════════════════════════════════════════════════ -->
+<section class="section section--white" id="modulos">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow">Tecnologia</div>
+      <h2 class="sec-title">5 Módulos de IA</h2>
+      <p class="sec-sub">Cada módulo é independente, escalável e integrado ao backend Firebase</p>
+    </div>
+    <div class="modules-grid">
+
+      <div class="module-card">
+        <div class="module-icon">🤖</div>
+        <div class="module-title">Assistente Virtual Conecta</div>
+        <div class="module-desc">Avatar com personalidade própria — ponto central de todas as funções IA. Voz, animação e memória de contexto.</div>
+        <div class="module-features">
+          <div class="module-feature">Avatar animado com voz TTS em PT-BR</div>
+          <div class="module-feature">Memória de contexto (perfil + histórico)</div>
+          <div class="module-feature">Estados reativos: motivação, alerta, conquista</div>
+          <div class="module-feature">Proativa: notifica e sugere ações</div>
+        </div>
+        <div class="module-ai-chips">
+          <span class="ai-chip">Claude Sonnet 4.6</span>
+          <span class="ai-chip">ElevenLabs</span>
+          <span class="ai-chip">Lottie/Rive</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">👥</div>
+        <div class="module-title">5 Agentes Virtuais</div>
+        <div class="module-desc">Cada agente tem skin, personalidade e especialidade. Generativos, provocativos, propositivos e motivacionais.</div>
+        <div class="module-features">
+          <div class="module-feature">Coach Vitor — Planejamento de carreira</div>
+          <div class="module-feature">Scout Ana — Análise técnica de perfil</div>
+          <div class="module-feature">Mídia Léo — Conteúdo para redes sociais</div>
+          <div class="module-feature">Mentor Jorge — Psicologia esportiva</div>
+        </div>
+        <div class="module-ai-chips">
+          <span class="ai-chip">Claude Opus 4.7</span>
+          <span class="ai-chip">Claude Sonnet 4.6</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🎬</div>
+        <div class="module-title">Análise de Vídeo & Laudo Scout</div>
+        <div class="module-desc">Upload de jogos completos ou highlights. IA analisa e gera laudo técnico profissional com notas e evolução.</div>
+        <div class="module-features">
+          <div class="module-feature">Notas: Técnica, Visão, Físico, Posicionamento</div>
+          <div class="module-feature">Pontos fortes + a desenvolver + recomendação</div>
+          <div class="module-feature">Dashboard de evolução histórica</div>
+          <div class="module-feature">Compartilhamento de laudo com clubes</div>
+        </div>
+        <div class="module-ai-chips">
+          <span class="ai-chip">Gemini 2.0 Flash</span>
+          <span class="ai-chip">Claude Sonnet 4.6</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">✨</div>
+        <div class="module-title">Bio & Conteúdos</div>
+        <div class="module-desc">IA gera textos e cards visuais prontos para compartilhar — pré-jogo, pós-jogo, conquistas e perfil.</div>
+        <div class="module-features">
+          <div class="module-feature">Card de perfil baseado em vídeos</div>
+          <div class="module-feature">Cards pré-jogo, pós-jogo e conquistas</div>
+          <div class="module-feature">Bio profissional em 3 estilos</div>
+          <div class="module-feature">Export para Stories 9:16</div>
+        </div>
+        <div class="module-ai-chips">
+          <span class="ai-chip">Claude Sonnet 4.6</span>
+          <span class="ai-chip">html2canvas</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">🏆</div>
+        <div class="module-title">Gamificação Completa</div>
+        <div class="module-desc">XP, níveis, badges e ranking segmentado por categoria — Juvena, Boleiro, Cria da Base e Profissa.</div>
+        <div class="module-features">
+          <div class="module-feature">6 níveis: Novato → Revelação → Promessa → Destaque → Craque → Lenda</div>
+          <div class="module-feature">12+ badges de conquista</div>
+          <div class="module-feature">Ranking semanal por categoria e posição</div>
+          <div class="module-feature">Missões semanais com recompensas de XP</div>
+        </div>
+        <div class="module-ai-chips">
+          <span class="ai-chip">Claude Sonnet 4.6</span>
+          <span class="ai-chip">Firebase Functions</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINANCEIRO ════════════════════════════════════════════════════ -->
+<section class="section section--navy" id="financeiro">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow sec-eyebrow--light">Projeção</div>
+      <h2 class="sec-title sec-title--light">Modelo Financeiro — 5 Anos</h2>
+      <p class="sec-sub sec-sub--light">Base: 500 usuários ativos, crescimento de 40%/ano, conversão 10% Pro + 5% Elite</p>
+    </div>
+
+    <div class="costs-grid">
+      <div class="cost-card">
+        <div class="cost-card-title">Custos IA — Cenário Zero Pagantes</div>
+        <div class="cost-row"><span class="cost-label">Claude Sonnet (500 free × 3 msgs)</span><span class="cost-val">R$ 50</span></div>
+        <div class="cost-row"><span class="cost-label">Claude Opus</span><span class="cost-val cost-val--green">R$ 0</span></div>
+        <div class="cost-row"><span class="cost-label">Gemini Flash (vídeo)</span><span class="cost-val cost-val--green">R$ 0</span></div>
+        <div class="cost-row"><span class="cost-label">ElevenLabs / HeyGen</span><span class="cost-val cost-val--green">R$ 0 (free tier)</span></div>
+        <div class="cost-row"><span class="cost-label" style="font-weight:700">Total/mês</span><span class="cost-val cost-val--highlight" style="font-size:16px">R$ 50</span></div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-card-title">Custos IA — 10 Pagantes (todas features)</div>
+        <div class="cost-row"><span class="cost-label">Fixo — ElevenLabs + HeyGen</span><span class="cost-val">R$ 290</span></div>
+        <div class="cost-row"><span class="cost-label">Claude Sonnet + Opus</span><span class="cost-val">R$ 130</span></div>
+        <div class="cost-row"><span class="cost-label">Gemini Flash (10 laudos)</span><span class="cost-val">R$ 60</span></div>
+        <div class="cost-row"><span class="cost-label">Free users (490 restantes)</span><span class="cost-val">R$ 49</span></div>
+        <div class="cost-row"><span class="cost-label" style="font-weight:700">Total/mês</span><span class="cost-val cost-val--highlight" style="font-size:16px">R$ 529</span></div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-card-title">Break-even (Elite R$ 49,90)</div>
+        <div class="cost-row"><span class="cost-label">10 pagantes</span><span class="cost-val cost-val--red">-R$ 30/mês</span></div>
+        <div class="cost-row"><span class="cost-label">14 pagantes</span><span class="cost-val cost-val--green">✅ Break-even</span></div>
+        <div class="cost-row"><span class="cost-label">20 pagantes</span><span class="cost-val cost-val--green">+R$ 178/mês</span></div>
+        <div class="cost-row"><span class="cost-label">30 pagantes</span><span class="cost-val cost-val--green">+R$ 500/mês</span></div>
+        <div class="cost-row"><span class="cost-label" style="font-weight:700">Custo/usuário</span><span class="cost-val cost-val--highlight">R$ 2,23–3,14</span></div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:24px;overflow-x:auto">
+      <table class="proj-table">
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Usuários</th>
+            <th>Custo IA/mês</th>
+            <th>Receita/mês</th>
+            <th>Resultado/mês</th>
+            <th>Lucro/ano</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Base</td><td>500</td><td>R$ 1.570</td><td>R$ 1.743</td><td class="cost-val--highlight">+R$ 173</td><td>R$ 2.076</td></tr>
+          <tr><td>Ano 1</td><td>700</td><td>R$ 2.029</td><td>R$ 2.440</td><td class="cost-val--green">+R$ 411</td><td>R$ 4.932</td></tr>
+          <tr><td>Ano 2</td><td>980</td><td>R$ 2.638</td><td>R$ 3.415</td><td class="cost-val--green">+R$ 777</td><td>R$ 9.324</td></tr>
+          <tr><td>Ano 3</td><td>1.372</td><td>R$ 3.449</td><td>R$ 4.800</td><td class="cost-val--green">+R$ 1.351</td><td>R$ 16.212</td></tr>
+          <tr><td>Ano 4</td><td>1.921</td><td>R$ 4.537</td><td>R$ 6.691</td><td class="cost-val--green">+R$ 2.154</td><td>R$ 25.848</td></tr>
+          <tr class="highlight-row"><td>Ano 5</td><td>2.689</td><td>R$ 6.002</td><td>R$ 9.350</td><td class="cost-val--green">+R$ 3.348</td><td>R$ 40.176</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:11px;color:rgba(255,255,255,.4);margin-top:12px">* Receita calculada com 10% Pro (R$9,90) + 5% Elite (R$49,90). Lucro acumulado 5 anos: ~R$ 98.000</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PLANOS ═════════════════════════════════════════════════════════ -->
+<section class="section section--white" id="planos">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow">Monetização</div>
+      <h2 class="sec-title">Planos de Assinatura</h2>
+      <p class="sec-sub">Estrutura de tiers que equilibra acessibilidade e sustentabilidade da IA</p>
+    </div>
+    <div class="plans-grid">
+
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">R$ 0<span>/mês</span></div>
+        <div class="plan-desc">Para conhecer a plataforma e construir o perfil</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Perfil completo</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Feed e posts</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Chat com atletas e clubes</div>
+          <div class="plan-feat"><span class="plan-feat-icon">⚡</span>3 msgs IA/mês</div>
+          <div class="plan-feat"><span class="plan-feat-icon">❌</span>Laudos Scout</div>
+          <div class="plan-feat"><span class="plan-feat-icon">❌</span>Agentes Virtuais</div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">R$ 9,90<span>/mês</span></div>
+        <div class="plan-desc">Para atletas que querem usar a IA no dia a dia</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Tudo do Free</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Chat IA ilimitado</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Análise de perfil</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Geração de bio e posts</div>
+          <div class="plan-feat"><span class="plan-feat-icon">❌</span>Laudos Scout</div>
+          <div class="plan-feat"><span class="plan-feat-icon">❌</span>Agentes Virtuais</div>
+        </div>
+      </div>
+
+      <div class="plan-card plan-card--featured">
+        <div class="plan-badge">RECOMENDADO</div>
+        <div class="plan-name">Elite</div>
+        <div class="plan-price">R$ 49,90<span>/mês</span></div>
+        <div class="plan-desc">Para atletas sérios que querem se destacar</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Tudo do Pro</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>5 Agentes Virtuais</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Laudos Scout ilimitados</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Cards pré/pós-jogo IA</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Ranking e match IA</div>
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Dashboard de evolução</div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Elite Anual</div>
+        <div class="plan-price">R$ 399<span>/ano</span></div>
+        <div class="plan-desc">Elite com 33% de desconto — R$ 33,25/mês</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-icon">✅</span>Tudo do Elite</div>
+          <div class="plan-feat"><span class="plan-feat-icon">💰</span>Economia de R$ 179/ano</div>
+          <div class="plan-feat"><span class="plan-feat-icon">🎯</span>Reduz churn</div>
+          <div class="plan-feat"><span class="plan-feat-icon">🚀</span>Prioridade em novas features</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ STACK ══════════════════════════════════════════════════════════ -->
+<section class="section section--gray" id="stack">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <div class="sec-eyebrow">Tecnologia</div>
+      <h2 class="sec-title">Stack Técnica</h2>
+      <p class="sec-sub">Arquitetura moderna, serverless e escalável</p>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card"><span class="stack-icon">🅰️</span><div><div class="stack-name">Angular 17</div><div class="stack-role">Frontend — 40+ módulos</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🔥</span><div><div class="stack-name">Firebase</div><div class="stack-role">Auth, Firestore, Functions, Hosting</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🤖</span><div><div class="stack-name">Claude Sonnet/Opus</div><div class="stack-role">LLM principal — chat, análise, conteúdo</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🎬</span><div><div class="stack-name">Gemini 2.0 Flash</div><div class="stack-role">Análise de vídeo nativa</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🔊</span><div><div class="stack-name">ElevenLabs</div><div class="stack-role">Voz TTS em PT-BR</div></div></div>
+      <div class="stack-card"><span class="stack-icon">📱</span><div><div class="stack-name">Capacitor 7</div><div class="stack-role">iOS + Android nativo</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🔍</span><div><div class="stack-name">Algolia</div><div class="stack-role">Busca full-text</div></div></div>
+      <div class="stack-card"><span class="stack-icon">💳</span><div><div class="stack-name">Mercado Pago</div><div class="stack-role">Pagamentos + assinatura</div></div></div>
+      <div class="stack-card"><span class="stack-icon">🍎</span><div><div class="stack-name">StoreKit2</div><div class="stack-role">In-App Purchase iOS</div></div></div>
+      <div class="stack-card"><span class="stack-icon">💬</span><div><div class="stack-name">Wablas</div><div class="stack-role">Integração WhatsApp</div></div></div>
+      <div class="stack-card"><span class="stack-icon">📊</span><div><div class="stack-name">NgRx</div><div class="stack-role">State management</div></div></div>
+      <div class="stack-card"><span class="stack-icon">☁️</span><div><div class="stack-name">Azure Pipelines</div><div class="stack-role">CI/CD</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <p><strong>ConectaFoot</strong> — Projeto IA &nbsp;|&nbsp; Documento interno para validação do produto &nbsp;|&nbsp; 2026</p>
+</footer>
+
+<script>
+  function togglePhase(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.phase-toggle');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
+  }
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.topnav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.getAttribute('id');
+    });
+    navLinks.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+
+  // Open first phase by default
+  document.querySelector('.phase-header').click();
+</script>
+</body>
+</html>

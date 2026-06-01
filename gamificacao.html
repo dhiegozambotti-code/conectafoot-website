@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motor de Gamificação — ConectaFoot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    :root{
+      --navy:#1a237e;--navy2:#283593;--navy3:#3949ab;
+      --blue:#3eb7e6;--blue-l:#e8f6fd;
+      --green:#2e7d32;--green-l:#e8f5e9;--green-m:#4caf50;
+      --amber:#f59e0b;--amber-l:#fff8e1;
+      --red:#e53935;--red-l:#fff3f3;
+      --purple:#7c3aed;--purple-l:#f5f3ff;
+      --orange:#ea580c;--orange-l:#fff7ed;
+      --g1:#f2f4f7;--g2:#e8eaf6;--g3:#d0d5dd;--g4:#98a2b3;--g5:#667085;--g6:#475467;--g7:#344054;
+      --w:#fff;
+    }
+    body{font-family:'Poppins',sans-serif;background:var(--g1);color:var(--g7);line-height:1.6}
+
+    /* NAV */
+    .topnav{background:var(--navy);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+    .nav-brand{display:flex;align-items:center;gap:10px}
+    .nav-logo{font-size:16px;font-weight:800;color:var(--blue)}
+    .nav-tag{background:rgba(46,125,50,.3);border:1px solid rgba(46,125,50,.5);color:#81c784;font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px}
+    .nav-links{display:flex;gap:4px}
+    .nav-link{color:rgba(255,255,255,.65);font-size:12px;font-weight:600;padding:6px 12px;border-radius:6px;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+    @media(max-width:640px){.nav-links{display:none}}
+
+    /* HERO */
+    .hero{background:linear-gradient(135deg,#1b5e20 0%,#2e7d32 60%,#388e3c 100%);padding:52px 24px 44px;color:#fff;text-align:center}
+    .hero-eye{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px}
+    .hero-title{font-size:clamp(26px,4.5vw,44px);font-weight:900;line-height:1.15;margin-bottom:10px}
+    .hero-sub{font-size:14px;opacity:.75;max-width:580px;margin:0 auto 28px;line-height:1.7}
+    .hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .hero-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:5px 14px;border-radius:100px}
+
+    /* SECTION */
+    .sec{padding:48px 24px}
+    .sec--white{background:var(--w)}
+    .sec--gray{background:var(--g1)}
+    .sec--navy{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff}
+    .sec-inner{max-width:1060px;margin:0 auto}
+    .sec-header{margin-bottom:32px}
+    .sec-eye{display:inline-block;font-size:11px;font-weight:700;padding:4px 13px;border-radius:100px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+    .sec-eye--green{background:var(--green-l);color:var(--green)}
+    .sec-eye--blue{background:var(--blue-l);color:var(--navy)}
+    .sec-eye--amber{background:var(--amber-l);color:#92400e}
+    .sec-eye--red{background:var(--red-l);color:var(--red)}
+    .sec-eye--purple{background:var(--purple-l);color:var(--purple)}
+    .sec-eye--orange{background:var(--orange-l);color:var(--orange)}
+    .sec-eye--light{background:rgba(255,255,255,.15);color:#fff}
+    .sec-title{font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:6px}
+    .sec-title--light{color:#fff}
+    .sec-sub{font-size:13px;color:var(--g5);max-width:600px;line-height:1.7}
+    .sec-sub--light{color:rgba(255,255,255,.65)}
+
+    /* RULE TABLE */
+    .rule-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--w);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+    .rule-table th{background:var(--g2);color:var(--g7);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:10px 14px;text-align:left}
+    .rule-table td{padding:11px 14px;border-bottom:1px solid var(--g1);color:var(--g6);vertical-align:top}
+    .rule-table tr:last-child td{border-bottom:none}
+    .rule-table tr:hover td{background:#f8f9ff}
+    .xp-badge{display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:800;padding:2px 9px;border-radius:6px;white-space:nowrap}
+    .xp-badge--once{background:var(--blue-l);color:var(--navy)}
+    .xp-badge--limit{background:var(--amber-l);color:#92400e}
+    .limit-note{font-size:10px;color:var(--g4);margin-top:3px}
+
+    /* RULE CARDS */
+    .rule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .rule-card{background:var(--w);border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid var(--g3)}
+    .rule-card--green  {border-color:var(--green)}
+    .rule-card--blue   {border-color:var(--blue)}
+    .rule-card--amber  {border-color:var(--amber)}
+    .rule-card--red    {border-color:var(--red)}
+    .rule-card--purple {border-color:var(--purple)}
+    .rule-card--orange {border-color:var(--orange)}
+    .rule-card--navy   {border-color:var(--navy)}
+    .rc-icon{font-size:28px;margin-bottom:10px}
+    .rc-title{font-size:14px;font-weight:800;color:var(--g7);margin-bottom:6px}
+    .rc-list{display:flex;flex-direction:column;gap:5px}
+    .rc-item{font-size:12px;color:var(--g6);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+    .rc-item::before{content:'›';color:var(--blue);font-weight:800;font-size:14px;flex-shrink:0;margin-top:-1px}
+    .rc-note{font-size:11px;color:var(--g4);margin-top:8px;padding-top:8px;border-top:1px solid var(--g1)}
+
+    /* LEVELS */
+    .level-track{display:flex;flex-direction:column;gap:10px}
+    .level-item{display:flex;align-items:center;gap:14px;background:var(--w);border-radius:14px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:2px solid transparent}
+    .level-item--active{border-color:var(--amber);background:var(--amber-l)}
+    .level-badge{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+    .level-info{flex:1}
+    .level-name{font-size:14px;font-weight:800;color:var(--g7)}
+    .level-xp{font-size:12px;color:var(--g4);margin-top:1px}
+    .level-unlock{margin-top:6px}
+    .unlock-chip{display:inline-block;background:var(--g2);color:var(--navy);font-size:11px;font-weight:600;padding:3px 10px;border-radius:6px;margin:2px 2px 0 0}
+    .unlock-chip--new{background:var(--navy);color:#fff}
+    .level-mult{font-size:13px;font-weight:800;color:var(--amber);white-space:nowrap}
+
+    /* BADGES GRID */
+    .badges-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .badge-rule{display:flex;align-items:center;gap:12px;background:var(--w);border-radius:12px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+    .badge-icon-big{font-size:28px;flex-shrink:0}
+    .badge-info{flex:1}
+    .badge-name{font-size:13px;font-weight:700;color:var(--g7)}
+    .badge-trigger{font-size:11px;color:var(--g5);margin-top:2px;line-height:1.4}
+    .badge-xp{font-size:11px;font-weight:800;color:var(--green)}
+
+    /* NOTIFICATION RULES */
+    .notif-list{display:flex;flex-direction:column;gap:10px}
+    .notif-item{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px}
+    .notif-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+    .notif-info{flex:1}
+    .notif-title{font-size:13px;font-weight:700;color:#fff}
+    .notif-detail{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;line-height:1.5}
+    .notif-when{font-size:10px;font-weight:700;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);padding:2px 8px;border-radius:4px;margin-top:5px;display:inline-block}
+
+    /* ARCH */
+    .arch-flow{display:flex;flex-direction:column;gap:14px}
+    .arch-step{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px}
+    .arch-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .arch-content{flex:1}
+    .arch-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+    .arch-detail{font-size:12px;color:rgba(255,255,255,.6);line-height:1.6}
+    .arch-code{background:rgba(0,0,0,.3);color:#81d4fa;font-size:11px;font-family:monospace;padding:3px 8px;border-radius:4px;display:inline-block;margin-top:5px}
+
+    /* MULTIPLIER TABLE */
+    .mult-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .mult-card{background:var(--w);border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.07);text-align:center}
+    .mult-value{font-size:32px;font-weight:900;color:var(--navy);line-height:1}
+    .mult-label{font-size:12px;font-weight:700;color:var(--g7);margin-top:4px}
+    .mult-cond{font-size:11px;color:var(--g4);margin-top:3px}
+
+    /* FOOTER */
+    .footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px}
+    .footer strong{color:rgba(255,255,255,.9)}
+
+    /* DIVIDER */
+    .divider{height:1px;background:var(--g2);margin:24px 0}
+
+    /* ANTI-ABUSE */
+    .abuse-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--w);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+    .abuse-table th{background:#fce4ec;color:var(--red);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:9px 13px;text-align:left}
+    .abuse-table td{padding:10px 13px;border-bottom:1px solid var(--g1);color:var(--g6)}
+    .abuse-table tr:last-child td{border-bottom:none}
+
+    @media(max-width:600px){
+      .level-item{flex-wrap:wrap}
+      .rule-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <span class="nav-logo">ConectaFoot</span>
+    <span class="nav-tag">MOTOR XP</span>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#xp">XP por Ação</a>
+    <a class="nav-link" href="#streak">Streak</a>
+    <a class="nav-link" href="#missoes">Missões</a>
+    <a class="nav-link" href="#liga">Liga</a>
+    <a class="nav-link" href="#niveis">Níveis</a>
+    <a class="nav-link" href="#badges">Badges</a>
+    <a class="nav-link" href="#notif">Notificações</a>
+    <a class="nav-link" href="#arch">Arquitetura</a>
+    <a class="nav-link" href="projeto.html">← Projeto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eye">⚙️ Documento de Regras v1.0</div>
+  <h1 class="hero-title">Motor de Gamificação<br/>ConectaFoot</h1>
+  <p class="hero-sub">Regras completas de XP, streak, missões, ligas, níveis, badges, notificações e arquitetura Firebase para o sistema de gamificação da plataforma.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">8 mecânicas</span>
+    <span class="hero-pill">6 níveis</span>
+    <span class="hero-pill">5 ligas</span>
+    <span class="hero-pill">18 badges</span>
+    <span class="hero-pill">12 triggers de notificação</span>
+    <span class="hero-pill">Firebase Functions</span>
+  </div>
+</section>
+
+<!-- ══ XP POR AÇÃO ══════════════════════════════════════════════ -->
+<section class="sec sec--white" id="xp">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--green">⚡ XP por Ação</span>
+      <h2 class="sec-title">Regras de Pontuação</h2>
+      <p class="sec-sub">Cada ação na plataforma gera XP. Ações únicas valem mais — ações repetidas têm limite diário/semanal para evitar abuso.</p>
+    </div>
+
+    <!-- Perfil -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">👤 Perfil</h3>
+    <table class="rule-table" style="margin-bottom:24px">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Criar conta</td><td><span class="xp-badge xp-badge--once">+50 XP</span></td><td>1× por conta</td><td>Bônus de boas-vindas</td></tr>
+        <tr><td>Completar 50% do perfil</td><td><span class="xp-badge xp-badge--once">+100 XP</span></td><td>1× por conta</td><td>Trigger: completude ≥ 50%</td></tr>
+        <tr><td>Completar 100% do perfil</td><td><span class="xp-badge xp-badge--once">+200 XP</span></td><td>1× por conta</td><td>Trigger: completude = 100%</td></tr>
+        <tr><td>Adicionar foto de perfil</td><td><span class="xp-badge xp-badge--once">+30 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Atualizar posição/categoria</td><td><span class="xp-badge">+20 XP</span></td><td>Máx 3× por conta</td><td>Incentivo a manter dados atuais</td></tr>
+        <tr><td>Adicionar localização</td><td><span class="xp-badge xp-badge--once">+15 XP</span></td><td>1× por conta</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Portfólio / Vídeo -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🎬 Portfólio & Vídeo</h3>
+    <table class="rule-table" style="margin-bottom:24px">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Adicionar primeiro vídeo</td><td><span class="xp-badge xp-badge--once">+50 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Adicionar vídeo adicional</td><td><span class="xp-badge">+30 XP</span></td><td>Máx 5× por semana</td><td>Cooldown: 1 vídeo a cada 4h</td></tr>
+        <tr><td>Definir vídeo como portfólio principal</td><td><span class="xp-badge xp-badge--once">+20 XP</span></td><td>1× por conta</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <!-- IA / Laudos -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🤖 IA & Laudos Scout</h3>
+    <table class="rule-table" style="margin-bottom:24px">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Gerar primeiro Laudo Scout</td><td><span class="xp-badge xp-badge--once">+80 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Gerar Laudo Scout adicional</td><td><span class="xp-badge">+40 XP</span></td><td>Máx 3× por semana</td><td>Mínimo 24h entre laudos do mesmo vídeo</td></tr>
+        <tr><td>1ª sessão do dia com Agente IA</td><td><span class="xp-badge">+20 XP</span></td><td>1× por dia</td><td>Reinicia à meia-noite (Brasília)</td></tr>
+        <tr><td>Completar Planejamento de Carreira</td><td><span class="xp-badge xp-badge--once">+100 XP</span></td><td>1× por conta</td><td>Agente marca como completo</td></tr>
+        <tr><td>Gerar Bio com IA</td><td><span class="xp-badge">+25 XP</span></td><td>Máx 2× por mês</td><td>—</td></tr>
+        <tr><td>Gerar Card de conteúdo</td><td><span class="xp-badge">+15 XP</span></td><td>Máx 5× por semana</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Avaliações -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">⭐ Avaliações</h3>
+    <table class="rule-table" style="margin-bottom:24px">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Receber primeira avaliação</td><td><span class="xp-badge xp-badge--once">+100 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Receber avaliação adicional</td><td><span class="xp-badge">+60 XP</span></td><td>Máx 5× por mês</td><td>Mesmo avaliador: intervalo mín. 30 dias</td></tr>
+        <tr><td>Solicitar avaliação</td><td><span class="xp-badge">+20 XP</span></td><td>Máx 3× por semana</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Social / Feed -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📰 Social & Feed</h3>
+    <table class="rule-table" style="margin-bottom:24px">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Primeiro post</td><td><span class="xp-badge xp-badge--once">+40 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Publicar post (imagem ou vídeo)</td><td><span class="xp-badge">+20 XP</span></td><td>Máx 3× por dia</td><td>Cooldown: 30 min entre posts</td></tr>
+        <tr><td>Receber comentário</td><td><span class="xp-badge">+10 XP</span></td><td>Máx 5× por dia</td><td>Não conta comentário próprio</td></tr>
+        <tr><td>Ganhar novo seguidor</td><td><span class="xp-badge">+5 XP</span></td><td>Máx 20× por dia</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Conexões com Clubes -->
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🏟️ Conexões & Visibilidade</h3>
+    <table class="rule-table">
+      <thead><tr><th>Ação</th><th>XP</th><th>Frequência</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Primeira conexão com clube</td><td><span class="xp-badge xp-badge--once">+150 XP</span></td><td>1× por conta</td><td>—</td></tr>
+        <tr><td>Clube visualizar seu perfil</td><td><span class="xp-badge">+30 XP</span></td><td>Máx 3× por dia</td><td>Mesmo clube: intervalo mín. 48h</td></tr>
+        <tr><td>Scout visualizar seu perfil</td><td><span class="xp-badge">+25 XP</span></td><td>Máx 5× por dia</td><td>Mesmo scout: intervalo mín. 24h</td></tr>
+        <tr><td>Match IA recomendado pelo sistema</td><td><span class="xp-badge">+20 XP</span></td><td>Máx 2× por semana</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ MULTIPLICADORES ══════════════════════════════════════════ -->
+<section class="sec sec--gray" id="mult">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--purple">✖️ Multiplicadores</span>
+      <h2 class="sec-title">Bônus de XP</h2>
+      <p class="sec-sub">Multiplicadores são aplicados sobre o XP base antes de salvar no Firestore. Múltiplos multiplicadores são somados, não multiplicados entre si.</p>
+    </div>
+    <div class="mult-grid">
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--amber)">2×</div>
+        <div class="mult-label">Semana de Boas-Vindas</div>
+        <div class="mult-cond">Primeiros 7 dias após cadastro</div>
+      </div>
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--navy)">1.5×</div>
+        <div class="mult-label">Plano Elite</div>
+        <div class="mult-cond">Assinante Elite ativo</div>
+      </div>
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--green)">1.3×</div>
+        <div class="mult-label">Plano Pro</div>
+        <div class="mult-cond">Assinante Pro ativo</div>
+      </div>
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--blue)">1.2×</div>
+        <div class="mult-label">Perfil Verificado</div>
+        <div class="mult-cond">Badge "Atleta Verificado" ativo</div>
+      </div>
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--orange)">1.5×</div>
+        <div class="mult-label">Streak 30 dias</div>
+        <div class="mult-cond">Streak ativa ≥ 30 dias consecutivos</div>
+      </div>
+      <div class="mult-card">
+        <div class="mult-value" style="color:var(--red)">1.25×</div>
+        <div class="mult-label">Fim de Semana de Destaque</div>
+        <div class="mult-cond">Sábado e domingo — evento especial</div>
+      </div>
+    </div>
+    <div style="background:var(--w);border-radius:12px;padding:16px 18px;margin-top:16px;box-shadow:0 1px 4px rgba(0,0,0,.07)">
+      <p style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px">Exemplo de cálculo</p>
+      <p style="font-size:13px;color:var(--g6);line-height:1.7">Atleta Elite + 1ª semana + Streak 30d publica um post:<br>
+      Base: <strong>+20 XP</strong> × (1.5 Elite + 2.0 Boas-Vindas + 1.5 Streak30 − 2) = 20 × 3 = <strong>+60 XP</strong><br>
+      <span style="font-size:11px;color:var(--g4)">Fórmula: XP_final = XP_base × (1 + soma(bonus individuais − 1)). Teto máximo: 3×.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STREAK ═══════════════════════════════════════════════════ -->
+<section class="sec sec--white" id="streak">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--orange">🔥 Streak</span>
+      <h2 class="sec-title">Regras de Sequência Diária</h2>
+      <p class="sec-sub">A streak é o principal motor de retenção diária. Baseado no modelo Duolingo + Snapchat — o medo de perder é mais poderoso que a recompensa de ganhar.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card rule-card--orange">
+        <div class="rc-icon">🔥</div>
+        <div class="rc-title">Como funciona</div>
+        <div class="rc-list">
+          <div class="rc-item">Streak conta acesso diário + pelo menos 1 ação (post, laudo, agente, avaliação)</div>
+          <div class="rc-item">Reinicia à meia-noite horário de Brasília (UTC-3)</div>
+          <div class="rc-item">Dia perdido = streak zerada (sem exceções automaticamente)</div>
+          <div class="rc-item">Acesso ao app sem ação <strong>não conta</strong> como dia de streak</div>
+        </div>
+      </div>
+      <div class="rule-card rule-card--amber">
+        <div class="rc-icon">⚡</div>
+        <div class="rc-title">XP por Streak</div>
+        <div class="rc-list">
+          <div class="rc-item">Acesso diário válido: <strong>+10 XP</strong></div>
+          <div class="rc-item">Streak 3 dias: bônus <strong>+20 XP</strong></div>
+          <div class="rc-item">Streak 7 dias: bônus <strong>+50 XP</strong> + badge 🔥</div>
+          <div class="rc-item">Streak 14 dias: bônus <strong>+100 XP</strong></div>
+          <div class="rc-item">Streak 30 dias: bônus <strong>+200 XP</strong> + badge 💎 + multiplicador 1.5×</div>
+          <div class="rc-item">Streak 100 dias: bônus <strong>+500 XP</strong> + badge lendário 🏆</div>
+        </div>
+      </div>
+      <div class="rule-card rule-card--red">
+        <div class="rc-icon">🛡️</div>
+        <div class="rc-title">Protetor de Streak (Plano Elite)</div>
+        <div class="rc-list">
+          <div class="rc-item">Assinante Elite recebe <strong>2 protetores</strong> por mês</div>
+          <div class="rc-item">1 protetor salva 1 dia perdido automaticamente</div>
+          <div class="rc-item">Protetores não acumulam (máx. 2 ativos)</div>
+          <div class="rc-item">Plano Free: 0 protetores</div>
+          <div class="rc-item">Plano Pro: 1 protetor por mês</div>
+        </div>
+        <div class="rc-note">Inspirado no "Streak Freeze" do Duolingo</div>
+      </div>
+      <div class="rule-card rule-card--navy">
+        <div class="rc-icon">😱</div>
+        <div class="rc-title">Fear of Loss — Alertas</div>
+        <div class="rc-list">
+          <div class="rc-item">Push às <strong>21h</strong> se ainda não completou ação do dia</div>
+          <div class="rc-item">Push às <strong>23h</strong> com urgência máxima ("Faltam 60 min!")</div>
+          <div class="rc-item">Mensagem do Agente IA personalizada por personalidade</div>
+          <div class="rc-item">Notificação in-app com banner vermelho pulsante</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MISSÕES ══════════════════════════════════════════════════ -->
+<section class="sec sec--gray" id="missoes">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--blue">🎯 Missões</span>
+      <h2 class="sec-title">Sistema de Missões</h2>
+      <p class="sec-sub">3 camadas de missões com dificuldade e recompensa crescentes. Inspirado em Nike Run Club + Habitica + Chess.com.</p>
+    </div>
+    <div class="rule-grid">
+
+      <div class="rule-card rule-card--blue">
+        <div class="rc-icon">☀️</div>
+        <div class="rc-title">Missões Diárias</div>
+        <div class="rc-list">
+          <div class="rc-item">3 missões por dia, renovam à meia-noite (Brasília)</div>
+          <div class="rc-item">Completar todas as 3: bônus <strong>+30 XP</strong> extra</div>
+          <div class="rc-item">Missões fixas + 1 missão aleatória rotativa</div>
+        </div>
+        <div class="rc-note">
+          <strong>Missões fixas:</strong> Abrir app (+10), Interagir com Agente (+20), Visualizar perfil (+15)<br>
+          <strong>Rotativas (aleatorias):</strong> Curtir 3 posts, Responder comentário, Ver laudo existente
+        </div>
+      </div>
+
+      <div class="rule-card rule-card--green">
+        <div class="rc-icon">📅</div>
+        <div class="rc-title">Missões Semanais</div>
+        <div class="rc-list">
+          <div class="rc-item">5 missões por semana, renovam toda <strong>segunda-feira 00h</strong></div>
+          <div class="rc-item">Completar todas as 5: bônus <strong>+150 XP</strong> extra</div>
+          <div class="rc-item">Missão não concluída expira e não acumula</div>
+        </div>
+        <div class="rc-note">
+          Publicar 3 posts (+90), Gerar 1 Laudo Scout (+120), Adicionar 1 vídeo (+80), Solicitar 1 avaliação (+150), Acessar 5 dias seguidos (+200)
+        </div>
+      </div>
+
+      <div class="rule-card rule-card--purple">
+        <div class="rc-icon">🗓️</div>
+        <div class="rc-title">Desafios Mensais</div>
+        <div class="rc-list">
+          <div class="rc-item">2-3 desafios por mês, renovam no <strong>dia 1 às 00h</strong></div>
+          <div class="rc-item">Cada desafio entrega um <strong>badge exclusivo</strong> + XP alto</div>
+          <div class="rc-item">Desafios são progressivos (não binários)</div>
+          <div class="rc-item">Badge do mês aparece no perfil com a data</div>
+        </div>
+        <div class="rc-note">
+          Scout Ready (3 laudos → +400 XP 🎬), Atleta Visível (100 visitas → +300 XP 👁️), Rede Conectada (10 conexões → +500 XP 🤝)
+        </div>
+      </div>
+
+      <div class="rule-card rule-card--amber">
+        <div class="rc-icon">🎲</div>
+        <div class="rc-title">Missões de Evento (Especiais)</div>
+        <div class="rc-list">
+          <div class="rc-item">Criadas manualmente pelo admin para eventos sazonais</div>
+          <div class="rc-item">Ex: "Semana do Futebol Feminino", "Copa SP", "Janela de transferências"</div>
+          <div class="rc-item">XP 2× durante eventos especiais</div>
+          <div class="rc-item">Badge comemorativo exclusivo por período</div>
+        </div>
+        <div class="rc-note">Configuradas via Firestore pelo painel admin</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ LIGA ═════════════════════════════════════════════════════ -->
+<section class="sec sec--white" id="liga">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--amber">🏅 Liga</span>
+      <h2 class="sec-title">Sistema de Ligas Semanais</h2>
+      <p class="sec-sub">Competição semanal segmentada por categoria e posição. Baseado em Duolingo + Strava — o ranking é o principal motor de competição.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card rule-card--amber">
+        <div class="rc-icon">🏆</div>
+        <div class="rc-title">5 Ligas (do menor ao maior)</div>
+        <div class="rc-list">
+          <div class="rc-item">🥉 <strong>Bronze</strong> — entrada de novatos</div>
+          <div class="rc-item">🥈 <strong>Prata</strong> — intermediário</div>
+          <div class="rc-item">🥇 <strong>Ouro</strong> — competitivo</div>
+          <div class="rc-item">💚 <strong>Esmeralda</strong> — avançado</div>
+          <div class="rc-item">💎 <strong>Diamante</strong> — elite da plataforma</div>
+        </div>
+      </div>
+      <div class="rule-card rule-card--blue">
+        <div class="rc-icon">⚙️</div>
+        <div class="rc-title">Regras de Promoção</div>
+        <div class="rc-list">
+          <div class="rc-item">Ranking reseta toda <strong>segunda-feira às 00h</strong></div>
+          <div class="rc-item"><strong>Top 3</strong> da liga sobem para a próxima</div>
+          <div class="rc-item"><strong>Últimos 3</strong> da liga descem para a anterior (exceto Bronze)</div>
+          <div class="rc-item">Liga Bronze: ninguém desce (piso do sistema)</div>
+          <div class="rc-item">Empate desempata por quem atingiu o XP primeiro</div>
+          <div class="rc-item">Inativo na semana (0 XP): vai automaticamente para Bronze</div>
+        </div>
+      </div>
+      <div class="rule-card rule-card--green">
+        <div class="rc-icon">🗂️</div>
+        <div class="rc-title">Segmentação por Categoria</div>
+        <div class="rc-list">
+          <div class="rc-item">Cada categoria tem sua própria liga independente</div>
+          <div class="rc-item"><strong>Cria da Base</strong> — atletas em formação</div>
+          <div class="rc-item"><strong>Boleiro</strong> — amador / recreativo</div>
+          <div class="rc-item"><strong>Juvena</strong> — categoria feminina</div>
+          <div class="rc-item"><strong>Profissa</strong> — semi-profissional e profissional</div>
+          <div class="rc-item">Troca de categoria reinicia posição na liga Bronze</div>
+        </div>
+      </div>
+      <div class="rule-card rule-card--navy">
+        <div class="rc-icon">🎁</div>
+        <div class="rc-title">Recompensas de Liga</div>
+        <div class="rc-list">
+          <div class="rc-item">Top 1 da semana: badge 🥇 semanal + 200 XP</div>
+          <div class="rc-item">Top 3: badge pódio + 100 XP</div>
+          <div class="rc-item">Subir de liga: badge de promoção + 50 XP</div>
+          <div class="rc-item">Diamante por 4 semanas seguidas: badge "Lenda da Liga" 💎</div>
+          <div class="rc-item">Histórico de ligas visível no perfil</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NÍVEIS ════════════════════════════════════════════════════ -->
+<section class="sec sec--gray" id="niveis">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--green">⬆️ Níveis</span>
+      <h2 class="sec-title">Progressão de Nível & Desbloqueios</h2>
+      <p class="sec-sub">Nível é baseado em XP total acumulado e nunca diminui. Cada nível desbloqueia features reais da plataforma — criando incentivo direto para evoluir.</p>
+    </div>
+    <div class="level-track">
+      <div class="level-item">
+        <div class="level-badge" style="background:linear-gradient(135deg,#9e9e9e,#bdbdbd)">🌱</div>
+        <div class="level-info">
+          <div class="level-name">Nível 1 — Novato</div>
+          <div class="level-xp">0 XP | Entrada no sistema</div>
+          <div class="level-unlock">
+            <span class="unlock-chip unlock-chip--new">Perfil público</span>
+            <span class="unlock-chip unlock-chip--new">Feed e posts</span>
+            <span class="unlock-chip unlock-chip--new">Chat básico</span>
+            <span class="unlock-chip unlock-chip--new">3 msgs IA/mês</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1×</div>
+      </div>
+      <div class="level-item">
+        <div class="level-badge" style="background:linear-gradient(135deg,#4caf50,#66bb6a)">⚡</div>
+        <div class="level-info">
+          <div class="level-name">Nível 2 — Revelação</div>
+          <div class="level-xp">300 XP | Atleta em ascensão</div>
+          <div class="level-unlock">
+            <span class="unlock-chip">Tudo do Novato</span>
+            <span class="unlock-chip unlock-chip--new">Chat com Agente IA</span>
+            <span class="unlock-chip unlock-chip--new">Missões diárias</span>
+            <span class="unlock-chip unlock-chip--new">Liga Bronze</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1×</div>
+      </div>
+      <div class="level-item level-item--active">
+        <div class="level-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">🔥</div>
+        <div class="level-info">
+          <div class="level-name">Nível 3 — Promessa ⭐ Nível atual de Gabriel</div>
+          <div class="level-xp">800 XP | Talento reconhecido</div>
+          <div class="level-unlock">
+            <span class="unlock-chip">Tudo do Revelação</span>
+            <span class="unlock-chip unlock-chip--new">Laudo Scout IA</span>
+            <span class="unlock-chip unlock-chip--new">Cards de conteúdo</span>
+            <span class="unlock-chip unlock-chip--new">Missões semanais</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1×</div>
+      </div>
+      <div class="level-item">
+        <div class="level-badge" style="background:linear-gradient(135deg,#7c3aed,#9c27b0)">⭐</div>
+        <div class="level-info">
+          <div class="level-name">Nível 4 — Destaque</div>
+          <div class="level-xp">1.800 XP | Em radar dos clubes</div>
+          <div class="level-unlock">
+            <span class="unlock-chip">Tudo do Promessa</span>
+            <span class="unlock-chip unlock-chip--new">Match IA com clubes</span>
+            <span class="unlock-chip unlock-chip--new">5 Agentes virtuais</span>
+            <span class="unlock-chip unlock-chip--new">Desafios mensais</span>
+            <span class="unlock-chip unlock-chip--new">Liga Prata+</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1.1×</div>
+      </div>
+      <div class="level-item">
+        <div class="level-badge" style="background:linear-gradient(135deg,#e65100,#ff9800)">👑</div>
+        <div class="level-info">
+          <div class="level-name">Nível 5 — Craque</div>
+          <div class="level-xp">4.000 XP | Referência na plataforma</div>
+          <div class="level-unlock">
+            <span class="unlock-chip">Tudo do Destaque</span>
+            <span class="unlock-chip unlock-chip--new">Perfil em destaque para scouts</span>
+            <span class="unlock-chip unlock-chip--new">Badge verificado automático</span>
+            <span class="unlock-chip unlock-chip--new">Relatórios avançados</span>
+            <span class="unlock-chip unlock-chip--new">Liga Ouro+</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1.2×</div>
+      </div>
+      <div class="level-item">
+        <div class="level-badge" style="background:linear-gradient(135deg,#b71c1c,#e53935)">🏆</div>
+        <div class="level-info">
+          <div class="level-name">Nível 6 — Lenda</div>
+          <div class="level-xp">8.000 XP | Elite absoluta da plataforma</div>
+          <div class="level-unlock">
+            <span class="unlock-chip">Tudo do Craque</span>
+            <span class="unlock-chip unlock-chip--new">Badge dourado exclusivo</span>
+            <span class="unlock-chip unlock-chip--new">Acesso antecipado a features</span>
+            <span class="unlock-chip unlock-chip--new">Prioridade em contato de clubes</span>
+            <span class="unlock-chip unlock-chip--new">Liga Diamante+</span>
+          </div>
+        </div>
+        <div class="level-mult">XP 1.3×</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--g4);margin-top:16px">⚠️ O nível nunca diminui — é baseado no XP total acumulado histórico, não no XP semanal da liga.</p>
+  </div>
+</section>
+
+<!-- ══ BADGES ═══════════════════════════════════════════════════ -->
+<section class="sec sec--white" id="badges">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--amber">🏅 Badges</span>
+      <h2 class="sec-title">Sistema de Badges & Conquistas</h2>
+      <p class="sec-sub">Badges são permanentes e aparecem no perfil. Divididos em 3 categorias: Perfil, Engajamento e Elite.</p>
+    </div>
+
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">🏷️ Badges de Perfil</h3>
+    <div class="badges-list" style="margin-bottom:24px">
+      <div class="badge-rule"><span class="badge-icon-big">🎯</span><div class="badge-info"><div class="badge-name">Primeiro Login</div><div class="badge-trigger">Criou conta e fez primeiro acesso</div><div class="badge-xp">+0 XP (badge automático)</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">📝</span><div class="badge-info"><div class="badge-name">Perfil 50%</div><div class="badge-trigger">Completou 50% das informações do perfil</div><div class="badge-xp">+100 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">✅</span><div class="badge-info"><div class="badge-name">Perfil Completo</div><div class="badge-trigger">Completou 100% das informações do perfil</div><div class="badge-xp">+200 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🎬</span><div class="badge-info"><div class="badge-name">Portfólio</div><div class="badge-trigger">Adicionou primeiro vídeo ao portfólio</div><div class="badge-xp">+50 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🏟️</span><div class="badge-info"><div class="badge-name">Clube Interessado</div><div class="badge-trigger">Clube visualizou seu perfil pela 1ª vez</div><div class="badge-xp">+30 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🔍</span><div class="badge-info"><div class="badge-name">Primeiro Match</div><div class="badge-trigger">Recebeu primeiro Match IA com clube</div><div class="badge-xp">+50 XP</div></div></div>
+    </div>
+
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">🔥 Badges de Engajamento</h3>
+    <div class="badges-list" style="margin-bottom:24px">
+      <div class="badge-rule"><span class="badge-icon-big">⭐</span><div class="badge-info"><div class="badge-name">1ª Avaliação</div><div class="badge-trigger">Recebeu primeira avaliação de scout/avaliador</div><div class="badge-xp">+100 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🏅</span><div class="badge-info"><div class="badge-name">5 Avaliações</div><div class="badge-trigger">Recebeu 5 avaliações no total</div><div class="badge-xp">+150 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">👁️</span><div class="badge-info"><div class="badge-name">Popular</div><div class="badge-trigger">Perfil visualizado 50 vezes</div><div class="badge-xp">+80 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🔥</span><div class="badge-info"><div class="badge-name">Streak 7 dias</div><div class="badge-trigger">Acessou e completou ação 7 dias seguidos</div><div class="badge-xp">+50 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">💎</span><div class="badge-info"><div class="badge-name">Streak 30 dias</div><div class="badge-trigger">30 dias consecutivos de acesso com ação</div><div class="badge-xp">+200 XP + mult 1.5×</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🥇</span><div class="badge-info"><div class="badge-name">Top Semanal</div><div class="badge-trigger">Ficou em 1º no ranking semanal da categoria</div><div class="badge-xp">+200 XP</div></div></div>
+    </div>
+
+    <h3 style="font-size:13px;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">💎 Badges Elite (Desafios Mensais)</h3>
+    <div class="badges-list">
+      <div class="badge-rule"><span class="badge-icon-big">📋</span><div class="badge-info"><div class="badge-name">Scout Ready</div><div class="badge-trigger">Gerou 3 laudos scout em 1 mês</div><div class="badge-xp">+400 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">👁️</span><div class="badge-info"><div class="badge-name">Atleta Visível</div><div class="badge-trigger">100 visitas ao perfil em 1 mês</div><div class="badge-xp">+300 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🤝</span><div class="badge-info"><div class="badge-name">Rede Conectada</div><div class="badge-trigger">10 novas conexões em 1 mês</div><div class="badge-xp">+500 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🏆</span><div class="badge-info"><div class="badge-name">Lenda da Liga</div><div class="badge-trigger">4 semanas consecutivas na Liga Diamante</div><div class="badge-xp">+600 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🎖️</span><div class="badge-info"><div class="badge-name">Centenário</div><div class="badge-trigger">100 dias de streak consecutivos</div><div class="badge-xp">+500 XP</div></div></div>
+      <div class="badge-rule"><span class="badge-icon-big">🌟</span><div class="badge-info"><div class="badge-name">Atleta Verificado</div><div class="badge-trigger">Perfil validado pela equipe ConectaFoot</div><div class="badge-xp">+mult 1.2× permanente</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ANTI-ABUSO ════════════════════════════════════════════════ -->
+<section class="sec sec--gray" id="antiabuse">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--red">🛡️ Anti-Abuso</span>
+      <h2 class="sec-title">Regras de Proteção do Sistema</h2>
+      <p class="sec-sub">Limites para evitar farm de XP e garantir que as recompensas reflitam engajamento real.</p>
+    </div>
+    <table class="abuse-table">
+      <thead><tr><th>Regra</th><th>Descrição</th><th>Ação ao violar</th></tr></thead>
+      <tbody>
+        <tr><td>Rate limit diário de posts</td><td>Máx. 3 posts com XP por dia. Posts adicionais publicam mas não geram XP.</td><td>XP bloqueado, post publicado normalmente</td></tr>
+        <tr><td>Cooldown de laudo scout</td><td>Mínimo 24h para gerar novo laudo do mesmo vídeo</td><td>Botão desabilitado com timer</td></tr>
+        <tr><td>Visualização de próprio perfil</td><td>Acessar o próprio perfil não gera XP de "visita"</td><td>Flag userId === viewerId</td></tr>
+        <tr><td>Auto-comentário</td><td>Comentar no próprio post não conta como receber comentário</td><td>Flag no Firestore</td></tr>
+        <tr><td>Mesma ação repetida no dia</td><td>Missão diária concluída não conta novamente até o reset</td><td>Missão marcada como done no Firestore</td></tr>
+        <tr><td>Multi-conta</td><td>IP + device fingerprint: máx. 2 contas distintas por dispositivo</td><td>XP suspenso, revisão manual</td></tr>
+        <tr><td>Mesmo avaliador repetido</td><td>Mesmo avaliador só pode gerar XP para o mesmo atleta a cada 30 dias</td><td>XP bloqueado, avaliação salva sem pontuação</td></tr>
+        <tr><td>Visita repetida de clube</td><td>Mesmo clube só gera XP de visita 1× a cada 48h</td><td>Flag de cooldown por clubId no Firestore</td></tr>
+        <tr><td>XP suspeito (spike)</td><td>Ganho de XP > 500 em 1h dispara revisão automática</td><td>XP congelado, notificação ao admin</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ NOTIFICAÇÕES ══════════════════════════════════════════════ -->
+<section class="sec sec--navy" id="notif">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--light">🔔 Notificações</span>
+      <h2 class="sec-title sec-title--light">Triggers de Fear of Loss</h2>
+      <p class="sec-sub sec-sub--light">12 gatilhos de notificação push. O objetivo é criar urgência e evitar churn. Baseado em Duolingo + Snapchat + Strava.</p>
+    </div>
+    <div class="notif-list">
+      <div class="notif-item">
+        <span class="notif-icon">🔥</span>
+        <div class="notif-info">
+          <div class="notif-title">Streak em risco — aviso antecipado</div>
+          <div class="notif-detail">"Ei Gabriel, sua streak de 7 dias precisa de você hoje! Faltam 3h para a meia-noite."</div>
+          <span class="notif-when">Disparo: 21h00 se sem ação no dia</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🚨</span>
+        <div class="notif-info">
+          <div class="notif-title">Streak em risco — urgência máxima</div>
+          <div class="notif-detail">"⏰ ÚLTIMA HORA: 60 minutos para salvar sua streak de 7 dias. Não deixe tudo ir por água abaixo!"</div>
+          <span class="notif-when">Disparo: 23h00 se sem ação no dia</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">📉</span>
+        <div class="notif-info">
+          <div class="notif-title">Perdeu posição no ranking</div>
+          <div class="notif-detail">"Mateus R. acabou de te ultrapassar no ranking. Você caiu para o 8º lugar — faltam 50 XP para voltar."</div>
+          <span class="notif-when">Disparo: imediato quando outra conta ultrapassar</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🏟️</span>
+        <div class="notif-info">
+          <div class="notif-title">Clube visualizou seu perfil</div>
+          <div class="notif-detail">"Um clube de São Paulo visualizou seu perfil agora. Seu portfólio pode ser o próximo passo — atualize-o!"</div>
+          <span class="notif-when">Disparo: imediato + XP creditado</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">📅</span>
+        <div class="notif-info">
+          <div class="notif-title">Missão semanal expirando</div>
+          <div class="notif-detail">"Faltam 4h para a semana acabar e você ainda não gerou seu Laudo Scout. São +120 XP que vão expirar!"</div>
+          <span class="notif-when">Disparo: domingo às 20h se missão pendente</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">⬇️</span>
+        <div class="notif-info">
+          <div class="notif-title">Risco de rebaixamento de liga</div>
+          <div class="notif-detail">"Atenção: você está na zona de rebaixamento da Liga Prata. Faltam 80 XP para subir antes de segunda."</div>
+          <span class="notif-when">Disparo: sexta-feira se nos últimos 3 lugares</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🎉</span>
+        <div class="notif-info">
+          <div class="notif-title">Subiu de nível</div>
+          <div class="notif-detail">"🔥 GABRIEL! Você acaba de chegar no nível DESTAQUE! Novo desbloqueio: Match IA com Clubes."</div>
+          <span class="notif-when">Disparo: imediato ao atingir XP threshold</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🏅</span>
+        <div class="notif-info">
+          <div class="notif-title">Badge conquistado</div>
+          <div class="notif-detail">"Parabéns! Você desbloqueou o badge 'Scout Ready' 🎬. Ele já aparece no seu perfil para clubes e scouts."</div>
+          <span class="notif-when">Disparo: imediato ao completar trigger</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">📊</span>
+        <div class="notif-info">
+          <div class="notif-title">Resumo semanal (domingo)</div>
+          <div class="notif-detail">"Sua semana: +210 XP, 3 missões concluídas, 7º no ranking. Próximo objetivo: Top 5 até próxima semana."</div>
+          <span class="notif-when">Disparo: domingo às 18h</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🤖</span>
+        <div class="notif-info">
+          <div class="notif-title">Agente IA provocador (por personalidade)</div>
+          <div class="notif-detail">Cobra: "Você sumiu. Enquanto você não aparece, tem atleta da sua posição subindo. Vai ficar parado?" | Faísca: "Faz 2 dias! Você tem tudo para subir de nível, só precisa aparecer 💪"</div>
+          <span class="notif-when">Disparo: 48h sem acesso ao app</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">🔮</span>
+        <div class="notif-info">
+          <div class="notif-title">Novo match disponível</div>
+          <div class="notif-detail">"O sistema encontrou 2 clubes que combinam com seu perfil de Atacante / Cria da Base. Veja agora."</div>
+          <span class="notif-when">Disparo: quando Match IA processar e encontrar matches</span>
+        </div>
+      </div>
+      <div class="notif-item">
+        <span class="notif-icon">📈</span>
+        <div class="notif-info">
+          <div class="notif-title">Perfil em alta</div>
+          <div class="notif-detail">"Seu perfil teve 5 visitas nas últimas 24h — mais que 87% dos atletas da sua posição. Atualize o portfólio!"</div>
+          <span class="notif-when">Disparo: quando visitas do dia > média histórica × 2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ARQUITETURA ═══════════════════════════════════════════════ -->
+<section class="sec sec--gray" id="arch">
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="sec-eye sec-eye--blue">⚙️ Arquitetura</span>
+      <h2 class="sec-title">Implementação Firebase</h2>
+      <p class="sec-sub">O motor de XP roda em Cloud Functions com Firestore como fonte de verdade. Todas as operações de XP são atômicas para evitar inconsistências.</p>
+    </div>
+    <div class="arch-flow">
+      <div class="arch-step">
+        <div class="arch-num">1</div>
+        <div class="arch-content">
+          <div class="arch-title">Ação do usuário no app (Angular)</div>
+          <div class="arch-detail">Usuário realiza ação (post, laudo, avaliação, etc). O serviço Angular chama a Cloud Function via HTTPS callable.</div>
+          <code class="arch-code">functions.httpsCallable('awardXP')({ action: 'post', userId: uid })</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">2</div>
+        <div class="arch-content">
+          <div class="arch-title">Cloud Function: awardXP</div>
+          <div class="arch-detail">Valida a ação, verifica rate limits e cooldowns no Firestore, aplica multiplicadores, usa transação atômica para somar o XP.</div>
+          <code class="arch-code">Firestore: users/{uid} → xp, level, streak, badges[]</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">3</div>
+        <div class="arch-content">
+          <div class="arch-title">Verificação de nível e badges</div>
+          <div class="arch-detail">Após somar XP, a função verifica se o novo total cruza algum threshold de nível ou badge. Se sim, dispara o desbloqueio.</div>
+          <code class="arch-code">if (newXP >= LEVEL_THRESHOLDS[currentLevel + 1]) → levelUp()</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">4</div>
+        <div class="arch-content">
+          <div class="arch-title">Atualização de missões</div>
+          <div class="arch-detail">Verifica progresso de missões ativas (diária, semanal, mensal). Se missão completada, soma bônus e marca como done.</div>
+          <code class="arch-code">Firestore: missions/{uid}/{missionId} → progress, completed, expiresAt</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">5</div>
+        <div class="arch-content">
+          <div class="arch-title">Atualização do ranking da liga</div>
+          <div class="arch-detail">Após somar XP, atualiza o documento do ranking semanal por categoria. Ranking é calculado em tempo real via query ordenada.</div>
+          <code class="arch-code">Firestore: leaderboard/{category}/{weekId} → [{uid, xp, level, name}]</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">6</div>
+        <div class="arch-content">
+          <div class="arch-title">Disparo de notificações (FCM)</div>
+          <div class="arch-detail">Triggers automáticos via Firestore onChange + Cloud Scheduler para notificações temporizadas (streaks, resumo semanal, etc.).</div>
+          <code class="arch-code">Cloud Scheduler: cron "0 21 * * *" → checkStreakRisk()</code>
+        </div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-num">7</div>
+        <div class="arch-content">
+          <div class="arch-title">Reset semanal de liga (Scheduled Function)</div>
+          <div class="arch-detail">Toda segunda-feira às 00h, calcula promoções/rebaixamentos, cria novo documento de semana, notifica atletas afetados.</div>
+          <code class="arch-code">Cloud Scheduler: cron "0 0 * * 1" → weeklyLeagueReset()</code>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--w);border-radius:14px;padding:20px;margin-top:20px;box-shadow:0 1px 4px rgba(0,0,0,.07)">
+      <h3 style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:14px">📦 Estrutura Firestore</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;font-size:12px;font-family:monospace">
+        <div style="background:var(--g1);padding:12px;border-radius:8px;color:var(--navy)">
+          <div style="font-weight:700;margin-bottom:6px">users/{uid}</div>
+          xp: number<br>level: 1–6<br>streak: number<br>lastActive: Timestamp<br>badges: string[]<br>category: string<br>league: string<br>streakProtectors: number
+        </div>
+        <div style="background:var(--g1);padding:12px;border-radius:8px;color:var(--navy)">
+          <div style="font-weight:700;margin-bottom:6px">missions/{uid}/{missionId}</div>
+          type: daily|weekly|monthly<br>progress: number<br>target: number<br>completed: boolean<br>xpReward: number<br>expiresAt: Timestamp
+        </div>
+        <div style="background:var(--g1);padding:12px;border-radius:8px;color:var(--navy)">
+          <div style="font-weight:700;margin-bottom:6px">leaderboard/{cat}/{weekId}</div>
+          entries: [{<br>&nbsp;&nbsp;uid, name, xp,<br>&nbsp;&nbsp;level, avatar<br>}]<br>league: string<br>weekStart: Timestamp
+        </div>
+        <div style="background:var(--g1);padding:12px;border-radius:8px;color:var(--navy)">
+          <div style="font-weight:700;margin-bottom:6px">xp_limits/{uid}</div>
+          postsToday: number<br>laudosThisWeek: number<br>agentToday: boolean<br>lastPostAt: Timestamp<br>clubCooldowns: {[clubId]: Timestamp}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p><strong>ConectaFoot — Motor de Gamificação v1.0</strong> &nbsp;|&nbsp; Documento interno &nbsp;|&nbsp; <a href="projeto.html" style="color:var(--blue);text-decoration:none">← Voltar ao Projeto</a></p>
+</footer>
+
+</body>
+</html>

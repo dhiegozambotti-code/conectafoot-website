@@ -1023,6 +1023,98 @@
       border:1.5px solid var(--gray-2); flex-shrink:0;
     }
 
+    /* ── SCOUT REPORT PHASES ───────────────────────────────── */
+    .vphase { display:none; }
+    .vphase.active { display:block; }
+
+    /* loading phase */
+    .scout-loading {
+      padding:24px 0 8px; display:flex; flex-direction:column; align-items:center; text-align:center;
+    }
+    .scout-loading-icon {
+      width:72px; height:72px; border-radius:20px;
+      background:linear-gradient(135deg,var(--navy),var(--navy-3));
+      display:flex; align-items:center; justify-content:center;
+      font-size:34px; margin-bottom:16px;
+      animation:scoutPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes scoutPulse {
+      0%,100%{box-shadow:0 0 0 0 rgba(26,35,126,.4)}
+      50%{box-shadow:0 0 0 14px rgba(26,35,126,0)}
+    }
+    .scout-loading-title { font-size:16px; font-weight:800; color:var(--navy); margin-bottom:4px; }
+    .scout-loading-sub { font-size:12px; color:var(--gray-5); margin-bottom:24px; }
+    .scout-steps { width:100%; text-align:left; display:flex; flex-direction:column; gap:10px; }
+    .scout-step {
+      display:flex; align-items:center; gap:10px;
+      font-size:13px; color:var(--gray-4); font-weight:500;
+      transition:color .3s;
+    }
+    .scout-step.done { color:var(--gray-6); }
+    .scout-step.active { color:var(--navy); font-weight:700; }
+    .scout-step-dot {
+      width:22px; height:22px; border-radius:50%; flex-shrink:0;
+      background:var(--gray-2); display:flex; align-items:center; justify-content:center;
+      font-size:11px; transition:all .3s;
+    }
+    .scout-step.done  .scout-step-dot { background:var(--green-l); color:var(--green); }
+    .scout-step.active .scout-step-dot {
+      background:linear-gradient(135deg,var(--navy),var(--navy-3)); color:#fff;
+      animation:stepSpin .8s linear infinite;
+    }
+    @keyframes stepSpin { to{transform:rotate(360deg)} }
+
+    /* report phase */
+    .scout-report-phase { animation:fadeIn .5s ease; }
+    .scout-overall {
+      display:flex; align-items:center; gap:14px; margin-bottom:20px;
+      background:linear-gradient(135deg,var(--navy),var(--navy-2));
+      border-radius:14px; padding:16px;
+    }
+    .scout-score-circle {
+      width:70px; height:70px; border-radius:50%; flex-shrink:0;
+      background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.3);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+    }
+    .scout-score-num { font-size:26px; font-weight:900; color:#fff; line-height:1; }
+    .scout-score-max { font-size:10px; color:rgba(255,255,255,.55); }
+    .scout-overall-info { flex:1; }
+    .scout-overall-title { font-size:14px; font-weight:800; color:#fff; margin-bottom:3px; }
+    .scout-overall-sub { font-size:11px; color:rgba(255,255,255,.65); line-height:1.5; }
+    .scout-overall-badge {
+      background:rgba(62,183,230,.3); border:1px solid rgba(62,183,230,.5);
+      color:var(--blue); font-size:10px; font-weight:700;
+      padding:3px 10px; border-radius:100px; margin-top:6px; display:inline-block;
+    }
+
+    .scout-dim-bars { display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+    .scout-dim-row { display:flex; align-items:center; gap:8px; }
+    .scout-dim-label { font-size:12px; color:var(--gray-6); width:88px; flex-shrink:0; }
+    .scout-dim-track {
+      flex:1; height:8px; background:var(--gray-2); border-radius:4px; overflow:hidden;
+    }
+    .scout-dim-fill {
+      height:100%; border-radius:4px; width:0%;
+      transition:width 1s cubic-bezier(.4,0,.2,1);
+      background:linear-gradient(90deg,var(--navy),var(--blue));
+    }
+    .scout-dim-num { font-size:12px; font-weight:800; color:var(--navy); width:28px; text-align:right; flex-shrink:0; }
+
+    .scout-chips-group { margin-bottom:14px; }
+    .scout-chips-label { font-size:11px; font-weight:700; color:var(--gray-6); margin-bottom:7px; }
+    .scout-chips { display:flex; flex-wrap:wrap; gap:6px; }
+    .scout-chip { padding:4px 12px; border-radius:100px; font-size:11px; font-weight:600; }
+    .scout-chip--green { background:var(--green-l); color:var(--green); }
+    .scout-chip--amber { background:var(--amber-l); color:#92400e; }
+
+    .scout-recommendation {
+      background:#f8f9ff; border-left:3px solid var(--navy);
+      padding:12px 14px; border-radius:0 8px 8px 0;
+      font-size:12px; color:var(--gray-6); line-height:1.7;
+      font-style:italic; margin-bottom:16px;
+    }
+    .scout-actions { display:flex; gap:8px; }
+
     /* ── AGENTE VIRTUAL ─────────────────────────────────────── */
     .agent-card-quick {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
@@ -1877,7 +1969,14 @@
 
   // ── Modal helpers ───────────────────────────────────────
   function openModal(id)  { document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    /* reset video player phases quando fechar */
+    if (id === 'videoPlayerModal') {
+      document.getElementById('vplayerFrame').src = '';
+      showPhase('phasePlayer');
+    }
+  }
   function openScoutModal()   { openModal('scoutModal'); }
   function openReportModal()  { openModal('reportModal'); }
   function openContentModal() { openModal('contentModal'); }
@@ -2188,16 +2287,110 @@
     openModal('videoPlayerModal');
   }
 
+  /* dados de laudo por vídeo */
+  const SCOUT_REPORTS = [
+    {
+      score:'7.8', tec:82, vis:75, fis:79, pos:76,
+      strengths:['Finalização precisa','Leitura de jogo','Velocidade acima da média','Proteção de bola'],
+      develop:['Jogo aéreo','Drible em alta velocidade'],
+      rec:'"Atleta com perfil técnico acima da média para a categoria Promessa. Destaque para a qualidade de finalização e inteligência tática nas transições ofensivas. Apresenta boa leitura espacial do jogo e velocidade de execução que se destaca nos momentos decisivos. Recomendo acompanhamento presencial para seleção na próxima janela. Potencial para categoria Destaque em 6 a 12 meses com trabalho consistente nos fundamentos aéreos."'
+    },
+    {
+      score:'7.1', tec:78, vis:69, fis:72, pos:68,
+      strengths:['Toque de bola preciso','Condução sob pressão','Dribles curtos'],
+      develop:['Visão periférica','Tomada de decisão rápida','Aceleração em espaço aberto'],
+      rec:'"Bom nível técnico em situações controladas de treino. Fundamentos sólidos de toque e condução, mas necessita evoluir em aspectos táticos e de tomada de decisão sob pressão real de jogo. O ambiente de treino não reflete plenamente o potencial — recomendo análise em jogo oficial para avaliação mais precisa."'
+    },
+    {
+      score:'7.5', tec:76, vis:78, fis:72, pos:74,
+      strengths:['Inteligência tática','Movimentação sem bola','Passes em profundidade'],
+      develop:['Intensidade no 2º tempo','Duelos aéreos'],
+      rec:'"Atleta demonstra excelente leitura de jogo em situações reais. Destaque para a capacidade de criar jogadas com e sem posse, especialmente nas transições. Queda de intensidade física após os 60 minutos é o principal ponto de atenção. Com evolução física, tem perfil para atuar em categorias superiores."'
+    }
+  ];
+
+  function showPhase(id) {
+    ['phasePlayer','phaseLoading','phaseReport'].forEach(p => {
+      const el = document.getElementById(p);
+      el.classList.toggle('active', el.id === id);
+    });
+  }
+
   function generateScoutFromPlayer() {
-    const v = VIDEOS[currentPlayerIdx];
-    if (v.score) { openScoutModal(); closeModal('videoPlayerModal'); return; }
-    const btn = document.getElementById('vplayerScoutBtn');
-    btn.textContent = '⏳ Analisando vídeo…'; btn.disabled = true;
+    const v   = VIDEOS[currentPlayerIdx];
+    const rep = SCOUT_REPORTS[currentPlayerIdx] || SCOUT_REPORTS[0];
+
+    /* parar o vídeo */
+    document.getElementById('vplayerFrame').src = '';
+
+    /* ir para fase de loading */
+    showPhase('phaseLoading');
+    document.getElementById('loadingVideoTitle').textContent = v.title;
+
+    /* animar steps sequencialmente */
+    const steps = ['step0','step1','step2','step3','step4'];
+    steps.forEach(id => document.getElementById(id).className = 'scout-step');
+
+    let i = 0;
+    function nextStep() {
+      if (i > 0) {
+        const prev = document.getElementById(steps[i-1]);
+        prev.className = 'scout-step done';
+        prev.querySelector('.scout-step-dot').textContent = '✓';
+      }
+      if (i < steps.length) {
+        document.getElementById(steps[i]).className = 'scout-step active';
+        i++;
+        setTimeout(nextStep, 620);
+      } else {
+        /* todos concluídos → mostrar laudo */
+        setTimeout(() => renderReport(v, rep), 400);
+      }
+    }
+    setTimeout(nextStep, 300);
+  }
+
+  function renderReport(v, rep) {
+    /* preencher dados */
+    document.getElementById('reportScore').textContent      = rep.score;
+    document.getElementById('reportVideoTitle').textContent = v.title;
+    document.getElementById('reportDate').textContent       = '📅 Gerado agora · Promessa';
+
+    /* barras */
+    const bars = [{id:'tec2',val:rep.tec},{id:'vis2',val:rep.vis},{id:'fis2',val:rep.fis},{id:'pos2',val:rep.pos}];
+    bars.forEach(b => {
+      document.getElementById('num-'+b.id).textContent = (b.val/10).toFixed(1);
+    });
+
+    /* ir para fase de relatório primeiro, depois animar barras */
+    showPhase('phaseReport');
     setTimeout(() => {
-      closeModal('videoPlayerModal');
-      btn.textContent = '📋 Gerar Laudo Scout'; btn.disabled = false;
-      showToast('✅ Laudo Scout gerado com sucesso!');
-    }, 2800);
+      bars.forEach((b,i) => setTimeout(() => {
+        document.getElementById('bar-'+b.id).style.width = b.val + '%';
+      }, i * 120));
+    }, 100);
+
+    /* chips */
+    document.getElementById('reportStrengths').innerHTML =
+      rep.strengths.map(s => `<span class="scout-chip scout-chip--green">${s}</span>`).join('');
+    document.getElementById('reportDevelop').innerHTML =
+      rep.develop.map(d => `<span class="scout-chip scout-chip--amber">${d}</span>`).join('');
+
+    /* recomendação */
+    document.getElementById('reportRecommendation').textContent = rep.rec;
+
+    /* atualizar score no array de vídeos */
+    VIDEOS[currentPlayerIdx].score = rep.score;
+  }
+
+  function openVideoPlayerWithReport(idx) {
+    openVideoPlayer(idx);
+    /* se já tem score, pular direto para o laudo */
+    const rep = SCOUT_REPORTS[idx] || SCOUT_REPORTS[0];
+    if (VIDEOS[idx].score) {
+      document.getElementById('vplayerFrame').src = '';
+      renderReport(VIDEOS[idx], rep);
+    }
   }
 
   /* ── ADD VIDEO ── */
@@ -2509,33 +2702,108 @@
 
 <!-- ═══════════════════════════════ MODAL — PLAYER DE VÍDEO -->
 <div class="modal-overlay" id="videoPlayerModal" onclick="if(event.target===this)closeModal('videoPlayerModal')">
-  <div class="modal-sheet" style="position:relative;">
+  <div class="modal-sheet" style="position:relative; overflow:hidden;">
     <button class="modal-close" onclick="closeModal('videoPlayerModal')">✕</button>
     <div class="modal-handle"></div>
 
-    <iframe class="vplayer-frame" id="vplayerFrame" src="" allowfullscreen allow="autoplay"></iframe>
-
-    <div class="vplayer-info">
-      <div class="vplayer-title" id="vplayerTitle">—</div>
-      <div class="vplayer-tags" id="vplayerTags"></div>
-      <div class="vplayer-desc" id="vplayerDesc"></div>
-    </div>
-
-    <div class="vplayer-scout-box" id="vplayerScoutBox">
-      <div class="vplayer-scout-icon">📋</div>
-      <div class="vplayer-scout-text">
-        <div class="vplayer-scout-title" id="vplayerScoutTitle">Gerar Laudo Scout IA</div>
-        <div class="vplayer-scout-sub" id="vplayerScoutSub">A IA analisa o vídeo e gera um relatório técnico profissional</div>
+    <!-- ── FASE 1: PLAYER ── -->
+    <div class="vphase active" id="phasePlayer">
+      <iframe class="vplayer-frame" id="vplayerFrame" src="" allowfullscreen allow="autoplay"></iframe>
+      <div class="vplayer-info">
+        <div class="vplayer-title" id="vplayerTitle">—</div>
+        <div class="vplayer-tags" id="vplayerTags"></div>
+        <div class="vplayer-desc" id="vplayerDesc"></div>
       </div>
-      <div id="vplayerScoutScore" style="display:none" class="vplayer-scout-score"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-outline" onclick="closeModal('videoPlayerModal');openVideoHub()">← Voltar</button>
+        <button class="btn-primary" id="vplayerScoutBtn" onclick="generateScoutFromPlayer()" style="flex:1">
+          📋 Gerar Laudo Scout
+        </button>
+      </div>
     </div>
 
-    <div style="display:flex;gap:8px;">
-      <button class="btn-outline" onclick="closeModal('videoPlayerModal');openVideoHub()">← Voltar</button>
-      <button class="btn-primary" id="vplayerScoutBtn" onclick="generateScoutFromPlayer()" style="flex:1">
-        📋 Gerar Laudo Scout
-      </button>
+    <!-- ── FASE 2: LOADING / ANÁLISE ── -->
+    <div class="vphase" id="phaseLoading">
+      <div class="scout-loading">
+        <div class="scout-loading-icon">🤖</div>
+        <div class="scout-loading-title">Analisando vídeo…</div>
+        <div class="scout-loading-sub" id="loadingVideoTitle"></div>
+        <div class="scout-steps" id="scoutSteps">
+          <div class="scout-step" id="step0"><div class="scout-step-dot">1</div>Identificando atleta e contexto do vídeo</div>
+          <div class="scout-step" id="step1"><div class="scout-step-dot">2</div>Processando frames e sequências de jogo</div>
+          <div class="scout-step" id="step2"><div class="scout-step-dot">3</div>Analisando fundamentos técnicos</div>
+          <div class="scout-step" id="step3"><div class="scout-step-dot">4</div>Calculando métricas de desempenho</div>
+          <div class="scout-step" id="step4"><div class="scout-step-dot">5</div>Gerando relatório de scout profissional</div>
+        </div>
+      </div>
     </div>
+
+    <!-- ── FASE 3: LAUDO SCOUT ── -->
+    <div class="vphase" id="phaseReport">
+      <div class="scout-report-phase">
+
+        <!-- Overall -->
+        <div class="scout-overall">
+          <div class="scout-score-circle">
+            <div class="scout-score-num" id="reportScore">—</div>
+            <div class="scout-score-max">/10</div>
+          </div>
+          <div class="scout-overall-info">
+            <div class="scout-overall-title" id="reportVideoTitle">—</div>
+            <div class="scout-overall-sub">Laudo gerado via análise de IA — Claude Sonnet</div>
+            <div class="scout-overall-badge" id="reportDate"></div>
+          </div>
+        </div>
+
+        <!-- Barras de dimensão -->
+        <div class="scout-dim-bars">
+          <div class="scout-dim-row">
+            <span class="scout-dim-label">⚽ Técnica</span>
+            <div class="scout-dim-track"><div class="scout-dim-fill" id="bar-tec2"></div></div>
+            <span class="scout-dim-num" id="num-tec2">—</span>
+          </div>
+          <div class="scout-dim-row">
+            <span class="scout-dim-label">🧠 Visão</span>
+            <div class="scout-dim-track"><div class="scout-dim-fill" id="bar-vis2"></div></div>
+            <span class="scout-dim-num" id="num-vis2">—</span>
+          </div>
+          <div class="scout-dim-row">
+            <span class="scout-dim-label">💪 Físico</span>
+            <div class="scout-dim-track"><div class="scout-dim-fill" id="bar-fis2"></div></div>
+            <span class="scout-dim-num" id="num-fis2">—</span>
+          </div>
+          <div class="scout-dim-row">
+            <span class="scout-dim-label">📍 Posicionamento</span>
+            <div class="scout-dim-track"><div class="scout-dim-fill" id="bar-pos2"></div></div>
+            <span class="scout-dim-num" id="num-pos2">—</span>
+          </div>
+        </div>
+
+        <!-- Pontos Fortes -->
+        <div class="scout-chips-group">
+          <div class="scout-chips-label">✅ Pontos Fortes</div>
+          <div class="scout-chips" id="reportStrengths"></div>
+        </div>
+
+        <!-- A Desenvolver -->
+        <div class="scout-chips-group">
+          <div class="scout-chips-label">⚠️ A Desenvolver</div>
+          <div class="scout-chips" id="reportDevelop"></div>
+        </div>
+
+        <!-- Recomendação -->
+        <div class="scout-chips-label">📝 Recomendação do Scout</div>
+        <div class="scout-recommendation" id="reportRecommendation"></div>
+
+        <!-- Ações -->
+        <div class="scout-actions">
+          <button class="btn-outline" onclick="closeModal('videoPlayerModal');openVideoHub()">← Voltar</button>
+          <button class="btn-outline" onclick="showToast('📋 Laudo copiado!')">📋 Copiar</button>
+          <button class="btn-blue" onclick="showToast('📤 Compartilhando laudo…')">📤 Compartilhar</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

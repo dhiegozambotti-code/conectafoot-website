@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Design System — ConectaFoot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    /* ════════════ TOKENS (Paleta Principal — Figma) ════════════ */
+    :root{
+      --primary:#0097B1;       /* Azul ciano */
+      --primary-dark:#006B7D;  /* Hover, headers, pressed */
+      --primary-light:#D9F4F8; /* Backgrounds leves */
+      --accent:#FF7A59;        /* Coral — CTAs secundários */
+      --accent-dark:#e8623f;
+      --text:#1F2933;          /* Grafite — texto principal */
+      --text-2:#667085;        /* Texto secundário */
+      --bg:#F5FAFB;            /* Off-white — fundo geral */
+      --white:#FFFFFF;
+      --success:#2FBF71;
+      --warning:#F5A623;
+      --error:#E85D75;
+      --info:#0097B1;
+      --line:#E9EEF0;
+
+      --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:24px; --r-pill:100px;
+      --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-8:48px;
+      --sh-sm:0 1px 3px rgba(16,24,40,.06);
+      --sh:0 4px 16px rgba(16,24,40,.08);
+      --sh-lg:0 12px 32px rgba(0,151,177,.12);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+    /* nav */
+    .topbar{background:var(--white);border-bottom:1px solid var(--line);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50;box-shadow:var(--sh-sm)}
+    .brand{font-size:18px;font-weight:800;color:var(--primary);letter-spacing:-.5px}
+    .brand span{color:var(--text)}
+    .brand-tag{background:var(--primary-light);color:var(--primary-dark);font-size:10px;font-weight:700;padding:3px 9px;border-radius:var(--r-pill);margin-left:8px}
+
+    .wrap{max-width:1080px;margin:0 auto;padding:40px 28px 80px}
+    .hero{text-align:center;margin-bottom:48px}
+    .hero h1{font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:8px}
+    .hero h1 b{color:var(--primary)}
+    .hero p{color:var(--text-2);font-size:15px;max-width:560px;margin:0 auto}
+    .hero-meta{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+    .hero-chip{background:var(--white);border:1px solid var(--line);color:var(--text-2);font-size:12px;font-weight:600;padding:6px 14px;border-radius:var(--r-pill)}
+
+    section{margin-bottom:56px}
+    .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--line)}
+    .sec-num{font-size:13px;font-weight:800;color:var(--primary);background:var(--primary-light);width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .sec-head h2{font-size:20px;font-weight:700}
+    .sec-head p{font-size:13px;color:var(--text-2);margin-left:auto}
+
+    /* color swatches */
+    .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+    .swatch{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-sm);border:1px solid var(--line)}
+    .swatch-color{height:84px}
+    .swatch-info{padding:12px 14px}
+    .swatch-name{font-size:13px;font-weight:700}
+    .swatch-hex{font-size:12px;color:var(--text-2);font-family:monospace;margin-top:2px}
+    .swatch-use{font-size:11px;color:var(--text-2);margin-top:4px;line-height:1.4}
+
+    .status-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:16px}
+    .status-pill{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--sh-sm)}
+    .status-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0}
+    .status-pill b{font-size:12px;font-weight:700}
+    .status-pill small{display:block;font-size:11px;color:var(--text-2);font-family:monospace}
+
+    /* type scale */
+    .type-row{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-bottom:1px solid var(--line)}
+    .type-row:last-child{border-bottom:none}
+    .type-spec{font-size:11px;color:var(--text-2);font-family:monospace;width:200px;flex-shrink:0}
+
+    /* component cards */
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+    .demo{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-sm);border:1px solid var(--line)}
+    .demo-label{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px}
+
+    /* buttons */
+    .btn{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;padding:11px 22px;border-radius:var(--r);border:none;cursor:pointer;transition:all .2s}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark);box-shadow:var(--sh-lg)}
+    .btn-accent{background:var(--accent);color:#fff}
+    .btn-accent:hover{background:var(--accent-dark)}
+    .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+    .btn-outline:hover{background:var(--primary-light)}
+    .btn-ghost{background:transparent;color:var(--text-2)}
+    .btn-ghost:hover{background:var(--bg)}
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+    /* chips */
+    .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 13px;border-radius:var(--r-pill)}
+    .chip-primary{background:var(--primary-light);color:var(--primary-dark)}
+    .chip-accent{background:#fff0eb;color:var(--accent-dark)}
+    .chip-success{background:#e6f8ef;color:#1d8a4f}
+    .chip-neutral{background:var(--bg);color:var(--text-2);border:1px solid var(--line)}
+
+    /* ficha tecnica card */
+    .ficha{display:flex;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-sm);overflow:hidden}
+    .ficha-side{display:flex;align-items:center;gap:10px;padding:14px 16px;flex:1}
+    .ficha-badge{width:38px;height:38px;border-radius:8px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+    .ficha-side small{font-size:11px;color:var(--text-2);display:block}
+    .ficha-side b{font-size:14px}
+    .ficha-chev{width:44px;align-self:stretch;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;clip-path:polygon(40% 0,100% 0,100% 100%,40% 100%,0 50%)}
+
+    /* agent pill */
+    .agent-pill{display:inline-flex;flex-direction:column;align-items:center;gap:6px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;box-shadow:var(--sh-sm);min-width:92px}
+    .agent-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
+    .agent-pill b{font-size:12px}
+    .agent-pill small{font-size:10px;color:var(--text-2)}
+
+    /* profile header demo */
+    .prof{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh);overflow:hidden;max-width:320px;margin:0 auto}
+    .prof-top{background:linear-gradient(135deg,var(--primary-light),#eef9fb);height:70px}
+    .prof-av{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));margin:-44px auto 0;border:4px solid #fff;display:flex;align-items:center;justify-content:center;font-size:34px}
+    .prof-body{padding:12px 20px 20px;text-align:center}
+    .prof-name{font-size:22px;font-weight:600;color:var(--text)}
+    .prof-meta{font-size:13px;color:var(--text-2);margin-top:2px}
+    .prof-link{font-size:12px;color:var(--primary);margin-top:6px;display:inline-block}
+
+    /* bottom nav demo */
+    .botnav{display:flex;background:var(--white);border-top:1px solid var(--line);border-radius:0 0 var(--r-lg) var(--r-lg)}
+    .botnav-item{flex:1;text-align:center;padding:10px 0;font-size:20px;color:var(--text-2)}
+    .botnav-item.active{color:var(--primary)}
+
+    /* code block */
+    .code{background:#0d2025;color:#9fe8f0;border-radius:var(--r);padding:20px;font-family:monospace;font-size:12px;line-height:1.7;overflow-x:auto;white-space:pre}
+    .code .c{color:#5a7a80}
+    .code .v{color:#ffb38a}
+
+    .note{background:var(--primary-light);border-left:3px solid var(--primary);border-radius:0 var(--r) var(--r) 0;padding:14px 18px;font-size:13px;color:var(--primary-dark);margin-top:16px}
+
+    .footer{text-align:center;color:var(--text-2);font-size:12px;padding:32px;border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div><span class="brand">Conecta<span>Foot</span></span><span class="brand-tag">DESIGN SYSTEM</span></div>
+  <div style="font-size:12px;color:var(--text-2)">v1.0 · derivado do Figma</div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Design System <b>ConectaFoot</b></h1>
+    <p>Linguagem visual moderna extraída do Figma — paleta ciano + coral, tipografia Poppins, componentes responsivos. Esta é a referência que o app Angular implementa.</p>
+    <div class="hero-meta">
+      <span class="hero-chip">🎨 Paleta Principal</span>
+      <span class="hero-chip">🔤 Poppins</span>
+      <span class="hero-chip">📱 Mobile + Desktop</span>
+      <span class="hero-chip">🧩 Componentes</span>
+    </div>
+  </div>
+
+  <!-- 1. CORES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">1</span><h2>Cores</h2><p>Paleta Principal — Figma</p></div>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch-color" style="background:#0097B1"></div><div class="swatch-info"><div class="swatch-name">Primária</div><div class="swatch-hex">#0097B1</div><div class="swatch-use">Botões, links, ativos</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#006B7D"></div><div class="swatch-info"><div class="swatch-name">Primária escura</div><div class="swatch-hex">#006B7D</div><div class="swatch-use">Hover, headers, pressed</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#D9F4F8"></div><div class="swatch-info"><div class="swatch-name">Primária clara</div><div class="swatch-hex">#D9F4F8</div><div class="swatch-use">Backgrounds leves</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#FF7A59"></div><div class="swatch-info"><div class="swatch-name">Coral (accent)</div><div class="swatch-hex">#FF7A59</div><div class="swatch-use">CTAs secundários</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1F2933"></div><div class="swatch-info"><div class="swatch-name">Grafite</div><div class="swatch-hex">#1F2933</div><div class="swatch-use">Texto principal</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#667085"></div><div class="swatch-info"><div class="swatch-name">Cinza azulado</div><div class="swatch-hex">#667085</div><div class="swatch-use">Texto secundário</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#F5FAFB;border-bottom:1px solid #E9EEF0"></div><div class="swatch-info"><div class="swatch-name">Off-white</div><div class="swatch-hex">#F5FAFB</div><div class="swatch-use">Fundo geral</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#FFFFFF;border-bottom:1px solid #E9EEF0"></div><div class="swatch-info"><div class="swatch-name">Branco</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-use">Cards, respiro</div></div></div>
+    </div>
+
+    <div class="status-row">
+      <div class="status-pill"><div class="status-dot" style="background:#2FBF71"></div><div><b>Sucesso</b><small>#2FBF71</small></div></div>
+      <div class="status-pill"><div class="status-dot" style="background:#F5A623"></div><div><b>Atenção</b><small>#F5A623</small></div></div>
+      <div class="status-pill"><div class="status-dot" style="background:#E85D75"></div><div><b>Erro</b><small>#E85D75</small></div></div>
+      <div class="status-pill"><div class="status-dot" style="background:#0097B1"></div><div><b>Informação</b><small>#0097B1</small></div></div>
+    </div>
+
+    <div class="note">💎 <b>Opção Premium</b> (alternativa sofisticada): azul profundo #003F4D · areia #F4EFEA · coral queimado #E76F51. Disponível no Figma para um visual mais "premium".</div>
+  </section>
+
+  <!-- 2. TIPOGRAFIA -->
+  <section>
+    <div class="sec-head"><span class="sec-num">2</span><h2>Tipografia</h2><p>Poppins · 300–900</p></div>
+    <div class="demo">
+      <div class="type-row"><div class="type-spec">SemiBold 600 · 22px</div><div style="font-weight:600;font-size:22px">Samuel Victor Gomides</div></div>
+      <div class="type-row"><div class="type-spec">SemiBold 600 · 18px</div><div style="font-weight:600;font-size:18px">Título de seção secundário</div></div>
+      <div class="type-row"><div class="type-spec">Regular 400 · 16px</div><div style="font-weight:400;font-size:16px">Ficha técnica</div></div>
+      <div class="type-row"><div class="type-spec">Regular 400 · 14px · #667085</div><div style="font-weight:400;font-size:14px;color:#667085">São Paulo | SUB 15 | Atacante | Pé Esquerdo</div></div>
+      <div class="type-row"><div class="type-spec">Medium 500 · 13px</div><div style="font-weight:500;font-size:13px">Texto de apoio e labels</div></div>
+    </div>
+  </section>
+
+  <!-- 3. BOTÕES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">3</span><h2>Botões</h2></div>
+    <div class="demo">
+      <div class="btn-row">
+        <button class="btn btn-primary">Primário</button>
+        <button class="btn btn-accent">Secundário (coral)</button>
+        <button class="btn btn-outline">Outline</button>
+        <button class="btn btn-ghost">Ghost</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CHIPS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">4</span><h2>Chips & Tags</h2></div>
+    <div class="demo">
+      <div class="btn-row">
+        <span class="chip chip-primary">⚽ Atacante</span>
+        <span class="chip chip-accent">🔥 Destaque</span>
+        <span class="chip chip-success">✓ Disponível</span>
+        <span class="chip chip-neutral">SUB 15</span>
+        <span class="chip chip-primary">Pé Esquerdo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. COMPONENTES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">5</span><h2>Componentes</h2><p>Padrões das telas do Figma</p></div>
+    <div class="grid2">
+
+      <div class="demo">
+        <div class="demo-label">Card "Ficha Técnica"</div>
+        <div class="ficha">
+          <div class="ficha-side"><div class="ficha-badge">🛡️</div><div><small>Clube atual</small><b>Paulista</b></div></div>
+          <div class="ficha-chev">›</div>
+          <div class="ficha-side" style="justify-content:flex-end"><div style="text-align:right"><small>Posição</small><b>Atacante</b></div><div class="ficha-badge" style="background:#e6f8ef">📍</div></div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Agent Pills (5 agentes)</div>
+        <div class="btn-row">
+          <div class="agent-pill"><div class="agent-av" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">🌟</div><b>Faísca</b><small>Motivacional</small></div>
+          <div class="agent-pill"><div class="agent-av" style="background:linear-gradient(135deg,#ea580c,#f97316)">⚡</div><b>Vitor</b><small>Desafiador</small></div>
+          <div class="agent-pill"><div class="agent-av" style="background:linear-gradient(135deg,#0097B1,#006B7D)">📊</div><b>Ana</b><small>Estudioso</small></div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Profile Header</div>
+        <div class="prof">
+          <div class="prof-top"></div>
+          <div class="prof-av">⚽</div>
+          <div class="prof-body">
+            <div class="prof-name">Samuel V. Gomides</div>
+            <div class="prof-meta">São Paulo | SUB 15 | Atacante</div>
+            <div class="prof-meta">Pé Esquerdo | 70KG | 1,80</div>
+            <a class="prof-link">🔗 instagram.com/samu...</a>
+          </div>
+          <div class="botnav">
+            <div class="botnav-item active">⌂</div>
+            <div class="botnav-item">➤</div>
+            <div class="botnav-item">⊕</div>
+            <div class="botnav-item">⚽</div>
+            <div class="botnav-item">◉</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-label">Top Nav (web) — com Central IA</div>
+        <div style="background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:0;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:4px;padding:12px 14px;font-size:12px;flex-wrap:wrap">
+            <span style="font-weight:800;color:var(--primary);margin-right:8px">ConectaFoot</span>
+            <span style="padding:6px 10px;border-radius:8px;background:var(--bg);font-weight:600">⌂ Início</span>
+            <span style="padding:6px 10px;border-radius:8px;font-weight:600;color:var(--text-2)">Conexões</span>
+            <span style="padding:6px 10px;border-radius:8px;font-weight:600;color:var(--text-2)">Chat</span>
+            <span style="padding:6px 10px;border-radius:8px;background:var(--primary);color:#fff;font-weight:700">🤖 Central IA</span>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--text-2);margin-top:10px">⭐ "Central IA" promovida da sidebar para o topo, com destaque ciano.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. TOKENS SCSS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">6</span><h2>Tokens SCSS</h2><p>Pronto p/ <code>_tokens.scss</code></p></div>
+    <div class="code"><span class="c">// projects/app/src/styles/_tokens.scss — ConectaFoot Design System</span>
+:root{
+  <span class="c">/* Paleta Principal */</span>
+  --cf-primary:        <span class="v">#0097B1</span>;
+  --cf-primary-dark:   <span class="v">#006B7D</span>;
+  --cf-primary-light:  <span class="v">#D9F4F8</span>;
+  --cf-accent:         <span class="v">#FF7A59</span>;
+  --cf-text:           <span class="v">#1F2933</span>;
+  --cf-text-2:         <span class="v">#667085</span>;
+  --cf-bg:             <span class="v">#F5FAFB</span>;
+  --cf-white:          <span class="v">#FFFFFF</span>;
+  --cf-line:           <span class="v">#E9EEF0</span>;
+  <span class="c">/* Status */</span>
+  --cf-success:        <span class="v">#2FBF71</span>;
+  --cf-warning:        <span class="v">#F5A623</span>;
+  --cf-error:          <span class="v">#E85D75</span>;
+  --cf-info:           <span class="v">#0097B1</span>;
+  <span class="c">/* Raio & sombra */</span>
+  --cf-radius:         12px;
+  --cf-radius-lg:      16px;
+  --cf-shadow:         0 4px 16px rgba(16,24,40,.08);
+}
+body{ font-family:'Poppins',sans-serif; background:var(--cf-bg); color:var(--cf-text); }</div>
+    <div class="note">📌 Importar Poppins no <code>styles.scss</code>:<br><code>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&amp;display=swap');</code></div>
+  </section>
+
+</div>
+
+<div class="footer">
+  <strong>ConectaFoot Design System v1.0</strong> · Derivado do Figma · Implementação no app Angular <code>conectafoot-ia</code>
+</div>
+
+</body>
+</html>
